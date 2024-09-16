@@ -6,5 +6,6 @@
         <file>../qml/MainPage/Finder.qml</file>
         <file>../qml/MainPage/Header.qml</file>
         <file>../qml/MainPage/RecipeList.qml</file>
+        <file>../qml/ReceiptPage/ReceiptPage.qml</file>
     </qresource>
 </RCC>

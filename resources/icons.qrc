@@ -1,1 +1,11 @@
-<RCC/>
+<RCC>
+    <qresource prefix="/">
+        <file>../icons/decorative/dropdownIcon.png</file>
+	<file>../icons/decorative/plusAddReceipt.png</file>
+	<file>../icons/categories/snack.png</file>
+	<file>../icons/categories/salad.png</file>
+	<file>../icons/categories/main.png</file>
+	<file>../icons/categories/starters.png</file>
+	<file>../icons/categories/dessert.png</file>
+    </qresource>
+</RCC>

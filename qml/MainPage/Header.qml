@@ -24,11 +24,13 @@ Rectangle {
     }
 
     contentItem: Text {
+      id: receiptDropDownText
+
       text: "Список рецептів"
 
       font.family: "DIN Alternate"
 
-      font.pixelSize: 20
+      font.pixelSize: 25
       font.bold: true
 
       horizontalAlignment: Text.AlignHCenter
@@ -36,27 +38,35 @@ Rectangle {
 
       color: "white"
 
-      anchors.centerIn: parent
+      anchors {
+        right: parent.right
+        rightMargin: 20
+      }
     }
 
     background: Rectangle {
       id: receiptDropDownBackground
-      color: "#2e77da"
+      color: "#6b80ef"
 
       radius: 7
 
       Image {
         id: customArrowIcon
 
-        source: "qrc:/custom_arrow_down.png"
+        source: "qrc:icons/decorative/dropdownIcon.png"
 
-        width: 12
-        height: 12
+        width: 30
+        height: 30
 
         fillMode: Image.PreserveAspectFit
 
-        anchors.right: parent.right
-        anchors.rightMargin: 20
+        anchors {
+          right: parent.right
+          rightMargin: 16
+
+          top: parent.top
+          topMargin: 15
+        }
       }
     }
 
@@ -64,7 +74,7 @@ Rectangle {
       id: popup
 
       width: receiptDropDown.width
-      height: 200
+      height: 300
 
       modal: true
       focus: true
@@ -91,26 +101,56 @@ Rectangle {
         width: parent.width
         height: parent.height
 
-        model: ["Перше", "Друге", "Салати", "Закуски"]
+        model: ListModel {
+
+          ListElement {
+            icon: "qrc:icons/categories/main.png"
+            text: "Перші страви"
+          }
+
+          ListElement {
+            icon: "qrc:icons/categories/starters.png"
+            text: "Другі страви"
+          }
+
+          ListElement {
+            icon: "qrc:icons/categories/salad.png"
+            text: "Салати"
+          }
+
+          ListElement {
+            icon: "qrc:icons/categories/snack.png"
+            text: "Закуски"
+          }
+
+          ListElement {
+            icon: "qrc:icons/categories/dessert.png"
+            text: "Десерти"
+          }
+        }
 
         delegate: ItemDelegate {
           id: dropdownElementsStyle
 
-          contentItem: Text {
-            text: modelData
+          contentItem: Row {
+            spacing: 10
 
-            font {
-
-              family: "DIN Alternate"
-              pixelSize: 18
-              bold: true
+            Image {
+              source: model.icon
+              width: 30
+              height: 30
+              fillMode: Image.PreserveAspectFit
             }
 
-            color: "black"
-
-            anchors {
-              left: parent.left
-              leftMargin: 46
+            Text {
+              text: model.text
+              font {
+                family: "DIN Alternate"
+                pixelSize: 23
+                bold: true
+              }
+              color: "black"
+              anchors.verticalCenter: parent.verticalCenter
             }
           }
 
@@ -123,25 +163,85 @@ Rectangle {
   }
 
   Text {
-    id: menuTittle
+    id: klopotenkoTittleWord
 
-    text: "Klopotenko's Smart cookbook"
-    color: "white"
+    text: "Klopotenko's"
+    color: "#6e9fec" // color from "line" word in hotline site
 
-    font.pixelSize: 20
+    font {
 
-    anchors.horizontalCenter: parent.horizontalCenter
+      pixelSize: 27
+
+      bold: true
+    }
+
+    anchors {
+      horizontalCenter: parent.horizontalCenter
+
+      top: receiptDropDown.top
+    }
+  }
+
+  Text {
+    id: smartTittleWord
+
+    text: "Smart"
+    color: "#ffa726"
+
+    font {
+
+      pixelSize: 27
+
+      bold: true
+    }
+
+    anchors {
+      horizontalCenter: grayBackground.horizontalCenter
+
+      bottom: grayBackground.bottom
+      bottomMargin: 6
+
+      horizontalCenterOffset: -63
+    }
+  }
+
+  Text {
+    id: cookBookTittleWord
+
+    text: "cookbook"
+    color: "#6e9fec"
+
+    font {
+
+      pixelSize: 27
+
+      bold: true
+    }
+
+    anchors {
+      horizontalCenter: grayBackground.horizontalCenter
+
+      bottom: grayBackground.bottom
+      bottomMargin: 6
+
+      horizontalCenterOffset: +50
+    }
   }
 
   Image {
     id: addReceiptIcon
 
-    source: " " // додати іконку плюсика з фотошопу
+    source: "qrc:icons/decorative/plusAddReceipt.png"
 
-    width: 30
-    height: 30
+    width: 80
+    height: 75
 
-    anchors.rightMargin: 25
+    anchors {
+      verticalCenter: grayBackground.verticalCenter
+
+      right: grayBackground.right
+      rightMargin: 150
+    }
 
     MouseArea {
       anchors.fill: parent
