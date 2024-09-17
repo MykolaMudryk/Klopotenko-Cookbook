@@ -15,7 +15,10 @@ Rectangle {
     width: 254
     height: 55
 
-    onClicked: popup.open()
+    onClicked: {
+
+      popup.open()
+    }
 
     anchors {
       left: parent.left

@@ -1,0 +1,4 @@
+#ifndef DATABASE_HANDLER
+#define DATABASE_HANDLER
+
+#endif  // DATABASE_HANDLER

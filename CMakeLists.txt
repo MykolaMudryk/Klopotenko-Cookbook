@@ -11,7 +11,7 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 find_package(Qt6 REQUIRED COMPONENTS Core Quick Qml Gui)
 
 set(SOURCES
-    src/main.cpp
+    main.cpp
 )
 
 if(ANDROID)
@@ -70,10 +70,51 @@ qt_add_qml_module(Cookbook
     URI Cookbook
     VERSION 1.0
 
-        RESOURCES resources/qml.qrc
-        RESOURCES resources/icons.qrc
+    RESOURCES
+        resources/qml.qrc
+        resources/icons.qrc
 
+    SOURCES
+        main.cpp
+
+        # Client files
+        client/include/client.h
+        client/include/network_client.h
+        client/include/qml_handler.h
+
+        client/src/client.cpp
+        client/src/network_client.cpp
+        client/src/qml_handler.cpp
+
+        # Server files
+        server/include/server.h
+        server/include/request_handler.h
+        server/include/database_handler.h
+        server/include/qml_service.h
+
+        server/src/server.cpp
+        server/src/request_handler.cpp
+        server/src/database_handler.cpp
+        server/src/qml_service.cpp
+
+        # Database files
+        database/include/database.h
+        database/include/query_builder.h
+        database/include/connection.h
+
+        database/src/database.cpp
+        database/src/query_builder.cpp
+        database/src/connection.cpp
+
+        # Common files
+        common/include/common.h
+        common/include/json_parser.h
+        common/include/utility.h
+
+        common/src/json_parser.cpp
+        common/src/utility.cpp
 )
+
 
 target_include_directories(Cookbook PRIVATE ${CMAKE_SOURCE_DIR}/include)
 
