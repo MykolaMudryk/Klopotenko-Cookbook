@@ -8,7 +8,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Quick Qml Gui Network)
+find_package(Qt6 REQUIRED COMPONENTS Core Quick Qml Gui Network Sql)
 
 set(SOURCES
     main.cpp
@@ -53,46 +53,28 @@ qt_add_qml_module(Cookbook
         client/include/client.h
         client/include/network_client.h
         client/include/qml_handler.h
+        client/include/json_parser.h
 
         client/src/client.cpp
         client/src/network_client.cpp
         client/src/qml_handler.cpp
+        client/src/json_parser.cpp
 
         # Server files
         server/include/server.h
         server/include/request_handler.h
         server/include/database_handler.h
-        server/include/qml_service.h
 
         server/src/server.cpp
         server/src/request_handler.cpp
         server/src/database_handler.cpp
-        server/src/qml_service.cpp
 
-        # Database files
-        database/include/database.h
-        database/include/query_builder.h
-        database/include/connection.h
-
-        database/src/database.cpp
-        database/src/query_builder.cpp
-        database/src/connection.cpp
-
-        # Common files
-        common/include/common.h
-        common/include/json_parser.h
-        common/include/utility.h
-
-        common/src/json_parser.cpp
-        common/src/utility.cpp
 )
 
 
 target_include_directories(Cookbook PRIVATE
     ${CMAKE_SOURCE_DIR}/client/include
     ${CMAKE_SOURCE_DIR}/server/include
-    ${CMAKE_SOURCE_DIR}/database/include
-    ${CMAKE_SOURCE_DIR}/common/include
 )
 
-target_link_libraries(Cookbook PRIVATE Qt6::Core Qt6::Quick Qt6::Gui Qt6::Network)
+target_link_libraries(Cookbook PRIVATE Qt6::Core Qt6::Quick Qt6::Gui Qt6::Network Qt6::Sql)
