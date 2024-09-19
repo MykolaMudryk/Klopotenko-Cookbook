@@ -8,39 +8,11 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Quick Qml Gui)
+find_package(Qt6 REQUIRED COMPONENTS Core Quick Qml Gui Network)
 
 set(SOURCES
     main.cpp
 )
-
-if(ANDROID)
-  set(CMAKE_ANDROID_API 23)
-
-  set(CMAKE_ANDROID_ARCH_ABI "arm64-v8a")
-
-  set(COOKBOOK_ICON "${CMAKE_CURRENT_SOURCE_DIR}/icons/platform_specific/cookbookAndroid.png")
-
-  set(ANDROID_PACKAGE_SOURCE_DIR "${CMAKE_CURRENT_SOURCE_DIR}/android")
-  message(STATUS "ANDROID_PACKAGE_SOURCE_DIR: ${ANDROID_PACKAGE_SOURCE_DIR}")
-
-  set_source_files_properties(${COOKBOOK_ICON} PROPERTIES
-      ANDROID_PACKAGE_SOURCE_DIR "res/drawable"
-  )
-
-qt_add_executable(Calculator MACOSX_BUNDLE
-    ${SOURCES}
-    ${COOKBOOK_ICON}
-)
-
-  set_target_properties(Cookbook PROPERTIES
-      ANDROID_GUI TRUE
-      OUTPUT_NAME "Cookbook"
-      QT_ANDROID_PACKAGE_SOURCE_DIR "${ANDROID_PACKAGE_SOURCE_DIR}"
-  )
-
-  include(/Users/mac/Library/Android/sdk/android_openssl/CMakeLists.txt)
-endif()
 
 if(APPLE)
   set(CMAKE_OSX_BUNDLE TRUE)
@@ -116,6 +88,11 @@ qt_add_qml_module(Cookbook
 )
 
 
-target_include_directories(Cookbook PRIVATE ${CMAKE_SOURCE_DIR}/include)
+target_include_directories(Cookbook PRIVATE
+    ${CMAKE_SOURCE_DIR}/client/include
+    ${CMAKE_SOURCE_DIR}/server/include
+    ${CMAKE_SOURCE_DIR}/database/include
+    ${CMAKE_SOURCE_DIR}/common/include
+)
 
-target_link_libraries(Cookbook PRIVATE Qt6::Core Qt6::Quick Qt6::Gui)
+target_link_libraries(Cookbook PRIVATE Qt6::Core Qt6::Quick Qt6::Gui Qt6::Network)

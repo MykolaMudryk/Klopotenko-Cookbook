@@ -1,6 +1,7 @@
 import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls.Basic 2.15
+import QtQuick.Layouts
 
 Rectangle {
   id: grayBackground
@@ -72,7 +73,6 @@ Rectangle {
         }
       }
     }
-
     Popup {
       id: popup
 
@@ -104,61 +104,35 @@ Rectangle {
         width: parent.width
         height: parent.height
 
-        model: ListModel {
+        model: categoryModel
 
-          ListElement {
-            icon: "qrc:icons/categories/main.png"
-            text: "Перші страви"
+        delegate: Row {
+          spacing: 10
+
+          Image {
+            id: dropDownIcon
+
+            source: "qrc:/icons/categories/" + iconName
+
+            width: 30
+            height: 30
+
+            fillMode: Image.PreserveAspectFit
           }
 
-          ListElement {
-            icon: "qrc:icons/categories/starters.png"
-            text: "Другі страви"
-          }
-
-          ListElement {
-            icon: "qrc:icons/categories/salad.png"
-            text: "Салати"
-          }
-
-          ListElement {
-            icon: "qrc:icons/categories/snack.png"
-            text: "Закуски"
-          }
-
-          ListElement {
-            icon: "qrc:icons/categories/dessert.png"
-            text: "Десерти"
-          }
-        }
-
-        delegate: ItemDelegate {
-          id: dropdownElementsStyle
-
-          contentItem: Row {
-            spacing: 10
-
-            Image {
-              source: model.icon
-              width: 30
-              height: 30
-              fillMode: Image.PreserveAspectFit
+          Text {
+            text: categoryName
+            font {
+              family: "DIN Alternate"
+              pixelSize: 23
+              bold: true
             }
-
-            Text {
-              text: model.text
-              font {
-                family: "DIN Alternate"
-                pixelSize: 23
-                bold: true
-              }
-              color: "black"
-              anchors.verticalCenter: parent.verticalCenter
-            }
+            color: "black"
+            anchors.verticalCenter: parent.verticalCenter
           }
-
-          onClicked: {
-            popup.close()
+          MouseArea {
+            anchors.fill: parent
+            onClicked: popup.close()
           }
         }
       }
@@ -168,55 +142,33 @@ Rectangle {
   Text {
     id: klopotenkoTittleWord
 
-    text: "Klopotenko's"
+    text: "Smart"
     color: "#6e9fec" // color from "line" word in hotline site
 
     font {
 
-      pixelSize: 27
+      pixelSize: 30
 
       bold: true
     }
 
     anchors {
-      horizontalCenter: parent.horizontalCenter
+      horizontalCenter: grayBackground.horizontalCenter
 
       top: receiptDropDown.top
     }
   }
 
   Text {
-    id: smartTittleWord
-
-    text: "Smart"
-    color: "#ffa726"
-
-    font {
-
-      pixelSize: 27
-
-      bold: true
-    }
-
-    anchors {
-      horizontalCenter: grayBackground.horizontalCenter
-
-      bottom: grayBackground.bottom
-      bottomMargin: 6
-
-      horizontalCenterOffset: -63
-    }
-  }
-
-  Text {
     id: cookBookTittleWord
 
-    text: "cookbook"
-    color: "#6e9fec"
+    text: "<span style='color:#ffa726;'>cook</span><span style='color:#6e9fec;'>book</span>"
+
+    textFormat: Text.RichText
 
     font {
 
-      pixelSize: 27
+      pixelSize: 30
 
       bold: true
     }
@@ -225,9 +177,7 @@ Rectangle {
       horizontalCenter: grayBackground.horizontalCenter
 
       bottom: grayBackground.bottom
-      bottomMargin: 6
-
-      horizontalCenterOffset: +50
+      bottomMargin: 4
     }
   }
 
