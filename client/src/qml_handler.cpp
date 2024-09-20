@@ -2,8 +2,6 @@
 
 #include <QObject>
 
-#include "json_parser.h"
-
 CategoryModel::CategoryModel(QObject *parent) : QAbstractListModel(parent) {}
 
 int CategoryModel::rowCount(const QModelIndex &parent) const {
@@ -48,21 +46,18 @@ QList<CategoryModel::CategoryItem> CategoryModel::getCategories() const {
 QmlHandler::QmlHandler(NetworkClient *client, QObject *parent)
     : QObject(parent),
       networkClient(client),
-      m_categoryModel(new CategoryModel(this)) {
-  JsonParser *parser = new JsonParser(this);
-
-  connect(parser, &JsonParser::categoryNameExtracted, this,
-          &QmlHandler::handleCategoryName);
-}
+      m_categoryModel(new CategoryModel(this)) {}
 
 void QmlHandler::fetchCategories() {
-  networkClient->sendRequest("http://127.0.0.1:5000");
+  networkClient->sendRequest("http://localhost:8080/categories");
 }
 
 CategoryModel *QmlHandler::categoryModel() const { return m_categoryModel; }
 
 void QmlHandler::handleCategoryName(const QString &categoryName,
                                     const QString &iconName) {
+  qDebug() << "handleCategoryName triggered";
+
   QList<CategoryModel::CategoryItem> categories =
       m_categoryModel->getCategories();
 

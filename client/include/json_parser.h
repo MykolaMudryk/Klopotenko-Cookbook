@@ -2,6 +2,9 @@
 #define JSON_PARSER_H
 
 #include <QByteArray>
+#include <QJsonArray>
+#include <QJsonDocument>
+#include <QJsonObject>
 #include <QObject>
 #include <QString>
 

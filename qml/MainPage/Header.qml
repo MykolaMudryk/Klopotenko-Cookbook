@@ -19,6 +19,7 @@ Rectangle {
     onClicked: {
 
       popup.open()
+      qmlHandler.fetchCategories()
     }
 
     anchors {
@@ -104,7 +105,7 @@ Rectangle {
         width: parent.width
         height: parent.height
 
-        model: categoryModel
+        model: qmlHandler.categoryModel
 
         delegate: Row {
           spacing: 10
@@ -112,7 +113,7 @@ Rectangle {
           Image {
             id: dropDownIcon
 
-            source: "qrc:/icons/categories/" + iconName
+            source: "qrc:/icons/categories/" + model.iconName
 
             width: 30
             height: 30
@@ -121,14 +122,13 @@ Rectangle {
           }
 
           Text {
-            text: categoryName
+            text: model.categoryName
             font {
               family: "DIN Alternate"
               pixelSize: 23
               bold: true
             }
             color: "black"
-            anchors.verticalCenter: parent.verticalCenter
           }
           MouseArea {
             anchors.fill: parent

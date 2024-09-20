@@ -43,7 +43,8 @@ class QmlHandler : public QObject {
   CategoryModel *m_categoryModel;
 
  public:
-  explicit QmlHandler(NetworkClient *client, QObject *parent = nullptr);
+  explicit QmlHandler(NetworkClient *client = nullptr,
+                      QObject *parent = nullptr);
 
   CategoryModel *categoryModel() const;
 
