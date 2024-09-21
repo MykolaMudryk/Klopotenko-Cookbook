@@ -33,9 +33,9 @@ This app provides an intuitive and user-friendly way to manage, search, and cust
 
 ├──────── /client                       # Code for the client-side
 
-│   ├── /src                      # Client source files
+│   ├────── /src                      # Client source files
 
-│   │   ├── client.cpp            # Logic for client operations
+│   │   ├ client.cpp            # Logic for client operations
 
 │   │   ├── network_client.cpp     # Logic for server interaction
 
@@ -44,7 +44,7 @@ This app provides an intuitive and user-friendly way to manage, search, and cust
 │   │   └── qml_handler.cpp       # Logic for QML integration
 
 
-│   └── /include                  # Client header files
+│   └────── /include                  # Client header files
 
 │       ├── client.h              # Header file for the client
 
@@ -57,7 +57,7 @@ This app provides an intuitive and user-friendly way to manage, search, and cust
 │
 ├──────── /server                       # Code for the server-side
 
-│   ├── /src                      # Server source files
+│   ├────── /src                      # Server source files
 
 │   │   ├── server.cpp            # Main server logic
 
@@ -65,7 +65,7 @@ This app provides an intuitive and user-friendly way to manage, search, and cust
 
 │   │   ├── database_handler.cpp    # Logic for database operations
 
-│   └── /include                  # Server header files
+│   └────── /include                  # Server header files
 
 │       ├── server.h              # Header file for the server
 
