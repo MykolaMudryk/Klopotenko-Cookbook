@@ -35,13 +35,13 @@ This app provides an intuitive and user-friendly way to manage, search, and cust
 
 │   ├────── /src                      # Client source files
 
-│   │   ├ client.cpp            # Logic for client operations
+│       ├ client.cpp            # Logic for client operations
 
-│   │   ├── network_client.cpp     # Logic for server interaction
+│       ├── network_client.cpp     # Logic for server interaction
 
-│   │   ├── json_parser.cpp       # Logic for JSON handling
+│       ├── json_parser.cpp       # Logic for JSON handling
 
-│   │   ├── qml_handler.cpp       # Logic for QML integration
+│       ├── qml_handler.cpp       # Logic for QML integration
 
 
 │   └────── /include                  # Client header files
@@ -59,11 +59,11 @@ This app provides an intuitive and user-friendly way to manage, search, and cust
 
 │   ├────── /src                      # Server source files
 
-│   │   ├── server.cpp            # Main server logic
+│       ├── server.cpp            # Main server logic
 
-│   │   ├── request_handler.cpp    # Logic for handling client requests
+│       ├── request_handler.cpp    # Logic for handling client requests
 
-│   │   ├── database_handler.cpp    # Logic for database operations
+│       ├── database_handler.cpp    # Logic for database operations
 
 │   └────── /include                  # Server header files
 
