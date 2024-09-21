@@ -28,7 +28,9 @@ This app provides an intuitive and user-friendly way to manage, search, and cust
 ## Project File Structure
 
 /Cookbook
+
 │   ├── main.cpp                  # Main file to launch the application
+
 ├── /client                       # Code for the client-side
 │   ├── /src                      # Client source files
 │   │   ├── client.cpp            # Logic for client operations
