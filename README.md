@@ -31,7 +31,7 @@ This app provides an intuitive and user-friendly way to manage, search, and cust
 
 │   ├── main.cpp                  # Main file to launch the application
 
-├── /client                       # Code for the client-side
+├──────── /client                       # Code for the client-side
 
 │   ├── /src                      # Client source files
 
@@ -55,7 +55,7 @@ This app provides an intuitive and user-friendly way to manage, search, and cust
 │       └── qml_handler.h         # Header file for QML handling
 
 │
-├── /server                       # Code for the server-side
+├──────── /server                       # Code for the server-side
 
 │   ├── /src                      # Server source files
 
