@@ -108,7 +108,7 @@ Rectangle {
         model: qmlHandler.categoryModel
 
         delegate: Row {
-          spacing: 10
+          spacing: 30
 
           Image {
             id: dropDownIcon
@@ -131,7 +131,6 @@ Rectangle {
             color: "black"
           }
           MouseArea {
-            anchors.fill: parent
             onClicked: popup.close()
           }
         }

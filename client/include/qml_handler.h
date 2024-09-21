@@ -4,6 +4,7 @@
 #include <QAbstractListModel>
 #include <QList>
 #include <QObject>
+#include <QString>
 
 #include "network_client.h"
 
@@ -28,6 +29,8 @@ class CategoryModel : public QAbstractListModel {
                 int role = Qt::DisplayRole) const override;
 
   QHash<int, QByteArray> roleNames() const override;
+
+  bool contains(const QString &categoryName, const QString &iconName) const;
 
   void setCategories(const QList<CategoryItem> &categories);
   QList<CategoryItem> getCategories() const;

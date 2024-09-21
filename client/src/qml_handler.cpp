@@ -33,8 +33,19 @@ QHash<int, QByteArray> CategoryModel::roleNames() const {
   return roles;
 }
 
+bool CategoryModel::contains(const QString &categoryName,
+                             const QString &iconName) const {
+  for (const CategoryItem &item : m_categories) {
+    if (item.categoryName == categoryName && item.iconName == iconName) {
+      return true;
+    }
+  }
+  return false;
+}
+
 void CategoryModel::setCategories(const QList<CategoryItem> &categories) {
   beginResetModel();
+  m_categories.clear();
   m_categories = categories;
   endResetModel();
 }
@@ -49,19 +60,26 @@ QmlHandler::QmlHandler(NetworkClient *client, QObject *parent)
       m_categoryModel(new CategoryModel(this)) {}
 
 void QmlHandler::fetchCategories() {
-  networkClient->sendRequest("http://localhost:8080/categories");
+  if (m_categoryModel->getCategories().isEmpty()) {
+    networkClient->sendRequest("http://localhost:8080/categories");
+  }
 }
 
 CategoryModel *QmlHandler::categoryModel() const { return m_categoryModel; }
 
 void QmlHandler::handleCategoryName(const QString &categoryName,
                                     const QString &iconName) {
-  qDebug() << "handleCategoryName triggered";
+  if (m_categoryModel->contains(categoryName, iconName)) {
+    return;
+  } else {
+    qDebug() << "handleCategoryName triggered";
 
-  QList<CategoryModel::CategoryItem> categories =
-      m_categoryModel->getCategories();
+    QList<CategoryModel::CategoryItem> categories =
+        m_categoryModel->getCategories();
 
-  categories.append({categoryName, iconName});
-  m_categoryModel->setCategories(categories);
-  emit categoryModelChanged();
+    categories.append({categoryName, iconName});
+    m_categoryModel->setCategories(categories);
+
+    emit categoryModelChanged();
+  }
 }
