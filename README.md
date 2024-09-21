@@ -41,7 +41,7 @@ This app provides an intuitive and user-friendly way to manage, search, and cust
 
 │   │   ├── json_parser.cpp       # Logic for JSON handling
 
-│   │   └── qml_handler.cpp       # Logic for QML integration
+│   │   ├── qml_handler.cpp       # Logic for QML integration
 
 
 │   └────── /include                  # Client header files
@@ -52,7 +52,7 @@ This app provides an intuitive and user-friendly way to manage, search, and cust
 
 │       ├── json_parser.h         # Header file for the JSON parser
 
-│       └── qml_handler.h         # Header file for QML handling
+│       ├── qml_handler.h         # Header file for QML handling
 
 │
 ├──────── /server                       # Code for the server-side
@@ -71,5 +71,5 @@ This app provides an intuitive and user-friendly way to manage, search, and cust
 
 │       ├── request_handler.h      # Header file for request handling
 
-│       └── database_handler.h      # Header file for database operations
+│       ├── database_handler.h      # Header file for database operations
 
