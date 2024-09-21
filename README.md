@@ -25,7 +25,28 @@
 
 This app provides an intuitive and user-friendly way to manage, search, and customize recipes.
 
-## Project File Structure**
+## Project File Structure
 
-/Cookbook │ ├── main.cpp # Main file to launch the application ├── /client # Code for the client-side │ ├── /src # Client source files │ │ ├── client.cpp # Logic for client operations │ │ ├── network_client.cpp # Logic for server interaction │ │ ├── json_parser.cpp # Logic for JSON handling │ │ └── qml_handler.cpp # Logic for QML integration │ └── /include # Client header files │ ├── client.h # Header file for the client │ ├── network_client.h # Header file for network functions │ ├── json_parser.h # Header file for the JSON parser │ └── qml_handler.h # Header file for QML handling │ ├── /server # Code for the server-side │ ├── /src # Server source files │ │ ├── server.cpp # Main server logic │ │ ├── request_handler.cpp # Logic for handling client requests │ │ ├── database_handler.cpp # Logic for database operations │ └── /include # Server header files │ ├── server.h # Header file for the server │ ├── request_handler.h # Header file for request handling │ └── database_handler.h # Header file for database operations
-
+/Cookbook
+│   ├── main.cpp                  # Main file to launch the application
+├── /client                       # Code for the client-side
+│   ├── /src                      # Client source files
+│   │   ├── client.cpp            # Logic for client operations
+│   │   ├── network_client.cpp     # Logic for server interaction
+│   │   ├── json_parser.cpp       # Logic for JSON handling
+│   │   └── qml_handler.cpp       # Logic for QML integration
+│   └── /include                  # Client header files
+│       ├── client.h              # Header file for the client
+│       ├── network_client.h       # Header file for network functions
+│       ├── json_parser.h         # Header file for the JSON parser
+│       └── qml_handler.h         # Header file for QML handling
+│
+├── /server                       # Code for the server-side
+│   ├── /src                      # Server source files
+│   │   ├── server.cpp            # Main server logic
+│   │   ├── request_handler.cpp    # Logic for handling client requests
+│   │   ├── database_handler.cpp    # Logic for database operations
+│   └── /include                  # Server header files
+│       ├── server.h              # Header file for the server
+│       ├── request_handler.h      # Header file for request handling
+│       └── database_handler.h      # Header file for database operations
