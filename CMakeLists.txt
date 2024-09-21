@@ -8,7 +8,7 @@ set(CMAKE_AUTORCC ON)
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 
-find_package(Qt6 REQUIRED COMPONENTS Core Quick Qml Gui Network Sql)
+find_package(Qt6 REQUIRED COMPONENTS Core Quick Qml Gui Network Sql WebSockets)
 
 set(SOURCES
     main.cpp
@@ -75,6 +75,7 @@ qt_add_qml_module(Cookbook
 target_include_directories(Cookbook PRIVATE
     ${CMAKE_SOURCE_DIR}/client/include
     ${CMAKE_SOURCE_DIR}/server/include
+
 )
 
-target_link_libraries(Cookbook PRIVATE Qt6::Core Qt6::Quick Qt6::Gui Qt6::Network Qt6::Sql)
+target_link_libraries(Cookbook PRIVATE Qt6::Core Qt6::Quick Qt6::Gui Qt6::Network Qt6::Sql Qt6::WebSockets)

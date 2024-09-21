@@ -38,7 +38,7 @@ QJsonDocument DatabaseHandler::getCategories() {
       categoryObject["category_name"] = categoryName;
       categoryObject["iconName"] = iconName;
 
-      qDebug() << "category_name: " << categoryName << "iconName: " << iconName;
+      qDebug() << "Data after query on server" << categoryName << iconName;
 
       categoriesArray.append(categoryObject);
     }
@@ -53,6 +53,27 @@ QJsonDocument DatabaseHandler::getCategories() {
     return QJsonDocument(errorArray);
   }
 
+  QJsonDocument doc(categoriesArray);
+  return doc;
+}
+
+QJsonDocument DatabaseHandler::setCategories(const QString &categoryName,
+                                             const QString &iconName) {
+  QSqlQuery query(db);
+  QJsonArray categoriesArray;
+
+  query.prepare(
+      "INSERT INTO categories (category_name, iconName) VALUES "
+      "(:category_name, :iconName)");
+  query.bindValue(":category_name", categoryName);
+  query.bindValue(":iconName", iconName);
+
+  if (query.exec()) {
+    qDebug() << "New category added successfully.";
+
+  } else {
+    qDebug() << "Error adding category:" << query.lastError().text();
+  }
   QJsonDocument doc(categoriesArray);
   return doc;
 }

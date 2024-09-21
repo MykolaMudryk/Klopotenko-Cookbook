@@ -20,6 +20,8 @@ class DatabaseHandler : public QObject {
   bool connectToDatabase();
 
   QJsonDocument getCategories();
+  QJsonDocument setCategories(const QString &categoryName,
+                              const QString &iconName);
 };
 
 #endif  // DATABASE_HANDLER

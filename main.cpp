@@ -13,6 +13,7 @@ int main(int argc, char *argv[]) {
 
   Client client;
   client.setupQML(engine);
+  client.networkClient->connectToServer();
   Server server;
   server.startServer();
 

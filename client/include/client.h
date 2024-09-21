@@ -17,8 +17,9 @@ class Client : public QObject {
 
   void setupQML(QQmlApplicationEngine &engine);
 
- private:
   NetworkClient *networkClient;
+
+ private:
   QmlHandler *qmlHandler;
   CategoryModel *categoryModel;
   JsonParser *jsonParser;

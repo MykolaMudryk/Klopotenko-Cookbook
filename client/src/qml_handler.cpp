@@ -61,7 +61,7 @@ QmlHandler::QmlHandler(NetworkClient *client, QObject *parent)
 
 void QmlHandler::fetchCategories() {
   if (m_categoryModel->getCategories().isEmpty()) {
-    networkClient->sendRequest("http://localhost:8080/categories");
+    networkClient->sendMessage("GET_CATEGORIES");
   }
 }
 

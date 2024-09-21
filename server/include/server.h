@@ -2,8 +2,8 @@
 #define SERVER_H
 
 #include <QObject>
-#include <QTcpServer>
-#include <QTcpSocket>
+#include <QWebSocket>
+#include <QWebSocketServer>
 
 #include "request_handler.h"
 
@@ -11,7 +11,8 @@ class Server : public QObject {
   Q_OBJECT
  private:
   RequestHandler requestHandler;
-  QTcpServer* tcpServer;
+  QWebSocketServer* webSocketServer;
+  QList<QWebSocket*> clients;
 
   int port;
 
@@ -20,7 +21,9 @@ class Server : public QObject {
 
   void startServer();
  public slots:
-  void incomingConnection();
+  void onIncomingConnection();
+  void handleGetRequest(const QString& getMessage);
+  void onSocketDisconnected();
 };
 
 #endif  // SERVER_H

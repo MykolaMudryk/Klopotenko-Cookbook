@@ -1,45 +1,49 @@
 #include "network_client.h"
 
-#include <QJsonArray>
-#include <QJsonDocument>
-#include <QNetworkAccessManager>
-#include <QNetworkReply>
-#include <QNetworkRequest>
-
-#include "json_parser.h"
-
 NetworkClient::NetworkClient(QObject *parent)
-    : QObject(parent), manager(new QNetworkAccessManager(this)) {}
-
-void NetworkClient::sendRequest(const QString &endpoint) {
-  QNetworkRequest request((QUrl(endpoint)));
-
-  QNetworkReply *reply = manager->get(request);
-
-  connect(reply, &QNetworkReply::finished, this,
-          &NetworkClient::onReplyFinished);
+    : QObject(parent),
+      websocket(
+          new QWebSocket(QString(), QWebSocketProtocol::VersionLatest, this)) {
+  connect(websocket, &QWebSocket::connected, this, &NetworkClient::onConnected);
+  connect(websocket, &QWebSocket::textMessageReceived, this,
+          &NetworkClient::onTextMessageReceived);
+  connect(websocket, &QWebSocket::errorOccurred, this, &NetworkClient::onError);
 }
 
-void NetworkClient::onReplyFinished() {
-  QNetworkReply *reply = qobject_cast<QNetworkReply *>(sender());
+void NetworkClient::connectToServer() {
+  websocket->open(QUrl("ws://localhost:8080/"));
+  qDebug() << "Client connected to server on port 8080";
+}
 
-  if (reply->error() == QNetworkReply::NoError) {
-    int statusCode =
-        reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+void NetworkClient::onConnected() { qDebug() << "Connected to the server"; }
 
-    qDebug() << "Statuc code on client: " << statusCode;
-
-    if (statusCode == 200) {
-      QByteArray response = reply->readAll();
-
-      emit requestFinished(response);
-    } else {
-      qWarning() << "Server returned an error" << statusCode;
-    }
-
+void NetworkClient::sendMessage(const QString &message) {
+  if (websocket->isValid()) {
+    websocket->sendTextMessage(message);
   } else {
-    qWarning() << "Network error: " << reply->errorString();
+    emit errorOccurred("Websocket isn't open");
   }
+}
 
-  reply->deleteLater();
+void NetworkClient::onTextMessageReceived(const QString &message) {
+  if (message == "Unknown request") {
+    qWarning() << "Bad request was sent to server";
+  } else {
+    QJsonDocument jsonDoc = QJsonDocument::fromJson(message.toUtf8());
+
+    if (jsonDoc.isNull()) {
+      qWarning() << "Received JSON is null.";
+      return;
+    } else if (!jsonDoc.isObject() && !jsonDoc.isArray()) {
+      qWarning() << "Received JSON is not an object nor array";
+
+    } else {
+      emit requestFinished(message.toUtf8());
+    }
+  }
+}
+
+void NetworkClient::onError(QAbstractSocket::SocketError error) {
+  qWarning() << websocket->errorString();
+  qWarning() << "WebSocket error:" << error << websocket->errorString();
 }
