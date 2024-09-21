@@ -2,11 +2,19 @@
 #include <QQmlApplicationEngine>
 #include <QQmlContext>
 
+#include "client.h"
+#include "server.h"
+
 using namespace std;
 
 int main(int argc, char *argv[]) {
   QGuiApplication app(argc, argv);
   QQmlApplicationEngine engine;
+
+  Client client;
+  client.setupQML(engine);
+  Server server;
+  server.startServer();
 
   const QUrl url(QStringLiteral("qrc:qml/MainPage/MainPage.qml"));
   engine.load(url);
