@@ -57,27 +57,7 @@ Rectangle {
     }
   }
 
-  Image {
-    id: addReceiptIcon
-
-    source: "qrc:icons/decorative/plusAddReceipt.png"
-
-    width: 80
-    height: 75
-
-    anchors {
-      verticalCenter: grayBackground.verticalCenter
-
-      right: grayBackground.right
-      rightMargin: 150
-    }
-
-    MouseArea {
-      anchors.fill: parent
-      onClicked: {
-
-        // виклик функції для додвання рецепту
-      }
-    }
+  AddReceiptButton {
+    id: addReceiptButton
   }
 }

@@ -4,10 +4,10 @@
         <file>../qml/MainPage/BreadCrumbNavigation.qml</file>
         <file>../qml/MainPage/FilterPanel.qml</file>
         <file>../qml/MainPage/Finder.qml</file>
-        <file>../qml/MainPage/Header/Header.qml</file>
+        <file>../qml/MainPage/Header.qml</file>
         <file>../qml/MainPage/RecipeList.qml</file>
-        <file>../qml/MainPage/Header/DropdownButton.qml</file>
-        <file>../qml/MainPage/Header/AddReceiptButton.qml</file>
+        <file>../qml/MainPage/DropdownButton.qml</file>
+        <file>../qml/MainPage/AddReceiptButton.qml</file>
         <file>../qml/ReceiptPage/ReceiptPage.qml</file>
     </qresource>
 </RCC>
