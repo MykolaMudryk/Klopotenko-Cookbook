@@ -2,63 +2,42 @@
 
 JsonParser::JsonParser(QObject *parent) : QObject(parent) {}
 
-void JsonParser::extractCategory(const QByteArray &jsonData) {
+void JsonParser::extractValues(const QByteArray &jsonData) {
   QJsonDocument doc = QJsonDocument::fromJson(jsonData);
 
-  if (doc.isArray()) {
+  if (!doc.isArray()) {
+    qWarning() << "Received JSON is not an array.";
+    return;
+  }
     QJsonArray jsonArray = doc.array();
 
     for (const QJsonValue &value : jsonArray) {
       QJsonObject jsonObject = value.toObject();
 
-      QString categoryName = jsonObject.value("category_name").toString();
-      QString iconName = jsonObject.value("iconName").toString();
+      if (jsonObject.contains("category_name") &&
+          jsonObject.contains("iconName")) {
+        QString categoryName = jsonObject.value("category_name").toString();
+        QString iconName = jsonObject.value("iconName").toString();
 
-      qDebug() << "Parsed category: " << categoryName << iconName;
+        qDebug() << "Parsed category: " << categoryName << iconName;
 
-      emit categoryExtracted(categoryName, iconName);
+        emit categoryExtracted(categoryName, iconName);
+      }
+
+      if (jsonObject.contains("nationality_name")) {
+        QString nationality = jsonObject.value("nationality_name").toString();
+
+        qDebug() << "Parsed nationality: " << nationality;
+
+        emit nationalityExtracted(nationality);
+      }
+
+      if (jsonObject.contains("name")) {
+        QString dishName = jsonObject.value("name").toString();
+
+        qDebug() << "Parsed dishName: " << dishName;
+
+        emit dishNameExtracted(dishName);
+      }
     }
-  } else {
-    qWarning() << "Received data isn't an array";
-  }
-}
-
-void JsonParser::extractNationality(const QByteArray &jsonData) {
-  QJsonDocument doc = QJsonDocument::fromJson(jsonData);
-
-  if (doc.isArray()) {
-    QJsonArray jsonArray = doc.array();
-
-    for (const QJsonValue &value : jsonArray) {
-      QJsonObject jsonObject = value.toObject();
-
-      QString nationality = jsonObject.value("nationality_name").toString();
-
-      qDebug() << "Parsed nationality: " << nationality;
-
-      emit nationalityExtracted(nationality);
-    }
-  } else {
-    qWarning() << "Received data isn't an array";
-  }
-}
-
-void JsonParser::extractDishName(const QByteArray &jsonData) {
-  QJsonDocument doc = QJsonDocument::fromJson(jsonData);
-
-  if (doc.isArray()) {
-    QJsonArray jsonArray = doc.array();
-
-    for (const QJsonValue &value : jsonArray) {
-      QJsonObject jsonObject = value.toObject();
-
-      QString dishName = jsonObject.value("name").toString();
-
-      qDebug() << "Parsed dishName: " << dishName;
-
-      emit dishNameExtracted(dishName);
-    }
-  } else {
-    qWarning() << "Received data isn't an array";
-  }
 }

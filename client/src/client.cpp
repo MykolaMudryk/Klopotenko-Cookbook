@@ -9,7 +9,7 @@ Client::Client(QObject *parent)
       categoryModel(new RecipeModel(this)),
       jsonParser(new JsonParser(this)) {
   connect(networkClient, &NetworkClient::requestFinished, jsonParser,
-          &JsonParser::extractCategory);
+          &JsonParser::extractValues);
   connect(jsonParser, &JsonParser::categoryExtracted, qmlHandler,
           &QmlHandler::handleCategory);
 }

@@ -17,9 +17,7 @@ class JsonParser : public QObject {
   explicit JsonParser(QObject *parent = nullptr);
 
  public slots:
-  void extractCategory(const QByteArray &jsonData);
-  void extractNationality(const QByteArray &jsonData);
-  void extractDishName(const QByteArray &jsonData);
+  void extractValues(const QByteArray &jsonData);
  signals:
   void categoryExtracted(const QString &categoryName, const QString &iconName);
   void nationalityExtracted(const QString &nationality);
