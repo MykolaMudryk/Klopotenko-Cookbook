@@ -6,12 +6,12 @@ Client::Client(QObject *parent)
     : QObject(parent),
       networkClient(new NetworkClient(this)),
       qmlHandler(new QmlHandler(networkClient, this)),
-      categoryModel(new CategoryModel(this)),
+      categoryModel(new RecipeModel(this)),
       jsonParser(new JsonParser(this)) {
   connect(networkClient, &NetworkClient::requestFinished, jsonParser,
-          &JsonParser::extractCategoryName);
-  connect(jsonParser, &JsonParser::categoryNameExtracted, qmlHandler,
-          &QmlHandler::handleCategoryName);
+          &JsonParser::extractCategory);
+  connect(jsonParser, &JsonParser::categoryExtracted, qmlHandler,
+          &QmlHandler::handleCategory);
 }
 
 void Client::setupQML(QQmlApplicationEngine &engine) {

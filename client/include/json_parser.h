@@ -17,10 +17,13 @@ class JsonParser : public QObject {
   explicit JsonParser(QObject *parent = nullptr);
 
  public slots:
-  void extractCategoryName(const QByteArray &jsonData);
+  void extractCategory(const QByteArray &jsonData);
+  void extractNationality(const QByteArray &jsonData);
+  void extractDishName(const QByteArray &jsonData);
  signals:
-  void categoryNameExtracted(const QString &categoryName,
-                             const QString &iconName);
+  void categoryExtracted(const QString &categoryName, const QString &iconName);
+  void nationalityExtracted(const QString &nationality);
+  void dishNameExtracted(const QString &nationality);
 };
 
 #endif  // JSON_PARSER_H

@@ -1,27 +1,28 @@
-#ifndef QMLHANDLER_H
-#define QMLHANDLER_H
+#ifndef RECIPE_MODEL_H
+#define RECIPE_MODEL_H
 
 #include <QAbstractListModel>
 #include <QList>
 #include <QObject>
-#include <QString>
+#include <QVariantMap>
 
 #include "network_client.h"
 
-class CategoryModel : public QAbstractListModel {
+class RecipeModel : public QAbstractListModel {
   Q_OBJECT
 
+ private:
+  QList<QVariantMap> m_recipes;
+
  public:
-  struct CategoryItem {
-    QString categoryName;
-    QString iconName;
+  explicit RecipeModel(QObject *parent = nullptr);
+
+  enum RecipeRoles {
+    CategoryNameRole = Qt::UserRole + 1,
+    IconNameRole,
+    NationalityRole,
+    DishNameRole
   };
-
-  QList<CategoryItem> m_categories;
-
-  enum CategoryRoles { NameRole = Qt::UserRole + 1, IconRole };
-
-  explicit CategoryModel(QObject *parent = nullptr);
 
   int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
@@ -30,33 +31,62 @@ class CategoryModel : public QAbstractListModel {
 
   QHash<int, QByteArray> roleNames() const override;
 
-  bool contains(const QString &categoryName, const QString &iconName) const;
+  bool containsCategory(const QString &categoryName, const QString &iconName,
+                        const QString &nationality) const;
 
-  void setCategories(const QList<CategoryItem> &categories);
-  QList<CategoryItem> getCategories() const;
+  void setCategories(const QString &categoryName, const QString &iconName);
+
+  void setIconName(const QString &iconName);
+
+  void setNationality(const QString &nationality);
+
+  void setDishName(const QString &dishName);
+
+  QStringList getCategories() const;
+
+  QStringList getNationality() const;
+
+  QStringList getDishNames() const;
 };
 
 class QmlHandler : public QObject {
   Q_OBJECT
-  Q_PROPERTY(CategoryModel *categoryModel READ categoryModel NOTIFY
-                 categoryModelChanged)
+  Q_PROPERTY(
+      RecipeModel *categoryModel READ categoryModel NOTIFY categoryChanged)
+  Q_PROPERTY(RecipeModel *nationalityModel READ nationalityModel NOTIFY
+                 nationalityChanged)
+  Q_PROPERTY(
+      RecipeModel *dishNameModel READ dishNameModel NOTIFY dishNameChanged)
 
  private:
   NetworkClient *networkClient;
-  CategoryModel *m_categoryModel;
+  RecipeModel *m_categoryModel;
+  RecipeModel *m_nationalityModel;
+  RecipeModel *m_dishNameModel;
+
+  int index;
 
  public:
   explicit QmlHandler(NetworkClient *client = nullptr,
                       QObject *parent = nullptr);
 
-  CategoryModel *categoryModel() const;
+  RecipeModel *categoryModel() const;
+  RecipeModel *nationalityModel() const;
+  RecipeModel *dishNameModel() const;
 
  public slots:
   void fetchCategories();
-  void handleCategoryName(const QString &categoryName, const QString &iconName);
+  void fetchNationality();
+  void fetchDishName();
+
+  void handleCategory(const QString &categoryName, const QString &iconName);
+  void handleNationality(const QString &nationality);
+  void handleDishName(const QString &dishName);
 
  signals:
-  void categoryModelChanged();
+  void categoryChanged();
+  void nationalityChanged();
+  void dishNameChanged();
 };
 
 #endif  // QMLHANDLER_H

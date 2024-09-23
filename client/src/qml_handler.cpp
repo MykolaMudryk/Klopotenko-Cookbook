@@ -2,62 +2,161 @@
 
 #include <QObject>
 
-CategoryModel::CategoryModel(QObject *parent) : QAbstractListModel(parent) {}
+RecipeModel::RecipeModel(QObject *parent) : QAbstractListModel(parent) {}
 
-int CategoryModel::rowCount(const QModelIndex &parent) const {
+int RecipeModel::rowCount(const QModelIndex &parent) const {
   Q_UNUSED(parent);
-  return m_categories.count();
+  return m_recipes.count();
 }
 
-QVariant CategoryModel::data(const QModelIndex &index, int role) const {
-  if (!index.isValid() || index.row() >= m_categories.count()) {
+QVariant RecipeModel::data(const QModelIndex &index, int role) const {
+  if (!index.isValid() || index.row() >= m_recipes.count()) {
     return QVariant();
   }
 
-  const CategoryItem &item = m_categories.at(index.row());
+  const QVariantMap &item = m_recipes.at(index.row());
 
-  if (role == NameRole) {
-    return item.categoryName;
-  } else if (role == IconRole) {
-    return item.iconName;
+  switch (role) {
+    case CategoryNameRole:
+      return item.value("categoryName");
+    case IconNameRole:
+      return item.value("iconName");
+    case NationalityRole:
+      return item.value("nationality");
+    case DishNameRole:
+      return item.value("dishName");
+    default:
+      return QVariant();
   }
-
-  return QVariant();
 }
 
-QHash<int, QByteArray> CategoryModel::roleNames() const {
+QHash<int, QByteArray> RecipeModel::roleNames() const {
   QHash<int, QByteArray> roles;
-
-  roles[NameRole] = "categoryName";
-  roles[IconRole] = "iconName";
+  roles[CategoryNameRole] = "categoryName";
+  roles[IconNameRole] = "iconName";
+  roles[NationalityRole] = "nationality";
+  roles[DishNameRole] = "dishName";
   return roles;
 }
 
-bool CategoryModel::contains(const QString &categoryName,
-                             const QString &iconName) const {
-  for (const CategoryItem &item : m_categories) {
-    if (item.categoryName == categoryName && item.iconName == iconName) {
-      return true;
+void RecipeModel::setCategories(const QString &categoryName,
+                                const QString &iconName) {
+  bool exists = false;
+  for (const auto &category : m_recipes) {
+    if (category.value("categoryName").toString() == categoryName &&
+        category.value("iconName").toString() == iconName) {
+      exists = true;
+      break;
     }
   }
-  return false;
+
+  if (!exists) {
+    beginInsertRows(QModelIndex(), m_recipes.count(), m_recipes.count());
+
+    QVariantMap newCategory;
+    newCategory["categoryName"] = categoryName;
+    newCategory["iconName"] = iconName;
+
+    m_recipes.append(newCategory);
+
+    endInsertRows();
+  }
 }
 
-void CategoryModel::setCategories(const QList<CategoryItem> &categories) {
-  beginResetModel();
-  m_categories.clear();
-  m_categories = categories;
-  endResetModel();
+void RecipeModel::setIconName(const QString &iconName) {
+  bool exists = false;
+  for (const auto &icon : m_recipes) {
+    if (icon.value("iconName").toString() == iconName) {
+      exists = true;
+      break;
+    }
+  }
+
+  if (!exists) {
+    beginInsertRows(QModelIndex(), m_recipes.count(), m_recipes.count());
+
+    QVariantMap newIconName;
+    newIconName["iconName"] = iconName;
+
+    m_recipes.append(newIconName);
+
+    endInsertRows();
+  }
 }
 
-QList<CategoryModel::CategoryItem> CategoryModel::getCategories() const {
-  return m_categories;
+void RecipeModel::setNationality(const QString &nationality) {
+  bool exists = false;
+  for (const auto &cuisine : m_recipes) {
+    if (cuisine.value("nationality").toString() == nationality) {
+      exists = true;
+      break;
+    }
+  }
+
+  if (!exists) {
+    beginInsertRows(QModelIndex(), m_recipes.count(), m_recipes.count());
+
+    QVariantMap newNationality;
+    newNationality["nationality"] = nationality;
+
+    m_recipes.append(newNationality);
+
+    endInsertRows();
+  }
+}
+
+void RecipeModel::setDishName(const QString &dishName) {
+  bool exists = false;
+  for (const auto &dish : m_recipes) {
+    if (dish.value("dishName").toString() == dishName) {
+      exists = true;
+      break;
+    }
+  }
+
+  if (!exists) {
+    beginInsertRows(QModelIndex(), m_recipes.count(), m_recipes.count());
+
+    QVariantMap dishName;
+    dishName["dishName"] = dishName;
+
+    m_recipes.append(dishName);
+
+    endInsertRows();
+  }
+}
+
+QStringList RecipeModel::getCategories() const {
+  QStringList categories;
+  for (const auto &recipe : m_recipes) {
+    categories.append(recipe.value("categoryName").toString());
+    categories.append(recipe.value("iconName").toString());
+  }
+  return categories;
+}
+
+QStringList RecipeModel::getNationality() const {
+  QStringList nationalities;
+  for (const auto &recipe : m_recipes) {
+    nationalities.append(recipe.value("nationality").toString());
+  }
+  return nationalities;
+}
+
+QStringList RecipeModel::getDishNames() const {
+  QStringList dishNames;
+  for (const auto &recipe : m_recipes) {
+    dishNames.append(recipe.value("dishName").toString());
+  }
+  return dishNames;
 }
 
 QmlHandler::QmlHandler(NetworkClient *client, QObject *parent)
     : QObject(parent),
       networkClient(client),
-      m_categoryModel(new CategoryModel(this)) {}
+      m_categoryModel(new RecipeModel(this)),
+      m_nationalityModel(new RecipeModel(this)),
+      m_dishNameModel(new RecipeModel(this)) {}
 
 void QmlHandler::fetchCategories() {
   if (m_categoryModel->getCategories().isEmpty()) {
@@ -65,21 +164,45 @@ void QmlHandler::fetchCategories() {
   }
 }
 
-CategoryModel *QmlHandler::categoryModel() const { return m_categoryModel; }
-
-void QmlHandler::handleCategoryName(const QString &categoryName,
-                                    const QString &iconName) {
-  if (m_categoryModel->contains(categoryName, iconName)) {
-    return;
-  } else {
-    qDebug() << "handleCategoryName triggered";
-
-    QList<CategoryModel::CategoryItem> categories =
-        m_categoryModel->getCategories();
-
-    categories.append({categoryName, iconName});
-    m_categoryModel->setCategories(categories);
-
-    emit categoryModelChanged();
+void QmlHandler::fetchNationality() {
+  if (m_nationalityModel->getNationality().isEmpty()) {
+    networkClient->sendMessage("GET_NATIONALITY");
   }
+}
+
+void QmlHandler::fetchDishName() {
+  if (m_dishNameModel->getDishNames().isEmpty()) {
+    networkClient->sendMessage("GET_DISHNAME");
+  }
+}
+
+RecipeModel *QmlHandler::categoryModel() const { return m_categoryModel; }
+
+RecipeModel *QmlHandler::nationalityModel() const { return m_nationalityModel; }
+
+RecipeModel *QmlHandler::dishNameModel() const { return m_dishNameModel; }
+
+void QmlHandler::handleCategory(const QString &categoryName,
+                                const QString &iconName) {
+  qDebug() << "handleCategory triggered";
+
+  m_categoryModel->setCategories(categoryName, iconName);
+
+  emit categoryChanged();
+}
+
+void QmlHandler::handleNationality(const QString &nationality) {
+  qDebug() << "handleNationality triggered";
+
+  m_nationalityModel->setNationality(nationality);
+
+  emit nationalityChanged();
+}
+
+void QmlHandler::handleDishName(const QString &dishName) {
+  qDebug() << "handleDishName triggered";
+
+  m_dishNameModel->setDishName(dishName);
+
+  emit dishNameChanged();
 }
