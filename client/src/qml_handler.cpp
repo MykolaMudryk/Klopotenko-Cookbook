@@ -164,9 +164,10 @@ void QmlHandler::fetchCategories() {
   }
 }
 
-void QmlHandler::fetchNationality() {
+void QmlHandler::fetchNationality(const QString &categoryName) {
   if (m_nationalityModel->getNationality().isEmpty()) {
-    networkClient->sendMessage("GET_NATIONALITY");
+    QString message = QString("GET_NATIONALITY %1").arg(categoryName);
+    networkClient->sendMessage(message);
   }
 }
 

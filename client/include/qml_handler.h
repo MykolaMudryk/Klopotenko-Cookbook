@@ -76,7 +76,7 @@ class QmlHandler : public QObject {
 
  public slots:
   void fetchCategories();
-  void fetchNationality();
+  void fetchNationality(const QString &categoryName);
   void fetchDishName();
 
   void handleCategory(const QString &categoryName, const QString &iconName);

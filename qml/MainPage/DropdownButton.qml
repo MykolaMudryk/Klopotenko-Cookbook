@@ -69,9 +69,8 @@ Button {
   Popup {
     id: popup
 
-    width: receiptDropDown.width
-    height: 300
-
+    // implicitWidth: receiptDropDown.width
+    // height: 300
     modal: true
     focus: true
 
@@ -83,73 +82,141 @@ Button {
     y: receiptDropDown.y + receiptDropDown.height
 
     background: Rectangle {
-      id: popupBackground
-      width: parent.width + 40
-      height: parent.height
+      id: categoryListviewBackground
 
-      color: "white"
+      width: receiptDropDown.width + 40
+      implicitHeight: qmlHandler.categoryModel.rowCount * 50
+
+      color: "#f0f0f0"
 
       radius: receiptDropDownBackground.radius
-    }
 
-    ListView {
-      id: listview
+      ListView {
+        id: categoryListview
 
-      width: parent.width
-      height: parent.height
+        width: categoryListviewBackground.width
+        implicitHeight: contentHeight
 
-      model: qmlHandler.categoryModel
+        model: qmlHandler.categoryModel
 
-      delegate: Rectangle {
-        id: dropdownColumnBackground
+        delegate: Rectangle {
+          id: dropdownColumnBackground
 
-        width: popup.width
+          width: categoryListviewBackground.width
 
-        height: 50
+          height: 50
 
-        MouseArea {
-          id: hoverArea
+          MouseArea {
+            id: categoryHoverArea
 
-          anchors.fill: parent
+            anchors.fill: parent
 
-          hoverEnabled: true
+            hoverEnabled: true
 
-          onEntered: parent.color = "#f6f7f8"
-
-          onExited: parent.color = "transparent"
-
-          onClicked: popup.close()
-        }
-
-        Row {
-          spacing: 17
-
-          anchors.fill: parent
-          anchors.margins: 10
-
-          anchors.verticalCenter: dropdownColumnBackground.verticalCenter
-
-          Image {
-            id: dropDownIcon
-
-            source: "qrc:/icons/categories/" + model.iconName
-
-            width: 30
-            height: 30
-
-            fillMode: Image.PreserveAspectFit
-          }
-
-          Text {
-            text: model.categoryName
-            font {
-              family: "DIN Alternate"
-              pixelSize: 23
-              bold: true
+            onEntered: {
+              parent.color = "#f6f7f8"
+              qmlHandler.fetchDishName(model.categoryName)
             }
 
-            anchors.verticalCenter: dropDownIcon.verticalCenter
-            color: "black"
+            onExited: parent.color = "white"
+
+            onClicked: popup.close()
+          }
+
+          Row {
+            spacing: 17
+
+            anchors.fill: parent
+            anchors.margins: 10
+
+            anchors.verticalCenter: dropdownColumnBackground.verticalCenter
+
+            Image {
+              id: dropDownIcon
+
+              source: "qrc:/icons/categories/" + model.iconName
+
+              width: 30
+              height: 30
+
+              fillMode: Image.PreserveAspectFit
+            }
+
+            Text {
+              text: model.categoryName
+              font {
+                family: "DIN Alternate"
+                pixelSize: 23
+                bold: true
+              }
+
+              anchors.verticalCenter: dropDownIcon.verticalCenter
+              color: "black"
+            }
+          }
+        }
+      }
+
+      Rectangle {
+        id: nationalityListviewBackground
+
+        width: parent.width
+        implicitHeight: qmlHandler.nationalityModel.rowCount * 50
+
+        color: "#f0f0f0"
+
+        radius: receiptDropDownBackground.radius
+
+        ListView {
+          id: nationalityListview
+
+          width: nationalityListviewBackground.width
+          implicitHeight: contentHeight
+
+          x: categoryListview.x + categoryListview.width
+          y: categoryHoverArea.y + categoryHoverArea.height
+
+          model: qmlHandler.nationalityModel
+
+          delegate: Rectangle {
+            id: nationalityColumnBackground
+
+            width: popup.width
+
+            height: 50
+
+            MouseArea {
+              id: nationalityHoverArea
+
+              anchors.fill: parent
+
+              hoverEnabled: true
+
+              onEntered: parent.color = "#f6f7f8"
+
+              onExited: parent.color = "white"
+
+              onClicked: popup.close()
+            }
+
+            Row {
+              spacing: 17
+
+              anchors.fill: parent
+              anchors.margins: 10
+
+              anchors.verticalCenter: nationalityColumnBackground.verticalCenter
+
+              Text {
+                text: model.nationality
+                font {
+                  family: "DIN Alternate"
+                  pixelSize: 23
+                  bold: true
+                }
+                color: "black"
+              }
+            }
           }
         }
       }

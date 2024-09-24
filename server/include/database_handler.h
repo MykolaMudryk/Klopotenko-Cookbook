@@ -22,6 +22,8 @@ class DatabaseHandler : public QObject {
   QJsonDocument getCategories();
   QJsonDocument setCategories(const QString &categoryName,
                               const QString &iconName);
+
+  QJsonDocument getNationality(const QString &categoryName);
 };
 
 #endif  // DATABASE_HANDLER

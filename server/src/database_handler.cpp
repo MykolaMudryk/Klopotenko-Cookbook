@@ -57,6 +57,28 @@ QJsonDocument DatabaseHandler::getCategories() {
   return doc;
 }
 
+QJsonDocument DatabaseHandler::getNationality(const QString &categoryName) {
+  QSqlQuery query;
+  query.prepare(R"(
+        SELECT DISTINCT n.name
+        FROM nationalities n
+        JOIN recipes r ON n.id = r.nationality_id
+        JOIN categories c ON r.category_id = c.id
+        WHERE c.name = :category_name
+    )");
+  query.bindValue(":category_name", categoryName);
+
+  if (query.exec()) {
+    QStringList nationalities;
+    while (query.next()) {
+      nationalities.append(query.value(0).toString());
+    }
+
+  } else {
+    qDebug() << "SQL Error:" << query.lastError();
+  }
+}
+
 QJsonDocument DatabaseHandler::setCategories(const QString &categoryName,
                                              const QString &iconName) {
   QSqlQuery query(db);
