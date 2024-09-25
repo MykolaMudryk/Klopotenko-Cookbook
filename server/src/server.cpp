@@ -1,13 +1,12 @@
 #include "server.h"
-Server::Server(QObject *parent)
+SendDataToClient::SendDataToClient(QObject *parent)
     : QObject(parent),
-      requestHandler(this),
       webSocketServer(new QWebSocketServer(QStringLiteral("WebSocket Server"),
                                            QWebSocketServer::NonSecureMode,
                                            this)),
       jsonParser(new ServerJsonParser(this)) {}
 
-void Server::startServer() {
+void SendDataToClient::startServer() {
   port = 8080;
 
   if (!webSocketServer->listen(QHostAddress::LocalHost, port)) {
@@ -16,24 +15,32 @@ void Server::startServer() {
   } else {
     qDebug() << "WebSocket server started on port: " << port;
     connect(webSocketServer, &QWebSocketServer::newConnection, this,
-            &Server::onIncomingConnection);
+            &SendDataToClient::onIncomingConnection);
   }
 }
 
-void Server::onIncomingConnection() {
+void SendDataToClient::onIncomingConnection() {
   while (webSocketServer->hasPendingConnections()) {
     QWebSocket *clientSocket = webSocketServer->nextPendingConnection();
 
     connect(clientSocket, &QWebSocket::textMessageReceived, this,
-            &Server::getCategories);
+            &SendDataToClient::getCategories);
     connect(clientSocket, &QWebSocket::textMessageReceived, jsonParser,
             &ServerJsonParser::extractCategory);
     connect(jsonParser, &ServerJsonParser::hoveredCategoryError, this,
-            &Server::getNationalities);
+            &SendDataToClient::getNationalities);
   }
 }
 
-void Server::getCategories(const QString &getMessage) {
+void SendDataToClient::onSocketDisconnected() {
+  QWebSocket *clientSocket = qobject_cast<QWebSocket *>(sender());
+  if (clientSocket) {
+    clients.removeAll(clientSocket);
+    clientSocket->deleteLater();
+  }
+}
+
+void SendDataToClient::getCategories(const QString &getMessage) {
   QWebSocket *clientSocket = qobject_cast<QWebSocket *>(sender());
   if (getMessage == "GET_CATEGORIES") {
     QString response = requestHandler.getCategories();
@@ -47,7 +54,8 @@ void Server::getCategories(const QString &getMessage) {
   }
 }
 
-void Server::getNationalities(const QByteArray &hoveredCategoryError) {
+void SendDataToClient::getNationalities(
+    const QByteArray &hoveredCategoryError) {
   QWebSocket *clientSocket = qobject_cast<QWebSocket *>(sender());
 
   if (!hoveredCategoryError.isEmpty()) {
@@ -55,17 +63,9 @@ void Server::getNationalities(const QByteArray &hoveredCategoryError) {
     return;
   }
 
-  QString response = requestHandler.getNationality();
+  QString response = databaseHandler.getNationality();
 
   QByteArray jsonResponse = response.toUtf8();
 
   clientSocket->sendTextMessage(QString::fromUtf8(jsonResponse));
-}
-
-void Server::onSocketDisconnected() {
-  QWebSocket *clientSocket = qobject_cast<QWebSocket *>(sender());
-  if (clientSocket) {
-    clients.removeAll(clientSocket);
-    clientSocket->deleteLater();
-  }
 }

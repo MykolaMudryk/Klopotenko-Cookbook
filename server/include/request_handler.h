@@ -14,7 +14,6 @@ class RequestHandler : public QObject {
   explicit RequestHandler(QObject* parent = nullptr);
 
   QString getCategories();
-  QString getNationality();
 };
 
 #endif  // REQUEST_HANDLER_H

@@ -18,8 +18,3 @@ void ServerJsonParser::extractCategory(const QString &category) {
     emit hoveredCategoryError(errorByteArray);
   }
 }
-// сигнал hoveredCategoryError має відправляти сигнал в getNationalities в класі
-// Server ВИКОНАНО
-
-// сигнал hoveredCategoryExtracted має відправлятиcь в форматі QJsonDocument
-// getNationality в класі DatabaseHandler для створення sql запиту

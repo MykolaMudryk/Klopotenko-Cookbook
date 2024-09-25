@@ -14,7 +14,7 @@ int main(int argc, char *argv[]) {
   Client client;
   client.setupQML(engine);
   client.networkClient->connectToServer();
-  Server server;
+  SendDataToClient server;
   server.startServer();
 
   const QUrl url(QStringLiteral("qrc:qml/MainPage/MainPage.qml"));

@@ -7,13 +7,11 @@
 #include <QWebSocket>
 #include <QWebSocketServer>
 
-#include "request_handler.h"
 #include "server_json_parser.h"
 
-class Server : public QObject {
+class SendDataToClient : public QObject {
   Q_OBJECT
  private:
-  RequestHandler requestHandler;
   ServerJsonParser* jsonParser;
 
   QWebSocketServer* webSocketServer;
@@ -22,7 +20,7 @@ class Server : public QObject {
   int port;
 
  public:
-  explicit Server(QObject* parent = nullptr);
+  explicit SendDataToClient(QObject* parent = nullptr);
 
   void startServer();
  public slots:
