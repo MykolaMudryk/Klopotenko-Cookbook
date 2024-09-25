@@ -63,3 +63,17 @@ void SendDataToClient::onSendNationality(const QByteArray &nationality) {
 
   clientSocket->sendTextMessage(QString::fromUtf8(jsonResponse));
 }
+
+SendErrorToclient::SendErrorToclient(QObject *parent)
+    : QObject(parent),
+      webSocketServer(new QWebSocketServer(QStringLiteral("WebSocket Server"),
+                                           QWebSocketServer::NonSecureMode,
+                                           this)),
+      jsonParser(new ServerJsonParser(this)) {}
+
+void SendErrorToclient::onConnectClientRequestError() {}
+
+void SendErrorToclient::sendCategoryError(const QByteArray &category) {}
+
+void SendErrorToclient::sendNationalityError(
+    const QByteArray &hoveredCategory) {}

@@ -2,7 +2,7 @@
 
 ServerJsonParser::ServerJsonParser(QObject *parent) : QObject(parent) {}
 
-void ServerJsonParser::extractCategory(const QString &category) {
+void ServerJsonParser::extractHoveredCategory(const QString &category) {
   if (category.startsWith("GET_NATIONALITY ")) {
     QString categoryName = category.mid(16);
 

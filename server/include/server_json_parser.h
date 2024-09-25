@@ -17,16 +17,10 @@ class ServerJsonParser : public QObject {
   explicit ServerJsonParser(QObject *parent = nullptr);
 
  public slots:
-  void extractCategory(const QString &category);
+  void extractHoveredCategory(const QString &category);
  signals:
   void hoveredCategoryExtracted(const QString &categoryName);
   void hoveredCategoryError(const QByteArray &errorDoc);
 };
 
 #endif  // JSON_PARSER_H
-
-// сигнал hoveredCategoryError має відправляти сигнал в getNationalities в класі
-// Server
-
-// сигнал hoveredCategoryExtracted має відправляти в getNationality в
-// класі DatabaseHandler для створення sql запиту
