@@ -24,11 +24,11 @@ void SendDataToClient::onIncomingConnection() {
     QWebSocket *clientSocket = webSocketServer->nextPendingConnection();
 
     connect(clientSocket, &QWebSocket::textMessageReceived, this,
-            &SendDataToClient::getCategories);
+            &SendDataToClient::onSendCategory);
     connect(clientSocket, &QWebSocket::textMessageReceived, jsonParser,
             &ServerJsonParser::extractCategory);
     connect(jsonParser, &ServerJsonParser::hoveredCategoryError, this,
-            &SendDataToClient::getNationalities);
+            &SendDataToClient::onSendNationality);
   }
 }
 
@@ -40,7 +40,7 @@ void SendDataToClient::onSocketDisconnected() {
   }
 }
 
-void SendDataToClient::getCategories(const QString &getMessage) {
+void SendDataToClient::onSendCategory(const QByteArray &category) {
   QWebSocket *clientSocket = qobject_cast<QWebSocket *>(sender());
   if (getMessage == "GET_CATEGORIES") {
     QString response = requestHandler.getCategories();
@@ -54,14 +54,8 @@ void SendDataToClient::getCategories(const QString &getMessage) {
   }
 }
 
-void SendDataToClient::getNationalities(
-    const QByteArray &hoveredCategoryError) {
+void SendDataToClient::onSendNationality(const QByteArray &nationality) {
   QWebSocket *clientSocket = qobject_cast<QWebSocket *>(sender());
-
-  if (!hoveredCategoryError.isEmpty()) {
-    clientSocket->sendTextMessage(QString::fromUtf8(hoveredCategoryError));
-    return;
-  }
 
   QString response = databaseHandler.getNationality();
 

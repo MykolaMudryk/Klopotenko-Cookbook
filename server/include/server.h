@@ -26,8 +26,24 @@ class SendDataToClient : public QObject {
  public slots:
   void onIncomingConnection();
   void onSocketDisconnected();
-  void getCategories(const QString& getMessage);
-  void getNationalities(const QByteArray& hoveredCategoryError);
+  void onSendCategory(const QByteArray& category);
+  void onSendNationality(const QByteArray& nationality);
+};
+
+class SendErrorToclient : public QObject {
+  Q_OBJECT
+ private:
+  QWebSocketServer* webSocketServer;
+  QList<QWebSocket*> clients;
+
+  int port;
+
+ public:
+  explicit SendErrorToclient(QObject* parent = nullptr);
+
+ public slots:
+  void sendNationalityError();
+  void sendCategoryError(const QByteArray& hoveredCategory);
 };
 
 #endif  // SERVER_H
