@@ -8,13 +8,13 @@
 #include <QObject>
 #include <QString>
 
-class ServerJsonParser : public QObject {
+class ParseClientData : public QObject {
   Q_OBJECT
  private:
   QString hoveredCategoryName;
 
  public:
-  explicit ServerJsonParser(QObject *parent = nullptr);
+  explicit ParseClientData(QObject *parent = nullptr);
 
  public slots:
   void extractHoveredCategory(const QString &category);

@@ -12,7 +12,7 @@
 class SendDataToClient : public QObject {
   Q_OBJECT
  private:
-  ServerJsonParser* jsonParser;
+  ParseClientData* jsonParser;
 
   QWebSocketServer* webSocketServer;
   QList<QWebSocket*> clients;
@@ -37,7 +37,7 @@ class SendErrorToclient : public QObject {
   QWebSocketServer* webSocketServer;
   QList<QWebSocket*> clients;
 
-  ServerJsonParser* jsonParser;
+  ParseClientData* jsonParser;
 
   int port;
 
@@ -47,7 +47,7 @@ class SendErrorToclient : public QObject {
  public slots:
   void onConnectClientRequestError();
   void sendCategoryError(const QByteArray& category);
-  void sendNationalityError(const QByteArray& hoveredCategory);
+  void sendHoveredCategoryError(const QByteArray& hoveredCategoryError);
 };
 
 #endif  // SERVER_H

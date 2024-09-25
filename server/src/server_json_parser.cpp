@@ -1,8 +1,8 @@
 #include "server_json_parser.h"
 
-ServerJsonParser::ServerJsonParser(QObject *parent) : QObject(parent) {}
+ParseClientData::ParseClientData(QObject *parent) : QObject(parent) {}
 
-void ServerJsonParser::extractHoveredCategory(const QString &category) {
+void ParseClientData::extractHoveredCategory(const QString &category) {
   if (category.startsWith("GET_NATIONALITY ")) {
     QString categoryName = category.mid(16);
 
@@ -11,7 +11,6 @@ void ServerJsonParser::extractHoveredCategory(const QString &category) {
     QJsonObject errorObject;
     errorObject["error"] = "Unknown request";
 
-    // Convert the JSON object to a QJsonDocument
     QJsonDocument errorDoc(errorObject);
 
     QByteArray errorByteArray = errorDoc.toJson(QJsonDocument::Compact);
