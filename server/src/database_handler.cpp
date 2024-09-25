@@ -22,7 +22,7 @@ bool DatabaseHandler::connectToDatabase() {
   return true;
 }
 
-QJsonDocument DatabaseHandler::getCategories() {
+QJsonArray DatabaseHandler::getCategories() {
   QSqlQuery query(db);
   QJsonArray categoriesArray;
 
@@ -36,6 +36,7 @@ QJsonDocument DatabaseHandler::getCategories() {
       QString iconName = query.value(1).toString();
 
       categoryObject["category_name"] = categoryName;
+
       categoryObject["iconName"] = iconName;
 
       qDebug() << "Data after query on server" << categoryName << iconName;
@@ -43,21 +44,14 @@ QJsonDocument DatabaseHandler::getCategories() {
       categoriesArray.append(categoryObject);
     }
   } else {
-    qDebug() << query.lastError();
-    QJsonObject errorObject;
-
-    errorObject["Error"] = "Failed to retrieve categories from database";
-    QJsonArray errorArray;
-    errorArray.append(errorObject);
-
-    return QJsonDocument(errorArray);
+    qDebug() << "Failed to retrieve categories from database: "
+             << query.lastError().text();
   }
 
-  QJsonDocument doc(categoriesArray);
-  return doc;
+  return categoriesArray;
 }
 
-QJsonDocument DatabaseHandler::getNationality(const QString &categoryName) {
+QJsonArray DatabaseHandler::getNationality(const QString &categoryName) {
   QSqlQuery query(db);
   QJsonArray nationalitiesArray;
 
@@ -72,47 +66,30 @@ QJsonDocument DatabaseHandler::getNationality(const QString &categoryName) {
 
   if (query.exec()) {
     while (query.next()) {
-      QJsonObject nationalityObject;
-
       QString nationality = query.value(0).toString();
-
-      nationalityObject["nationality"] = nationality;
-
-      nationalitiesArray.append(nationalityObject);
+      nationalitiesArray.append(nationality);
     }
   } else {
-    qDebug() << query.lastError();
-
-    QJsonObject errorObject;
-    errorObject["Error"] =
-        "Failed to retrieve nationalities for provided category";
-    QJsonArray errorArray;
-
-    errorArray.append(errorObject);
-    return QJsonDocument(errorArray);
+    qDebug() << "Failed to retrieve nationalitites for hovered category from "
+                "database: "
+             << query.lastError().text();
   }
 
-  QJsonDocument doc(nationalitiesArray);
-  return doc;
+  return nationalitiesArray;
 }
 
-QJsonDocument DatabaseHandler::setCategories(const QString &categoryName,
-                                             const QString &iconName) {
+QJsonArray DatabaseHandler::setCategories(const QString &categoryName) {
   QSqlQuery query(db);
-  QJsonArray categoriesArray;
 
   query.prepare(
-      "INSERT INTO categories (category_name, iconName) VALUES "
-      "(:category_name, :iconName)");
+      "INSERT INTO categories (category_name) VALUES (:category_name)");
+
   query.bindValue(":category_name", categoryName);
-  query.bindValue(":iconName", iconName);
 
-  if (query.exec()) {
-    qDebug() << "New category added successfully.";
-
-  } else {
-    qDebug() << "Error adding category:" << query.lastError().text();
+  if (!query.exec()) {
+    qDebug() << "Error adding category to database:"
+             << query.lastError().text();
   }
-  QJsonDocument doc(categoriesArray);
-  return doc;
+
+  return getCategories();
 }

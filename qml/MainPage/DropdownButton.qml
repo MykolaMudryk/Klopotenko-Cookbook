@@ -113,7 +113,7 @@ Button {
 
             onEntered: {
               parent.color = "#f6f7f8"
-              qmlHandler.fetchDishName(model.categoryName)
+              qmlHandler.fetchNationality(model.categoryName)
             }
 
             onExited: parent.color = "white"
@@ -172,7 +172,7 @@ Button {
           implicitHeight: contentHeight
 
           x: categoryListview.x + categoryListview.width
-          y: categoryHoverArea.y + categoryHoverArea.height
+          y: categoryListview.y + categoryListview.height
 
           model: qmlHandler.nationalityModel
 

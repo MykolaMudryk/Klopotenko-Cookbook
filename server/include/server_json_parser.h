@@ -8,19 +8,20 @@
 #include <QObject>
 #include <QString>
 
+#include "database_handler.h"
+
 class ParseClientData : public QObject {
   Q_OBJECT
  private:
+  DatabaseHandler database;
   QString hoveredCategoryName;
 
  public:
   explicit ParseClientData(QObject *parent = nullptr);
 
  public slots:
-  void extractHoveredCategory(const QString &category);
- signals:
-  void hoveredCategoryExtracted(const QString &categoryName);
-  void hoveredCategoryError(const QByteArray &errorDoc);
+  QByteArray extractCategory(const QString &getCategory);
+  QByteArray extractHoveredCategory(const QString &jsonResponse);
 };
 
 #endif  // JSON_PARSER_H

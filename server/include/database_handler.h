@@ -19,11 +19,10 @@ class DatabaseHandler : public QObject {
 
   bool connectToDatabase();
 
-  QJsonDocument getCategories();
-  QJsonDocument setCategories(const QString &categoryName,
-                              const QString &iconName);
+  QJsonArray getCategories();
+  QJsonArray setCategories(const QString &categoryName);
 
-  QJsonDocument getNationality(const QString &categoryName);
+  QJsonArray getNationality(const QString &categoryName);
 };
 
 #endif  // DATABASE_HANDLER

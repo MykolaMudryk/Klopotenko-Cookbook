@@ -1,19 +1,37 @@
 #include "server_json_parser.h"
 
-ParseClientData::ParseClientData(QObject *parent) : QObject(parent) {}
-
-void ParseClientData::extractHoveredCategory(const QString &category) {
-  if (category.startsWith("GET_NATIONALITY ")) {
-    QString categoryName = category.mid(16);
-
-    emit hoveredCategoryExtracted(categoryName);
-  } else {
-    QJsonObject errorObject;
-    errorObject["error"] = "Unknown request";
-
-    QJsonDocument errorDoc(errorObject);
-
-    QByteArray errorByteArray = errorDoc.toJson(QJsonDocument::Compact);
-    emit hoveredCategoryError(errorByteArray);
+ParseClientData::ParseClientData(QObject *parent)
+    : QObject(parent), database(this) {
+  if (!database.connectToDatabase()) {
+    qDebug() << "{\"error\": \"Database connection failed\"}";
   }
+}
+
+QByteArray ParseClientData::extractCategory(const QString &getCategory) {
+  if (getCategory == "GET_CATEGORIES") {
+    QJsonArray categoriesArray = database.getCategories();
+
+    QJsonDocument doc(categoriesArray);
+    QByteArray jsonResponse = doc.toJson(QJsonDocument::Compact);
+
+    return jsonResponse;
+  }
+
+  return QByteArray();
+}
+
+QByteArray ParseClientData::extractHoveredCategory(
+    const QString &hoveredCategory) {
+  if (hoveredCategory.startsWith("GET_NATIONALITY ")) {
+    QString categoryName = hoveredCategory.mid(16);
+
+    QJsonArray nationalitiesArray = database.getNationality(categoryName);
+
+    QJsonDocument doc(nationalitiesArray);
+    QByteArray jsonResponse = doc.toJson(QJsonDocument::Compact);
+
+    return jsonResponse;
+  }
+
+  return QByteArray();
 }

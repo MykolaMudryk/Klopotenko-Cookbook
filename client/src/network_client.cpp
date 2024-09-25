@@ -12,7 +12,7 @@ NetworkClient::NetworkClient(QObject *parent)
 
 void NetworkClient::connectToServer() {
   websocket->open(QUrl("ws://localhost:8080/"));
-  qDebug() << "Client connected to server on port 8080";
+  qDebug() << "Client opened connection";
 }
 
 void NetworkClient::onConnected() { qDebug() << "Connected to the server"; }
@@ -26,20 +26,18 @@ void NetworkClient::sendMessage(const QString &message) {
 }
 
 void NetworkClient::onTextMessageReceived(const QString &message) {
-  if (message == "Unknown request") {
-    qWarning() << "Bad request was sent to server";
+  QJsonDocument jsonDoc = QJsonDocument::fromJson(message.toUtf8());
+
+  if (jsonDoc.isNull()) {
+    qWarning() << "Received JSON is null.";
+    return;
+  } else if (!jsonDoc.isObject() && !jsonDoc.isArray()) {
+    qWarning() << "Received JSON is not an object nor array";
+
   } else {
-    QJsonDocument jsonDoc = QJsonDocument::fromJson(message.toUtf8());
+    qDebug() << "message received on client";
 
-    if (jsonDoc.isNull()) {
-      qWarning() << "Received JSON is null.";
-      return;
-    } else if (!jsonDoc.isObject() && !jsonDoc.isArray()) {
-      qWarning() << "Received JSON is not an object nor array";
-
-    } else {
-      emit requestFinished(message.toUtf8());
-    }
+    emit requestFinished(message.toUtf8());
   }
 }
 

@@ -4,7 +4,7 @@ SendDataToClient::SendDataToClient(QObject *parent)
       webSocketServer(new QWebSocketServer(QStringLiteral("WebSocket Server"),
                                            QWebSocketServer::NonSecureMode,
                                            this)),
-      jsonParser(new ParseClientData(this)) {}
+      jsonParser(this) {}
 
 void SendDataToClient::startServer() {
   port = 8080;
@@ -23,10 +23,20 @@ void SendDataToClient::onIncomingConnection() {
   while (webSocketServer->hasPendingConnections()) {
     QWebSocket *clientSocket = webSocketServer->nextPendingConnection();
 
+    connect(clientSocket, &QWebSocket::disconnected, this,
+            &SendDataToClient::onSocketDisconnected);
+
     connect(clientSocket, &QWebSocket::textMessageReceived, this,
             &SendDataToClient::onSendCategory);
-    connect(clientSocket, &QWebSocket::textMessageReceived, jsonParser,
-            &ParseClientData::extractHoveredCategory);
+
+    // connect(&jsonParser, &ParseClientData::getCategoryExtracted, this,
+    //         &SendDataToClient::onSendCategory);
+
+    connect(clientSocket, &QWebSocket::textMessageReceived, this,
+            &SendDataToClient::onSendNationality);
+
+    // connect(&jsonParser, &ParseClientData::hoveredCategoryExtracted, this,
+    //         &SendDataToClient::onSendNationality);
   }
 }
 
@@ -38,45 +48,27 @@ void SendDataToClient::onSocketDisconnected() {
   }
 }
 
-void SendDataToClient::onSendCategory(const QByteArray &category) {
+void SendDataToClient::onSendCategory(const QString &categoryName) {
   QWebSocket *clientSocket = qobject_cast<QWebSocket *>(sender());
-  if (getMessage == "GET_CATEGORIES") {
-    QString response = requestHandler.getCategories();
-    QByteArray jsonResponse = response.toUtf8();
 
-    clientSocket->sendTextMessage(QString::fromUtf8(jsonResponse));
-  } else {
-    clientSocket->sendTextMessage("Unknown request");
+  QByteArray parsedCategory = jsonParser.extractCategory(categoryName);
+
+  if (!clientSocket) {
+    qWarning() << "Client socket is null, cannot send message.";
+    return;
   }
+
+  qDebug() << "Received category from parser";
+
+  clientSocket->sendTextMessage(QString::fromUtf8(parsedCategory));
 }
 
-void SendDataToClient::onSendNationality(const QByteArray &nationality) {
+void SendDataToClient::onSendNationality(const QString &nationality) {
   QWebSocket *clientSocket = qobject_cast<QWebSocket *>(sender());
 
-  QString response = databaseHandler.getNationality();
+  QByteArray parsedHoveredCategory = jsonParser.extractCategory(nationality);
 
-  QByteArray jsonResponse = response.toUtf8();
+  qDebug() << "Received nationalities from parser";
 
-  clientSocket->sendTextMessage(QString::fromUtf8(jsonResponse));
-}
-
-SendErrorToclient::SendErrorToclient(QObject *parent)
-    : QObject(parent),
-      webSocketServer(new QWebSocketServer(QStringLiteral("WebSocket Server"),
-                                           QWebSocketServer::NonSecureMode,
-                                           this)),
-      jsonParser(new ParseClientData(this)) {}
-
-void SendErrorToclient::onConnectClientRequestError() {
-  connect(jsonParser, &ParseClientData::hoveredCategoryError, this,
-          &SendErrorToclient::sendHoveredCategoryError);
-}
-
-void SendErrorToclient::sendCategoryError(const QByteArray &category) {}
-
-void SendErrorToclient::sendHoveredCategoryError(
-    const QByteArray &hoveredCategoryError) {
-  QWebSocket *clientSocket = qobject_cast<QWebSocket *>(sender());
-
-  clientSocket->sendTextMessage(QString::fromUtf8(hoveredCategoryError));
+  clientSocket->sendTextMessage(QString::fromUtf8(parsedHoveredCategory));
 }
