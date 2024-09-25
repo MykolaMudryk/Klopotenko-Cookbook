@@ -5,7 +5,7 @@
 #include <QString>
 
 #include "QtQml/qqmlapplicationengine.h"
-#include "json_parser.h"
+#include "client_json_parser.h"
 #include "network_client.h"
 #include "qml_handler.h"
 

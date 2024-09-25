@@ -1,5 +1,5 @@
-#ifndef JSON_PARSER_H
-#define JSON_PARSER_H
+#ifndef CLIENT_JSON_PARSER_H
+#define CLIENT_JSON_PARSER_H
 
 #include <QByteArray>
 #include <QJsonArray>
@@ -12,6 +12,9 @@ class JsonParser : public QObject {
   Q_OBJECT
  private:
   QString categoryName;
+  QString iconName;
+  QString nationality;
+  QString dishName;
 
  public:
   explicit JsonParser(QObject *parent = nullptr);
@@ -24,4 +27,4 @@ class JsonParser : public QObject {
   void dishNameExtracted(const QString &nationality);
 };
 
-#endif  // JSON_PARSER_H
+#endif  // CLIENT_JSON_PARSER_H

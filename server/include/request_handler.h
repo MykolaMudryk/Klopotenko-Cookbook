@@ -2,8 +2,6 @@
 #define REQUEST_HANDLER_H
 
 #include <QObject>
-#include <QTcpServer>
-#include <QTcpSocket>
 
 #include "database_handler.h"
 
@@ -15,7 +13,8 @@ class RequestHandler : public QObject {
  public:
   explicit RequestHandler(QObject* parent = nullptr);
 
-  QString handleGetRequest();
+  QString getCategories();
+  QString getNationality();
 };
 
 #endif  // REQUEST_HANDLER_H

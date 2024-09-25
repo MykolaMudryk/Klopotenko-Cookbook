@@ -58,25 +58,42 @@ QJsonDocument DatabaseHandler::getCategories() {
 }
 
 QJsonDocument DatabaseHandler::getNationality(const QString &categoryName) {
-  QSqlQuery query;
+  QSqlQuery query(db);
+  QJsonArray nationalitiesArray;
+
   query.prepare(R"(
         SELECT DISTINCT n.name
         FROM nationalities n
         JOIN recipes r ON n.id = r.nationality_id
         JOIN categories c ON r.category_id = c.id
-        WHERE c.name = :category_name
+        WHERE c.category_name = :category_name
     )");
   query.bindValue(":category_name", categoryName);
 
   if (query.exec()) {
-    QStringList nationalities;
     while (query.next()) {
-      nationalities.append(query.value(0).toString());
-    }
+      QJsonObject nationalityObject;
 
+      QString nationality = query.value(0).toString();
+
+      nationalityObject["nationality"] = nationality;
+
+      nationalitiesArray.append(nationalityObject);
+    }
   } else {
-    qDebug() << "SQL Error:" << query.lastError();
+    qDebug() << query.lastError();
+
+    QJsonObject errorObject;
+    errorObject["Error"] =
+        "Failed to retrieve nationalities for provided category";
+    QJsonArray errorArray;
+
+    errorArray.append(errorObject);
+    return QJsonDocument(errorArray);
   }
+
+  QJsonDocument doc(nationalitiesArray);
+  return doc;
 }
 
 QJsonDocument DatabaseHandler::setCategories(const QString &categoryName,

@@ -53,21 +53,24 @@ qt_add_qml_module(Cookbook
         client/include/client.h
         client/include/network_client.h
         client/include/qml_handler.h
-        client/include/json_parser.h
+        client/include/client_json_parser.h
 
         client/src/client.cpp
         client/src/network_client.cpp
         client/src/qml_handler.cpp
-        client/src/json_parser.cpp
+        client/src/client_json_parser.cpp
 
         # Server files
         server/include/server.h
         server/include/request_handler.h
         server/include/database_handler.h
+        server/include/server_json_parser.h
 
         server/src/server.cpp
         server/src/request_handler.cpp
         server/src/database_handler.cpp
+        server/src/server_json_parser.cpp
+
 
 )
 

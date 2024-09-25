@@ -69,8 +69,6 @@ Button {
   Popup {
     id: popup
 
-    // implicitWidth: receiptDropDown.width
-    // height: 300
     modal: true
     focus: true
 

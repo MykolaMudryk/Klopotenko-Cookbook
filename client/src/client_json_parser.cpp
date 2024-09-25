@@ -1,4 +1,4 @@
-#include "json_parser.h"
+#include "client_json_parser.h"
 
 JsonParser::JsonParser(QObject *parent) : QObject(parent) {}
 
