@@ -39,24 +39,26 @@ QJsonArray DatabaseHandler::getCategories() {
 
       categoryObject["iconName"] = iconName;
 
-      qDebug() << "Data after query on server" << categoryName << iconName;
-
       categoriesArray.append(categoryObject);
     }
+    return categoriesArray;
+
   } else {
     qDebug() << "Failed to retrieve categories from database: "
              << query.lastError().text();
-  }
 
-  return categoriesArray;
+    return QJsonArray();
+  }
 }
 
 QJsonArray DatabaseHandler::getNationality(const QString &categoryName) {
   QSqlQuery query(db);
   QJsonArray nationalitiesArray;
 
+  int rowCount = 0;
+
   query.prepare(R"(
-        SELECT DISTINCT n.name
+        SELECT DISTINCT n.nationality_name
         FROM nationalities n
         JOIN recipes r ON n.id = r.nationality_id
         JOIN categories c ON r.category_id = c.id
@@ -64,18 +66,36 @@ QJsonArray DatabaseHandler::getNationality(const QString &categoryName) {
     )");
   query.bindValue(":category_name", categoryName);
 
+  qDebug() << "category name before sql query:" << categoryName;
+
   if (query.exec()) {
     while (query.next()) {
+      rowCount++;
+
+      QJsonObject nationalityObject;
+
       QString nationality = query.value(0).toString();
-      nationalitiesArray.append(nationality);
+
+      nationalityObject["nationality_name"] = nationality;
+
+      qDebug() << "Data after query on server" << nationality;
+
+      nationalitiesArray.append(nationalityObject);
     }
+    return nationalitiesArray;
+
+  } else if (rowCount == 0) {
+    qDebug() << "No recipes found for this category.";
+
+    return QJsonArray();
+
   } else {
     qDebug() << "Failed to retrieve nationalitites for hovered category from "
                 "database: "
              << query.lastError().text();
-  }
 
-  return nationalitiesArray;
+    return QJsonArray();
+  }
 }
 
 QJsonArray DatabaseHandler::setCategories(const QString &categoryName) {

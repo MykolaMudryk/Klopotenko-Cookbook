@@ -39,6 +39,22 @@ QHash<int, QByteArray> RecipeModel::roleNames() const {
   return roles;
 }
 
+void RecipeModel::clearNationalities() {
+  beginResetModel();
+  for (QVariantMap &item : m_recipes) {
+    item.remove("nationality");
+  }
+  endResetModel();
+}
+
+void RecipeModel::clearDishNames() {
+  beginResetModel();
+  for (QVariantMap &item : m_recipes) {
+    item.remove("dishName");
+  }
+  endResetModel();
+}
+
 void RecipeModel::setCategories(const QString &categoryName,
                                 const QString &iconName) {
   bool exists = false;
@@ -58,27 +74,6 @@ void RecipeModel::setCategories(const QString &categoryName,
     newCategory["iconName"] = iconName;
 
     m_recipes.append(newCategory);
-
-    endInsertRows();
-  }
-}
-
-void RecipeModel::setIconName(const QString &iconName) {
-  bool exists = false;
-  for (const auto &icon : m_recipes) {
-    if (icon.value("iconName").toString() == iconName) {
-      exists = true;
-      break;
-    }
-  }
-
-  if (!exists) {
-    beginInsertRows(QModelIndex(), m_recipes.count(), m_recipes.count());
-
-    QVariantMap newIconName;
-    newIconName["iconName"] = iconName;
-
-    m_recipes.append(newIconName);
 
     endInsertRows();
   }
@@ -159,22 +154,22 @@ QmlHandler::QmlHandler(NetworkClient *client, QObject *parent)
       m_dishNameModel(new RecipeModel(this)) {}
 
 void QmlHandler::fetchCategories() {
-  if (m_categoryModel->getCategories().isEmpty()) {
-    networkClient->sendMessage("GET_CATEGORIES");
-  }
+  networkClient->sendMessage("GET_CATEGORIES");
 }
 
 void QmlHandler::fetchNationality(const QString &categoryName) {
-  if (m_nationalityModel->getNationality().isEmpty()) {
-    QString message = QString("GET_NATIONALITY %1").arg(categoryName);
-    networkClient->sendMessage(message);
+  if (!m_nationalityModel->getNationality().isEmpty()) {
+    m_nationalityModel->clearNationalities();
   }
+  QString message = QString("GET_NATIONALITY %1").arg(categoryName);
+  networkClient->sendMessage(message);
 }
 
 void QmlHandler::fetchDishName() {
-  if (m_dishNameModel->getDishNames().isEmpty()) {
-    networkClient->sendMessage("GET_DISHNAME");
+  if (!m_nationalityModel->getNationality().isEmpty()) {
+    m_nationalityModel->clearDishNames();
   }
+  networkClient->sendMessage("GET_DISHNAME");
 }
 
 RecipeModel *QmlHandler::categoryModel() const { return m_categoryModel; }
@@ -185,15 +180,12 @@ RecipeModel *QmlHandler::dishNameModel() const { return m_dishNameModel; }
 
 void QmlHandler::handleCategory(const QString &categoryName,
                                 const QString &iconName) {
-  qDebug() << "handleCategory triggered";
-
   m_categoryModel->setCategories(categoryName, iconName);
 
   emit categoryChanged();
 }
 
 void QmlHandler::handleNationality(const QString &nationality) {
-  qDebug() << "handleNationality triggered";
 
   m_nationalityModel->setNationality(nationality);
 

@@ -11,8 +11,15 @@ Client::Client(QObject *parent)
       nationalityModel(new RecipeModel(this)) {
   connect(networkClient, &NetworkClient::requestFinished, jsonParser,
           &JsonParser::extractValues);
+
   connect(jsonParser, &JsonParser::categoryExtracted, qmlHandler,
           &QmlHandler::handleCategory);
+
+  connect(jsonParser, &JsonParser::nationalityExtracted, qmlHandler,
+          &QmlHandler::handleNationality);
+
+  connect(jsonParser, &JsonParser::dishNameExtracted, qmlHandler,
+          &QmlHandler::handleDishName);
 }
 
 void Client::setupQML(QQmlApplicationEngine &engine) {

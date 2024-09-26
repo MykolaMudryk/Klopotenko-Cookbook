@@ -19,7 +19,8 @@ void JsonParser::extractValues(const QByteArray &jsonData) {
         QString categoryName = jsonObject.value("category_name").toString();
         QString iconName = jsonObject.value("iconName").toString();
 
-        qDebug() << "Parsed category: " << categoryName << iconName;
+        // qDebug() << "Parsed category on client: " << categoryName <<
+        // iconName;
 
         emit categoryExtracted(categoryName, iconName);
       }
@@ -27,7 +28,7 @@ void JsonParser::extractValues(const QByteArray &jsonData) {
       if (jsonObject.contains("nationality_name")) {
         QString nationality = jsonObject.value("nationality_name").toString();
 
-        qDebug() << "Parsed nationality: " << nationality;
+        qDebug() << "Parsed nationality on client: " << nationality;
 
         emit nationalityExtracted(nationality);
       }
@@ -35,7 +36,7 @@ void JsonParser::extractValues(const QByteArray &jsonData) {
       if (jsonObject.contains("name")) {
         QString dishName = jsonObject.value("name").toString();
 
-        qDebug() << "Parsed dishName: " << dishName;
+        qDebug() << "Parsed dishName on client: " << dishName;
 
         emit dishNameExtracted(dishName);
       }

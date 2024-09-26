@@ -11,10 +11,12 @@ QByteArray ParseClientData::extractCategory(const QString &getCategory) {
   if (getCategory == "GET_CATEGORIES") {
     QJsonArray categoriesArray = database.getCategories();
 
-    QJsonDocument doc(categoriesArray);
-    QByteArray jsonResponse = doc.toJson(QJsonDocument::Compact);
+    if (!categoriesArray.isEmpty()) {
+      QJsonDocument doc(categoriesArray);
+      QByteArray jsonResponse = doc.toJson(QJsonDocument::Compact);
 
-    return jsonResponse;
+      return jsonResponse;
+    }
   }
 
   return QByteArray();
@@ -22,8 +24,8 @@ QByteArray ParseClientData::extractCategory(const QString &getCategory) {
 
 QByteArray ParseClientData::extractHoveredCategory(
     const QString &hoveredCategory) {
-  if (hoveredCategory.startsWith("GET_NATIONALITY ")) {
-    QString categoryName = hoveredCategory.mid(16);
+  if (hoveredCategory.startsWith("GET_NATIONALITY")) {
+    QString categoryName = hoveredCategory.mid(16).trimmed();
 
     QJsonArray nationalitiesArray = database.getNationality(categoryName);
 

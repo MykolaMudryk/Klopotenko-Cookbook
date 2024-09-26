@@ -29,14 +29,8 @@ void SendDataToClient::onIncomingConnection() {
     connect(clientSocket, &QWebSocket::textMessageReceived, this,
             &SendDataToClient::onSendCategory);
 
-    // connect(&jsonParser, &ParseClientData::getCategoryExtracted, this,
-    //         &SendDataToClient::onSendCategory);
-
     connect(clientSocket, &QWebSocket::textMessageReceived, this,
             &SendDataToClient::onSendNationality);
-
-    // connect(&jsonParser, &ParseClientData::hoveredCategoryExtracted, this,
-    //         &SendDataToClient::onSendNationality);
   }
 }
 
@@ -48,27 +42,34 @@ void SendDataToClient::onSocketDisconnected() {
   }
 }
 
-void SendDataToClient::onSendCategory(const QString &categoryName) {
+void SendDataToClient::onSendCategory(const QString &categoryDatabase) {
   QWebSocket *clientSocket = qobject_cast<QWebSocket *>(sender());
-
-  QByteArray parsedCategory = jsonParser.extractCategory(categoryName);
 
   if (!clientSocket) {
     qWarning() << "Client socket is null, cannot send message.";
     return;
   }
 
-  qDebug() << "Received category from parser";
+  QByteArray parsedCategory = jsonParser.extractCategory(categoryDatabase);
+
+  qDebug() << "Sending JSON category:" << QString::fromUtf8(parsedCategory);
 
   clientSocket->sendTextMessage(QString::fromUtf8(parsedCategory));
 }
 
-void SendDataToClient::onSendNationality(const QString &nationality) {
+void SendDataToClient::onSendNationality(const QString &categoryClient) {
   QWebSocket *clientSocket = qobject_cast<QWebSocket *>(sender());
 
-  QByteArray parsedHoveredCategory = jsonParser.extractCategory(nationality);
+  if (!clientSocket) {
+    qWarning() << "Client socket is null, cannot send message.";
+    return;
+  }
 
-  qDebug() << "Received nationalities from parser";
+  QByteArray parsedHoveredCategory =
+      jsonParser.extractHoveredCategory(categoryClient);
+
+  qDebug() << "Sending JSON hovered category:"
+           << QString::fromUtf8(parsedHoveredCategory);
 
   clientSocket->sendTextMessage(QString::fromUtf8(parsedHoveredCategory));
 }

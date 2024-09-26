@@ -31,12 +31,11 @@ class RecipeModel : public QAbstractListModel {
 
   QHash<int, QByteArray> roleNames() const override;
 
-  bool containsCategory(const QString &categoryName, const QString &iconName,
-                        const QString &nationality) const;
+  void clearNationalities();
+
+  void clearDishNames();
 
   void setCategories(const QString &categoryName, const QString &iconName);
-
-  void setIconName(const QString &iconName);
 
   void setNationality(const QString &nationality);
 

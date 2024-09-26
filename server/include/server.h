@@ -27,8 +27,8 @@ class SendDataToClient : public QObject {
   void onIncomingConnection();
   void onSocketDisconnected();
 
-  void onSendCategory(const QString& categoryName);
-  void onSendNationality(const QString& nationality);
+  void onSendCategory(const QString& categoryDatabase);
+  void onSendNationality(const QString& categoryClient);
 };
 
 #endif  // SERVER_H

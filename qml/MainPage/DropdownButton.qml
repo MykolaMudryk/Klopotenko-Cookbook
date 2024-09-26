@@ -9,7 +9,6 @@ Button {
   height: 55
 
   onClicked: {
-
     popup.open()
     qmlHandler.fetchCategories()
   }

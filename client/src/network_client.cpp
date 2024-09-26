@@ -28,6 +28,8 @@ void NetworkClient::sendMessage(const QString &message) {
 void NetworkClient::onTextMessageReceived(const QString &message) {
   QJsonDocument jsonDoc = QJsonDocument::fromJson(message.toUtf8());
 
+  qDebug() << "Received message on client:" << message;
+
   if (jsonDoc.isNull()) {
     qWarning() << "Received JSON is null.";
     return;
@@ -35,9 +37,12 @@ void NetworkClient::onTextMessageReceived(const QString &message) {
     qWarning() << "Received JSON is not an object nor array";
 
   } else {
-    qDebug() << "message received on client";
-
-    emit requestFinished(message.toUtf8());
+    if (jsonDoc.isArray() && jsonDoc.array().isEmpty()) {
+      qWarning() << "Received empty array.";
+    } else {
+      qDebug() << "Received data is correct";
+      emit requestFinished(message.toUtf8());
+    }
   }
 }
 
