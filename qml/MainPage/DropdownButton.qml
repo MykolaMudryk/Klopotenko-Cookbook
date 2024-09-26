@@ -84,9 +84,9 @@ Button {
       width: receiptDropDown.width + 40
       implicitHeight: qmlHandler.categoryModel.rowCount * 50
 
-      color: "#f0f0f0"
+      radius: 7
 
-      radius: receiptDropDownBackground.radius
+      color: "#f0f0f0"
 
       ListView {
         id: categoryListview
@@ -103,6 +103,8 @@ Button {
 
           height: 50
 
+          property int hoveredCategoryX: 0
+
           MouseArea {
             id: categoryHoverArea
 
@@ -110,12 +112,24 @@ Button {
 
             hoverEnabled: true
 
+            property int hoveredCategoryY: 0
+
             onEntered: {
               parent.color = "#f6f7f8"
               qmlHandler.fetchNationality(model.categoryName)
+
+              hoveredCategoryX = dropdownColumnBackground.x
+              hoveredCategoryY = dropdownColumnBackground.y
+
+              nationalityListview.x = hoveredCategoryX + categoryListview.x + categoryListview.width
+              nationalityListview.y = hoveredCategoryY
             }
 
-            onExited: parent.color = "white"
+            onExited: {
+
+              parent.color = "white"
+              nationalityListview.x = -1000
+            }
 
             onClicked: popup.close()
           }
@@ -157,7 +171,7 @@ Button {
       Rectangle {
         id: nationalityListviewBackground
 
-        width: parent.width
+        width: categoryListviewBackground.width
         implicitHeight: qmlHandler.nationalityModel.rowCount * 50
 
         color: "#f0f0f0"
