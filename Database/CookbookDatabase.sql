@@ -29,8 +29,8 @@ CREATE TABLE `categories` (
   `category_name` varchar(45) NOT NULL,
   `iconName` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `iconName_UNIQUE` (`iconName`),
-  UNIQUE KEY `category_name_UNIQUE` (`category_name`)
+  UNIQUE KEY `category_name_UNIQUE` (`category_name`),
+  UNIQUE KEY `iconName_UNIQUE` (`iconName`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -123,6 +123,31 @@ INSERT INTO `nationalities` VALUES (4,'Американська кухня'),(5,
 UNLOCK TABLES;
 
 --
+-- Table structure for table `recipe_details`
+--
+
+DROP TABLE IF EXISTS `recipe_details`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `recipe_details` (
+  `recipe_id` int NOT NULL,
+  `cooking_technology` text NOT NULL,
+  `notes` text,
+  PRIMARY KEY (`recipe_id`),
+  CONSTRAINT `fk_recipe_details` FOREIGN KEY (`recipe_id`) REFERENCES `recipes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `recipe_details`
+--
+
+LOCK TABLES `recipe_details` WRITE;
+/*!40000 ALTER TABLE `recipe_details` DISABLE KEYS */;
+/*!40000 ALTER TABLE `recipe_details` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
 -- Table structure for table `recipe_ingredients`
 --
 
@@ -135,8 +160,8 @@ CREATE TABLE `recipe_ingredients` (
   `weight_grams` decimal(6,2) NOT NULL,
   PRIMARY KEY (`recipe_id`,`ingredient_id`),
   KEY `idx_ingredient_id` (`ingredient_id`),
-  CONSTRAINT `recipe_ingredients_ibfk_1` FOREIGN KEY (`recipe_id`) REFERENCES `recipes` (`id`) ON DELETE CASCADE,
-  CONSTRAINT `recipe_ingredients_ibfk_2` FOREIGN KEY (`ingredient_id`) REFERENCES `ingredients` (`id`) ON DELETE CASCADE
+  CONSTRAINT `recipe_ingredients_ibfk_1` FOREIGN KEY (`recipe_id`) REFERENCES `recipes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `recipe_ingredients_ibfk_2` FOREIGN KEY (`ingredient_id`) REFERENCES `ingredients` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -165,7 +190,7 @@ CREATE TABLE `recipe_portions` (
   PRIMARY KEY (`id`),
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `recipe_portions_ibfk_1` (`recipe_id`),
-  CONSTRAINT `recipe_portions_ibfk_1` FOREIGN KEY (`recipe_id`) REFERENCES `recipes` (`id`) ON DELETE CASCADE
+  CONSTRAINT `recipe_portions_ibfk_1` FOREIGN KEY (`recipe_id`) REFERENCES `recipes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -197,8 +222,9 @@ CREATE TABLE `recipes` (
   KEY `recipes_ibfk_1` (`category_id`),
   KEY `recipes_ibfk_2` (`nationality_id`),
   KEY `fk_dish` (`dish_id`),
-  CONSTRAINT `recipes_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`),
-  CONSTRAINT `recipes_ibfk_2` FOREIGN KEY (`nationality_id`) REFERENCES `nationalities` (`id`)
+  CONSTRAINT `fk_dish` FOREIGN KEY (`dish_id`) REFERENCES `dishes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `recipes_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `recipes_ibfk_2` FOREIGN KEY (`nationality_id`) REFERENCES `nationalities` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -221,4 +247,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-22 19:36:04
+-- Dump completed on 2024-09-27 15:25:45

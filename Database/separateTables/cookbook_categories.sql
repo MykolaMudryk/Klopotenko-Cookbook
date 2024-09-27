@@ -29,8 +29,8 @@ CREATE TABLE `categories` (
   `category_name` varchar(45) NOT NULL,
   `iconName` varchar(45) NOT NULL,
   PRIMARY KEY (`id`),
-  UNIQUE KEY `iconName_UNIQUE` (`iconName`),
-  UNIQUE KEY `category_name_UNIQUE` (`category_name`)
+  UNIQUE KEY `category_name_UNIQUE` (`category_name`),
+  UNIQUE KEY `iconName_UNIQUE` (`iconName`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -53,4 +53,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-22 19:35:29
+-- Dump completed on 2024-09-27 15:26:36
