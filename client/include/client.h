@@ -22,8 +22,6 @@ class Client : public QObject {
  private:
   QmlHandler *qmlHandler;
   JsonParser *jsonParser;
-  RecipeModel *categoryModel;
-  RecipeModel *nationalityModel;
 };
 
 #endif  // CLIENT_H

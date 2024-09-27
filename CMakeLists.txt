@@ -62,12 +62,12 @@ qt_add_qml_module(Cookbook
 
         # Server files
         server/include/server.h
-        server/include/request_handler.h
+
         server/include/database_handler.h
         server/include/server_json_parser.h
 
         server/src/server.cpp
-        server/src/request_handler.cpp
+
         server/src/database_handler.cpp
         server/src/server_json_parser.cpp
 

@@ -73,12 +73,21 @@ Button {
 
     parent: Overlay.overlay
 
-    closePolicy: Popup.CloseOnEscape | Popup.CloseOnPressOutside
+    closePolicy: Popup.CloseOnPressOutside
 
     x: receiptDropDown.x
     y: receiptDropDown.y + receiptDropDown.height
 
     background: Rectangle {
+      id: popupContainer
+
+      width: parent.width
+      height: parent.height
+
+      color: "transparent"
+    }
+
+    Rectangle {
       id: categoryListviewBackground
 
       width: receiptDropDown.width + 40
@@ -103,6 +112,8 @@ Button {
 
           height: 50
 
+          property int hoveredIndex: index
+          property int previousIndex: -1
           property int hoveredCategoryX: 0
 
           MouseArea {
@@ -116,6 +127,7 @@ Button {
 
             onEntered: {
               parent.color = "#f6f7f8"
+
               qmlHandler.fetchNationality(model.categoryName)
 
               hoveredCategoryX = dropdownColumnBackground.x
@@ -126,12 +138,16 @@ Button {
             }
 
             onExited: {
-
               parent.color = "white"
-              nationalityListview.x = -1000
+
+              qmlHandler.nationalityModel.clearNationalities()
             }
 
-            onClicked: popup.close()
+            onClicked: {
+              nationalityListview.x = -1000
+              qmlHandler.nationalityModel.clearNationalities()
+              popup.close()
+            }
           }
 
           Row {
@@ -171,7 +187,7 @@ Button {
       Rectangle {
         id: nationalityListviewBackground
 
-        width: categoryListviewBackground.width
+        width: receiptDropDown.width + 40
         implicitHeight: qmlHandler.nationalityModel.rowCount * 50
 
         color: "#f0f0f0"
@@ -192,7 +208,7 @@ Button {
           delegate: Rectangle {
             id: nationalityColumnBackground
 
-            width: popup.width
+            width: nationalityListviewBackground.width
 
             height: 50
 
@@ -207,7 +223,10 @@ Button {
 
               onExited: parent.color = "white"
 
-              onClicked: popup.close()
+              onClicked: {
+                nationalityListview.x = -1000
+                popup.close()
+              }
             }
 
             Row {

@@ -40,6 +40,8 @@ QHash<int, QByteArray> RecipeModel::roleNames() const {
 }
 
 void RecipeModel::clearNationalities() {
+  qDebug() << "clearNationalities() called";
+
   beginResetModel();
   for (QVariantMap &item : m_recipes) {
     item.remove("nationality");
@@ -74,27 +76,6 @@ void RecipeModel::setCategories(const QString &categoryName,
     newCategory["iconName"] = iconName;
 
     m_recipes.append(newCategory);
-
-    endInsertRows();
-  }
-}
-
-void RecipeModel::setNationality(const QString &nationality) {
-  bool exists = false;
-  for (const auto &cuisine : m_recipes) {
-    if (cuisine.value("nationality").toString() == nationality) {
-      exists = true;
-      break;
-    }
-  }
-
-  if (!exists) {
-    beginInsertRows(QModelIndex(), m_recipes.count(), m_recipes.count());
-
-    QVariantMap newNationality;
-    newNationality["nationality"] = nationality;
-
-    m_recipes.append(newNationality);
 
     endInsertRows();
   }
@@ -138,6 +119,27 @@ QStringList RecipeModel::getNationality() const {
   return nationalities;
 }
 
+void RecipeModel::setNationality(const QString &nationality) {
+  bool exists = false;
+  for (const auto &cuisine : m_recipes) {
+    if (cuisine.value("nationality").toString() == nationality) {
+      exists = true;
+      break;
+    }
+  }
+
+  if (!exists) {
+    beginInsertRows(QModelIndex(), m_recipes.count(), m_recipes.count());
+
+    QVariantMap newNationality;
+    newNationality["nationality"] = nationality;
+
+    m_recipes.append(newNationality);
+
+    endInsertRows();
+  }
+}
+
 QStringList RecipeModel::getDishNames() const {
   QStringList dishNames;
   for (const auto &recipe : m_recipes) {
@@ -153,30 +155,7 @@ QmlHandler::QmlHandler(NetworkClient *client, QObject *parent)
       m_nationalityModel(new RecipeModel(this)),
       m_dishNameModel(new RecipeModel(this)) {}
 
-void QmlHandler::fetchCategories() {
-  networkClient->sendMessage("GET_CATEGORIES");
-}
-
-void QmlHandler::fetchNationality(const QString &categoryName) {
-  if (!m_nationalityModel->getNationality().isEmpty()) {
-    m_nationalityModel->clearNationalities();
-  }
-  QString message = QString("GET_NATIONALITY %1").arg(categoryName);
-  networkClient->sendMessage(message);
-}
-
-void QmlHandler::fetchDishName() {
-  if (!m_nationalityModel->getNationality().isEmpty()) {
-    m_nationalityModel->clearDishNames();
-  }
-  networkClient->sendMessage("GET_DISHNAME");
-}
-
 RecipeModel *QmlHandler::categoryModel() const { return m_categoryModel; }
-
-RecipeModel *QmlHandler::nationalityModel() const { return m_nationalityModel; }
-
-RecipeModel *QmlHandler::dishNameModel() const { return m_dishNameModel; }
 
 void QmlHandler::handleCategory(const QString &categoryName,
                                 const QString &iconName) {
@@ -185,12 +164,29 @@ void QmlHandler::handleCategory(const QString &categoryName,
   emit categoryChanged();
 }
 
-void QmlHandler::handleNationality(const QString &nationality) {
+void QmlHandler::fetchCategories() {
+  networkClient->sendMessage("GET_CATEGORIES");
+}
 
+void QmlHandler::fetchNationality(const QString &categoryName) {
+  QString message = QString("GET_NATIONALITY %1").arg(categoryName);
+  networkClient->sendMessage(message);
+}
+
+RecipeModel *QmlHandler::nationalityModel() const { return m_nationalityModel; }
+
+void QmlHandler::handleNationality(const QString &nationality) {
   m_nationalityModel->setNationality(nationality);
 
   emit nationalityChanged();
 }
+
+void QmlHandler::fetchDishName() {
+
+  networkClient->sendMessage("GET_DISHNAME");
+}
+
+RecipeModel *QmlHandler::dishNameModel() const { return m_dishNameModel; }
 
 void QmlHandler::handleDishName(const QString &dishName) {
   qDebug() << "handleDishName triggered";

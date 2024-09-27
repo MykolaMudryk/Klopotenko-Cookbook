@@ -33,17 +33,17 @@ class RecipeModel : public QAbstractListModel {
 
   void clearNationalities();
 
-  void clearDishNames();
-
-  void setCategories(const QString &categoryName, const QString &iconName);
+  QStringList getNationality() const;
 
   void setNationality(const QString &nationality);
 
-  void setDishName(const QString &dishName);
+  void setCategories(const QString &categoryName, const QString &iconName);
 
   QStringList getCategories() const;
 
-  QStringList getNationality() const;
+  void clearDishNames();
+
+  void setDishName(const QString &dishName);
 
   QStringList getDishNames() const;
 };
@@ -63,8 +63,6 @@ class QmlHandler : public QObject {
   RecipeModel *m_nationalityModel;
   RecipeModel *m_dishNameModel;
 
-  int index;
-
  public:
   explicit QmlHandler(NetworkClient *client = nullptr,
                       QObject *parent = nullptr);
@@ -72,6 +70,8 @@ class QmlHandler : public QObject {
   RecipeModel *categoryModel() const;
   RecipeModel *nationalityModel() const;
   RecipeModel *dishNameModel() const;
+
+  int getNationalityRowCount();
 
  public slots:
   void fetchCategories();

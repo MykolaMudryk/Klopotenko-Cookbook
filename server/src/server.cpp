@@ -52,7 +52,7 @@ void SendDataToClient::onSendCategory(const QString &categoryDatabase) {
 
   QByteArray parsedCategory = jsonParser.extractCategory(categoryDatabase);
 
-  qDebug() << "Sending JSON category:" << QString::fromUtf8(parsedCategory);
+  // qDebug() << "Sending JSON category:" << QString::fromUtf8(parsedCategory);
 
   clientSocket->sendTextMessage(QString::fromUtf8(parsedCategory));
 }

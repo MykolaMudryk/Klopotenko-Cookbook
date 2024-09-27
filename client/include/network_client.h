@@ -19,14 +19,14 @@ class NetworkClient : public QObject {
   void connectToServer();
   void sendMessage(const QString &message);
 
- signals:
-  void requestFinished(const QByteArray &response);
-  void errorOccurred(const QString &errorString);
-
  private slots:
   void onConnected();
   void onTextMessageReceived(const QString &message);
   void onError(QAbstractSocket::SocketError error);
+
+ signals:
+  void requestFinished(const QByteArray &response);
+  void errorOccurred(const QString &errorString);
 };
 
 #endif  // NETWORK_CLIENT_H

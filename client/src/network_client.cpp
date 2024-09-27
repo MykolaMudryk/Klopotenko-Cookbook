@@ -28,7 +28,7 @@ void NetworkClient::sendMessage(const QString &message) {
 void NetworkClient::onTextMessageReceived(const QString &message) {
   QJsonDocument jsonDoc = QJsonDocument::fromJson(message.toUtf8());
 
-  qDebug() << "Received message on client:" << message;
+  // qDebug() << "Received message on client:" << message;
 
   if (jsonDoc.isNull()) {
     qWarning() << "Received JSON is null.";
