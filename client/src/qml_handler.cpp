@@ -102,23 +102,6 @@ void RecipeModel::setDishName(const QString &dishName) {
   }
 }
 
-QStringList RecipeModel::getCategories() const {
-  QStringList categories;
-  for (const auto &recipe : m_recipes) {
-    categories.append(recipe.value("categoryName").toString());
-    categories.append(recipe.value("iconName").toString());
-  }
-  return categories;
-}
-
-QStringList RecipeModel::getNationality() const {
-  QStringList nationalities;
-  for (const auto &recipe : m_recipes) {
-    nationalities.append(recipe.value("nationality").toString());
-  }
-  return nationalities;
-}
-
 void RecipeModel::setNationality(const QString &nationality) {
   bool exists = false;
   for (const auto &cuisine : m_recipes) {

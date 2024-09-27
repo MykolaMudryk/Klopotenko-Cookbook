@@ -33,13 +33,9 @@ class RecipeModel : public QAbstractListModel {
 
   void clearNationalities();
 
-  QStringList getNationality() const;
-
   void setNationality(const QString &nationality);
 
   void setCategories(const QString &categoryName, const QString &iconName);
-
-  QStringList getCategories() const;
 
   void clearDishNames();
 
