@@ -16,30 +16,28 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `categories`
+-- Table structure for table `recipe_details`
 --
 
-DROP TABLE IF EXISTS `categories`;
+DROP TABLE IF EXISTS `recipe_details`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `categories` (
+CREATE TABLE `recipe_details` (
   `recipe_id` int NOT NULL AUTO_INCREMENT,
-  `category_name` varchar(45) NOT NULL,
-  `iconName` varchar(45) NOT NULL,
-  PRIMARY KEY (`recipe_id`),
-  UNIQUE KEY `category_name_UNIQUE` (`category_name`),
-  UNIQUE KEY `iconName_UNIQUE` (`iconName`)
+  `cooking_technology` text NOT NULL,
+  `recipe_notes` text NOT NULL,
+  PRIMARY KEY (`recipe_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
--- Dumping data for table `categories`
+-- Dumping data for table `recipe_details`
 --
 
-LOCK TABLES `categories` WRITE;
-/*!40000 ALTER TABLE `categories` DISABLE KEYS */;
-INSERT INTO `categories` VALUES (1,'Перші страви','main.png'),(2,'Другі страви','starters.png'),(3,'Салати','salad.png'),(4,'Закуски','snack.png'),(5,'Десерти','dessert.png');
-/*!40000 ALTER TABLE `categories` ENABLE KEYS */;
+LOCK TABLES `recipe_details` WRITE;
+/*!40000 ALTER TABLE `recipe_details` DISABLE KEYS */;
+INSERT INTO `recipe_details` VALUES (1,'вставити текст','вставити текст'),(2,'вставити текст','вставити текст'),(3,'вставити текст','вставити текст'),(4,'вставити текст','вставити текст'),(5,'вставити текст','вставити текст');
+/*!40000 ALTER TABLE `recipe_details` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 

@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `cookbook` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `cookbook`;
 -- MySQL dump 10.13  Distrib 8.0.38, for macos14 (arm64)
 --
 -- Host: localhost    Database: cookbook
@@ -53,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-27 15:26:36
+-- Dump completed on 2024-09-27 20:31:20

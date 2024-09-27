@@ -1,5 +1,3 @@
-CREATE DATABASE  IF NOT EXISTS `cookbook` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
-USE `cookbook`;
 -- MySQL dump 10.13  Distrib 8.0.38, for macos14 (arm64)
 --
 -- Host: localhost    Database: cookbook
@@ -25,10 +23,10 @@ DROP TABLE IF EXISTS `categories`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `categories` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `recipe_id` int NOT NULL AUTO_INCREMENT,
   `category_name` varchar(45) NOT NULL,
   `iconName` varchar(45) NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`recipe_id`),
   UNIQUE KEY `category_name_UNIQUE` (`category_name`),
   UNIQUE KEY `iconName_UNIQUE` (`iconName`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -52,9 +50,9 @@ DROP TABLE IF EXISTS `dishes`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `dishes` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `recipe_id` int NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`recipe_id`),
   UNIQUE KEY `name_UNIQUE` (`name`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -104,11 +102,11 @@ DROP TABLE IF EXISTS `nationalities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `nationalities` (
-  `id` int NOT NULL AUTO_INCREMENT,
+  `recipe_id` int NOT NULL AUTO_INCREMENT,
   `nationality_name` varchar(255) NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`recipe_id`),
   UNIQUE KEY `nationality_name_UNIQUE` (`nationality_name`),
-  UNIQUE KEY `id_UNIQUE` (`id`)
+  UNIQUE KEY `id_UNIQUE` (`recipe_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -130,12 +128,11 @@ DROP TABLE IF EXISTS `recipe_details`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `recipe_details` (
-  `recipe_id` int NOT NULL,
+  `recipe_id` int NOT NULL AUTO_INCREMENT,
   `cooking_technology` text NOT NULL,
-  `notes` text,
-  PRIMARY KEY (`recipe_id`),
-  CONSTRAINT `fk_recipe_details` FOREIGN KEY (`recipe_id`) REFERENCES `recipes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `recipe_notes` text NOT NULL,
+  PRIMARY KEY (`recipe_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -144,6 +141,7 @@ CREATE TABLE `recipe_details` (
 
 LOCK TABLES `recipe_details` WRITE;
 /*!40000 ALTER TABLE `recipe_details` DISABLE KEYS */;
+INSERT INTO `recipe_details` VALUES (1,'вставити текст','вставити текст'),(2,'вставити текст','вставити текст'),(3,'вставити текст','вставити текст'),(4,'вставити текст','вставити текст'),(5,'вставити текст','вставити текст');
 /*!40000 ALTER TABLE `recipe_details` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -218,13 +216,19 @@ CREATE TABLE `recipes` (
   `nationality_id` int NOT NULL,
   `isFavourite` tinyint(1) NOT NULL DEFAULT '0',
   `dish_id` int NOT NULL,
+  `cooking_technology_id` int NOT NULL,
+  `recipe_notes_id` int NOT NULL,
   PRIMARY KEY (`id`),
-  KEY `recipes_ibfk_1` (`category_id`),
-  KEY `recipes_ibfk_2` (`nationality_id`),
+  KEY `fk_categories` (`category_id`),
+  KEY `fk_nationalities` (`nationality_id`),
   KEY `fk_dish` (`dish_id`),
-  CONSTRAINT `fk_dish` FOREIGN KEY (`dish_id`) REFERENCES `dishes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `recipes_ibfk_1` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  CONSTRAINT `recipes_ibfk_2` FOREIGN KEY (`nationality_id`) REFERENCES `nationalities` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
+  KEY `fk_cooking_technology_idx` (`cooking_technology_id`),
+  KEY `fk_recipe_notes_idx` (`recipe_notes_id`),
+  CONSTRAINT `fk_categories` FOREIGN KEY (`category_id`) REFERENCES `categories` (`recipe_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_cooking_technology` FOREIGN KEY (`cooking_technology_id`) REFERENCES `recipe_details` (`recipe_id`),
+  CONSTRAINT `fk_dish` FOREIGN KEY (`dish_id`) REFERENCES `dishes` (`recipe_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_nationalities` FOREIGN KEY (`nationality_id`) REFERENCES `nationalities` (`recipe_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `fk_recipe_notes` FOREIGN KEY (`recipe_notes_id`) REFERENCES `recipe_details` (`recipe_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -234,7 +238,7 @@ CREATE TABLE `recipes` (
 
 LOCK TABLES `recipes` WRITE;
 /*!40000 ALTER TABLE `recipes` DISABLE KEYS */;
-INSERT INTO `recipes` VALUES (1,'Чахохбілі з куркою',1,3,0,3),(2,'Кебаб з сиром',2,2,0,4),(3,'Бургер з яловичиною',4,4,0,5),(4,'Борщ з картоплею',1,1,0,1),(5,'Авголемоно',1,5,0,1);
+INSERT INTO `recipes` VALUES (1,'Чахохбілі з куркою',1,3,0,3,1,1),(2,'Кебаб з сиром',2,2,0,4,2,2),(3,'Бургер з яловичиною',4,4,0,5,3,3),(4,'Борщ з картоплею',1,1,0,1,4,4),(5,'Авголемоно',1,5,0,1,5,5);
 /*!40000 ALTER TABLE `recipes` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -247,4 +251,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-27 15:25:45
+-- Dump completed on 2024-09-27 20:30:47
