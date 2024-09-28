@@ -89,6 +89,12 @@ Button {
       color: "transparent"
     }
 
+    MouseArea: {
+      onExited: {
+        nationalityListview.x = -1000
+      }
+    }
+
     Rectangle {
       id: categoryListviewBackground
 
