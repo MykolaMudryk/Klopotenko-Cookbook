@@ -1,28 +1,31 @@
-#ifndef RECIPE_MODEL_H
-#define RECIPE_MODEL_H
+#ifndef QMLHANDLER_H
+#define QMLHANDLER_H
 
 #include <QAbstractListModel>
 #include <QList>
 #include <QObject>
-#include <QVariantMap>
 
 #include "network_client.h"
 
-class RecipeModel : public QAbstractListModel {
+class CategoryModel : public QAbstractListModel {
   Q_OBJECT
+  Q_PROPERTY(
+      CategoryModel *categoryModel READ categoryModel NOTIFY categoryChanged)
 
  private:
-  QList<QVariantMap> m_recipes;
+  struct Category {
+    QString name;
+    QString icon;
+  };
+
+  QList<Category> m_categories;
+  NetworkClient *networkClient;
 
  public:
-  explicit RecipeModel(QObject *parent = nullptr);
+  explicit CategoryModel(NetworkClient *client = nullptr,
+                         QObject *parent = nullptr);
 
-  enum RecipeRoles {
-    CategoryNameRole = Qt::UserRole + 1,
-    IconNameRole,
-    NationalityRole,
-    DishNameRole
-  };
+  enum CategoryRoles { CategoryNameRole = Qt::UserRole + 1, IconNameRole };
 
   int rowCount(const QModelIndex &parent = QModelIndex()) const override;
 
@@ -31,56 +34,84 @@ class RecipeModel : public QAbstractListModel {
 
   QHash<int, QByteArray> roleNames() const override;
 
-  void clearNationalities();
+  void setCategory(const QString &categoryName, const QString &iconName);
 
-  void setNationality(const QString &nationality);
-
-  void setCategories(const QString &categoryName, const QString &iconName);
-
-  void clearDishNames();
-
-  void setDishName(const QString &dishName);
-
-  QStringList getDishNames() const;
-};
-
-class QmlHandler : public QObject {
-  Q_OBJECT
-  Q_PROPERTY(
-      RecipeModel *categoryModel READ categoryModel NOTIFY categoryChanged)
-  Q_PROPERTY(RecipeModel *nationalityModel READ nationalityModel NOTIFY
-                 nationalityChanged)
-  Q_PROPERTY(
-      RecipeModel *dishNameModel READ dishNameModel NOTIFY dishNameChanged)
-
- private:
-  NetworkClient *networkClient;
-  RecipeModel *m_categoryModel;
-  RecipeModel *m_nationalityModel;
-  RecipeModel *m_dishNameModel;
-
- public:
-  explicit QmlHandler(NetworkClient *client = nullptr,
-                      QObject *parent = nullptr);
-
-  RecipeModel *categoryModel() const;
-  RecipeModel *nationalityModel() const;
-  RecipeModel *dishNameModel() const;
-
-  int getNationalityRowCount();
+  CategoryModel *categoryModel() const;
 
  public slots:
   void fetchCategories();
-  void fetchNationality(const QString &categoryName);
-  void fetchDishName();
-
-  void handleCategory(const QString &categoryName, const QString &iconName);
-  void handleNationality(const QString &nationality);
-  void handleDishName(const QString &dishName);
 
  signals:
   void categoryChanged();
+};
+
+class NationalityModel : public QAbstractListModel {
+  Q_OBJECT
+  Q_PROPERTY(NationalityModel *nationalityModel READ nationalityModel NOTIFY
+                 nationalityChanged)
+
+ private:
+  QList<QString> m_nationalities;
+  NetworkClient *networkClient;
+
+ public:
+  explicit NationalityModel(NetworkClient *client = nullptr,
+                            QObject *parent = nullptr);
+
+  enum NationalityRoles { NationalityRole = Qt::UserRole + 1 };
+
+  int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+
+  QVariant data(const QModelIndex &index,
+                int role = Qt::DisplayRole) const override;
+
+  QHash<int, QByteArray> roleNames() const override;
+
+  Q_INVOKABLE void clearNationalities();
+
+  void setNationality(const QString &nationality);
+
+  NationalityModel *nationalityModel() const;
+
+ public slots:
+  void fetchNationality(const QString &categoryName);
+
+ signals:
   void nationalityChanged();
+};
+
+class DishNameModel : public QAbstractListModel {
+  Q_OBJECT
+  Q_PROPERTY(
+      DishNameModel *dishNameModel READ dishNameModel NOTIFY dishNameChanged)
+
+ private:
+  QList<QString> m_dishNames;
+  NetworkClient *networkClient;
+
+ public:
+  explicit DishNameModel(NetworkClient *client = nullptr,
+                         QObject *parent = nullptr);
+
+  enum DishNameRoles { DishNameRole = Qt::UserRole + 1 };
+
+  int rowCount(const QModelIndex &parent = QModelIndex()) const override;
+
+  QVariant data(const QModelIndex &index,
+                int role = Qt::DisplayRole) const override;
+
+  QHash<int, QByteArray> roleNames() const override;
+
+  Q_INVOKABLE void clearDishNames();
+
+  void setDishName(const QString &dishName);
+
+  DishNameModel *dishNameModel() const;
+
+ public slots:
+  void fetchDishName();
+
+ signals:
   void dishNameChanged();
 };
 

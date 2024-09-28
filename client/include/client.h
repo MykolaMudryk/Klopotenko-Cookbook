@@ -20,8 +20,10 @@ class Client : public QObject {
   NetworkClient *networkClient;
 
  private:
-  QmlHandler *qmlHandler;
   JsonParser *jsonParser;
+  CategoryModel *categoryModel;
+  NationalityModel *nationalityModel;
+  DishNameModel *dishNameModel;
 };
 
 #endif  // CLIENT_H

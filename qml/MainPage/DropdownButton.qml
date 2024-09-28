@@ -10,7 +10,7 @@ Button {
 
   onClicked: {
     popup.open()
-    qmlHandler.fetchCategories()
+    categoryModel.fetchCategories()
   }
 
   anchors {
@@ -91,7 +91,7 @@ Button {
       id: categoryListviewBackground
 
       width: receiptDropDown.width + 40
-      implicitHeight: qmlHandler.categoryModel.rowCount * 50
+      implicitHeight: categoryModel.rowCount * 50
 
       radius: 7
 
@@ -103,7 +103,7 @@ Button {
         width: categoryListviewBackground.width
         implicitHeight: contentHeight
 
-        model: qmlHandler.categoryModel
+        model: categoryModel
 
         delegate: Rectangle {
           id: dropdownColumnBackground
@@ -128,7 +128,7 @@ Button {
             onEntered: {
               parent.color = "#f6f7f8"
 
-              qmlHandler.fetchNationality(model.categoryName)
+              nationalityModel.fetchNationality(model.categoryName)
 
               hoveredCategoryX = dropdownColumnBackground.x
               hoveredCategoryY = dropdownColumnBackground.y
@@ -140,12 +140,12 @@ Button {
             onExited: {
               parent.color = "white"
 
-              qmlHandler.nationalityModel.clearNationalities()
+              nationalityModel.clearNationalities()
             }
 
             onClicked: {
               nationalityListview.x = -1000
-              qmlHandler.nationalityModel.clearNationalities()
+              nationalityModel.clearNationalities()
               popup.close()
             }
           }
@@ -188,7 +188,7 @@ Button {
         id: nationalityListviewBackground
 
         width: receiptDropDown.width + 40
-        implicitHeight: qmlHandler.nationalityModel.rowCount * 50
+        implicitHeight: nationalityModel.rowCount * 50
 
         color: "#f0f0f0"
 
@@ -203,7 +203,7 @@ Button {
           x: categoryListview.x + categoryListview.width
           y: categoryListview.y + categoryListview.height
 
-          model: qmlHandler.nationalityModel
+          model: nationalityModel
 
           delegate: Rectangle {
             id: nationalityColumnBackground
