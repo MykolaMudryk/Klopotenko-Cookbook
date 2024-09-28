@@ -75,6 +75,8 @@ Button {
 
     closePolicy: Popup.CloseOnPressOutside
 
+    property bool isInNationalityList: false
+
     x: receiptDropDown.x
     y: receiptDropDown.y + receiptDropDown.height
 
@@ -112,8 +114,6 @@ Button {
 
           height: 50
 
-          property int hoveredIndex: index
-          property int previousIndex: -1
           property int hoveredCategoryX: 0
 
           MouseArea {
@@ -140,7 +140,9 @@ Button {
             onExited: {
               parent.color = "white"
 
-              nationalityModel.clearNationalities()
+              if (!popup.isInNationalityList) {
+                nationalityModel.clearNationalities()
+              }
             }
 
             onClicked: {
@@ -219,9 +221,15 @@ Button {
 
               hoverEnabled: true
 
-              onEntered: parent.color = "#f6f7f8"
+              onEntered: {
+                popup.isInNationalityList = true
+                parent.color = "#f6f7f8"
+              }
 
-              onExited: parent.color = "white"
+              onExited: {
+                popup.isInNationalityList = false
+                parent.color = "white"
+              }
 
               onClicked: {
                 nationalityListview.x = -1000

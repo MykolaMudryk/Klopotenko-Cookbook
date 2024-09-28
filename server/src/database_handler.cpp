@@ -86,7 +86,6 @@ QJsonArray DatabaseHandler::getNationality(const QString &categoryName) {
 
   } else if (rowCount == 0) {
     qDebug() << "No recipes found for this category.";
-    // грузинська кухня, українська кухня, грецька кухня
     return QJsonArray();
 
   } else {
