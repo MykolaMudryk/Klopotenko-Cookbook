@@ -106,15 +106,6 @@ Button {
 
       ListView {
 
-        layer.enabled: true
-        layer.effect: OpacityMask {
-          maskSource: Rectangle {
-            width: categoryListviewBackground.width
-            height: categoryListviewBackground.height
-            radius: 15
-            color: "black"
-          }
-        }
         id: categoryListview
 
         width: categoryListviewBackground.width

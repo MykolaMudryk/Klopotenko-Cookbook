@@ -97,6 +97,42 @@ QJsonArray DatabaseHandler::getNationality(const QString &categoryName) {
   }
 }
 
+QJsonArray DatabaseHandler::getDishName(const QString &nationalityName) {
+  QSqlQuery query(db);
+  QJsonArray dishesArray;
+
+  query.prepare(R"(
+        SELECT DISTINCT d.name
+        FROM dishes d
+        JOIN recipes r ON d.recipe_id = r.dish_id
+        JOIN nationalities n ON r.nationality_id = n.nationality_id
+        WHERE n.nationality_name = :nationality_name
+    )");
+  query.bindValue(":nationality_name", nationalityName);
+
+  qDebug() << "Nationality name before SQL query:" << nationalityName;
+
+  if (query.exec()) {
+    while (query.next()) {
+      QJsonObject dishObject;
+
+      QString dishName = query.value(0).toString();
+
+      dishObject["dish_name"] = dishName;
+
+      qDebug() << "Data after query on server" << dishName;
+
+      dishesArray.append(dishObject);
+    }
+    return dishesArray;
+  } else {
+    qDebug()
+        << "Failed to retrieve dishes for hovered nationality from database:"
+        << query.lastError().text();
+    return QJsonArray();
+  }
+}
+
 QJsonArray DatabaseHandler::setCategories(const QString &categoryName) {
   QSqlQuery query(db);
 

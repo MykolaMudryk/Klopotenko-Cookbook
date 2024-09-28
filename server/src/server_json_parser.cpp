@@ -37,3 +37,16 @@ QByteArray ParseClientData::extractHoveredCategory(
 
   return QByteArray();
 }
+
+QByteArray ParseClientData::extractDishName(const QString &nationality) {
+  if (nationality.startsWith("GET_DISHNAME")) {
+    QJsonArray dishNameArray = database.getDishName(nationality);
+
+    QJsonDocument doc(dishNameArray);
+    QByteArray jsonResponse = doc.toJson(QJsonDocument::Compact);
+
+    return jsonResponse;
+  }
+
+  return QByteArray();
+}

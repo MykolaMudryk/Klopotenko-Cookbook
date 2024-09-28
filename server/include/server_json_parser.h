@@ -21,7 +21,8 @@ class ParseClientData : public QObject {
 
  public slots:
   QByteArray extractCategory(const QString &getCategory);
-  QByteArray extractHoveredCategory(const QString &jsonResponse);
+  QByteArray extractHoveredCategory(const QString &hoveredCategory);
+  QByteArray extractDishName(const QString &nationality);
 };
 
 #endif  // JSON_PARSER_H

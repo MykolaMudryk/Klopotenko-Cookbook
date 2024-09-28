@@ -73,3 +73,19 @@ void SendDataToClient::onSendNationality(const QString &categoryClient) {
 
   clientSocket->sendTextMessage(QString::fromUtf8(parsedHoveredCategory));
 }
+
+void SendDataToClient::onSendDishName(const QString &dishName) {
+  QWebSocket *clientSocket = qobject_cast<QWebSocket *>(sender());
+
+  if (!clientSocket) {
+    qWarning() << "Client socket is null, cannot send message.";
+    return;
+  }
+
+  QByteArray parsedDishName = jsonParser.extractDishName(dishName);
+
+  qDebug() << "Sending JSON hovered category:"
+           << QString::fromUtf8(parsedDishName);
+
+  clientSocket->sendTextMessage(QString::fromUtf8(parsedDishName));
+}
