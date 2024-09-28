@@ -2,6 +2,7 @@ import QtQuick 2.15
 import QtQuick.Controls 2.15
 import QtQuick.Controls.Basic 2.15
 import QtQuick.Layouts
+import Qt5Compat.GraphicalEffects
 
 Button {
   id: receiptDropDown
@@ -29,20 +30,22 @@ Button {
     font.pixelSize: 25
     font.bold: true
 
-    horizontalAlignment: Text.AlignHCenter
+    horizontalAlignment: Text.AlignLeft
     verticalAlignment: Text.AlignVCenter
 
     color: "white"
 
     anchors {
-      right: parent.right
-      rightMargin: 20
+      left: parent.left
+      leftMargin: 20
     }
   }
 
   background: Rectangle {
     id: receiptDropDownBackground
     color: "#6b80ef"
+
+    anchors.fill: parent
 
     radius: 7
 
@@ -77,9 +80,6 @@ Button {
 
     property bool isInNationalityList: false
 
-    x: receiptDropDown.x
-    y: receiptDropDown.y + receiptDropDown.height
-
     background: Rectangle {
       id: popupContainer
 
@@ -89,29 +89,40 @@ Button {
       color: "transparent"
     }
 
-    MouseArea: {
+    MouseArea {
       onExited: {
         nationalityListview.x = -1000
       }
     }
-
     Rectangle {
       id: categoryListviewBackground
 
       width: receiptDropDown.width + 40
       implicitHeight: categoryModel.rowCount * 50
 
-      radius: 7
-
       color: "#f0f0f0"
+      x: receiptDropDownBackground.x + 14
+      y: receiptDropDownBackground.y + receiptDropDownBackground.height
 
       ListView {
+
+        layer.enabled: true
+        layer.effect: OpacityMask {
+          maskSource: Rectangle {
+            width: categoryListviewBackground.width
+            height: categoryListviewBackground.height
+            radius: 15
+            color: "black"
+          }
+        }
         id: categoryListview
 
         width: categoryListviewBackground.width
         implicitHeight: contentHeight
 
         model: categoryModel
+
+        clip: true
 
         delegate: Rectangle {
           id: dropdownColumnBackground
@@ -191,7 +202,6 @@ Button {
           }
         }
       }
-
       Rectangle {
         id: nationalityListviewBackground
 
