@@ -60,8 +60,8 @@ QJsonArray DatabaseHandler::getNationality(const QString &categoryName) {
   query.prepare(R"(
         SELECT DISTINCT n.nationality_name
         FROM nationalities n
-        JOIN recipes r ON n.id = r.nationality_id
-        JOIN categories c ON r.category_id = c.id
+        JOIN recipes r ON n.recipe_id = r.nationality_id
+        JOIN categories c ON r.category_id = c.recipe_id
         WHERE c.category_name = :category_name
     )");
   query.bindValue(":category_name", categoryName);
@@ -86,7 +86,7 @@ QJsonArray DatabaseHandler::getNationality(const QString &categoryName) {
 
   } else if (rowCount == 0) {
     qDebug() << "No recipes found for this category.";
-
+    // грузинська кухня, українська кухня, грецька кухня
     return QJsonArray();
 
   } else {
