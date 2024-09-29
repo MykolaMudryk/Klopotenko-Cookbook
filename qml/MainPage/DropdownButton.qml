@@ -95,19 +95,22 @@ Button {
       }
     }
     Rectangle {
-      id: categoryListviewBackground
+      id: categoryColumnBackground
+
+      radius: 7
 
       width: receiptDropDown.width + 40
       height: categoryModel.rowCount * 50
 
       color: "#f0f0f0"
+
       x: receiptDropDownBackground.x + 14
       y: receiptDropDownBackground.y + receiptDropDownBackground.height
 
       Column {
         id: categoryColumn
 
-        width: categoryListviewBackground.width
+        width: categoryColumnBackground.width
         height: childrenRect.height
 
         Repeater {
@@ -116,7 +119,7 @@ Button {
           delegate: Rectangle {
             id: dropdownColumnBackground
 
-            width: categoryListviewBackground.width
+            width: categoryColumnBackground.width
             height: 50
 
             property int hoveredCategoryX: 0
