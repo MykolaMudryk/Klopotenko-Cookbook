@@ -91,175 +91,172 @@ Button {
 
     MouseArea {
       onExited: {
-        nationalityListview.x = -1000
+        nationalityColumn.x = -1000
       }
     }
     Rectangle {
       id: categoryListviewBackground
 
       width: receiptDropDown.width + 40
-      implicitHeight: categoryModel.rowCount * 50
+      height: categoryModel.rowCount * 50
 
       color: "#f0f0f0"
       x: receiptDropDownBackground.x + 14
       y: receiptDropDownBackground.y + receiptDropDownBackground.height
 
-      ListView {
-
-        id: categoryListview
+      Column {
+        id: categoryColumn
 
         width: categoryListviewBackground.width
-        implicitHeight: contentHeight
+        height: childrenRect.height
 
-        model: categoryModel
-
-        clip: true
-
-        delegate: Rectangle {
-          id: dropdownColumnBackground
-
-          width: categoryListviewBackground.width
-
-          height: 50
-
-          property int hoveredCategoryX: 0
-
-          MouseArea {
-            id: categoryHoverArea
-
-            anchors.fill: parent
-
-            hoverEnabled: true
-
-            property int hoveredCategoryY: 0
-
-            onEntered: {
-              parent.color = "#f6f7f8"
-
-              nationalityModel.fetchNationality(model.categoryName)
-
-              hoveredCategoryX = dropdownColumnBackground.x
-              hoveredCategoryY = dropdownColumnBackground.y
-
-              nationalityListview.x = hoveredCategoryX + categoryListview.x + categoryListview.width
-              nationalityListview.y = hoveredCategoryY
-            }
-
-            onExited: {
-              parent.color = "white"
-
-              if (!popup.isInNationalityList) {
-                nationalityModel.clearNationalities()
-              }
-            }
-
-            onClicked: {
-              nationalityListview.x = -1000
-              nationalityModel.clearNationalities()
-              popup.close()
-            }
-          }
-
-          Row {
-            spacing: 17
-
-            anchors.fill: parent
-            anchors.margins: 10
-
-            anchors.verticalCenter: dropdownColumnBackground.verticalCenter
-
-            Image {
-              id: dropDownIcon
-
-              source: "qrc:/icons/categories/" + model.iconName
-
-              width: 30
-              height: 30
-
-              fillMode: Image.PreserveAspectFit
-            }
-
-            Text {
-              text: model.categoryName
-              font {
-                family: "DIN Alternate"
-                pixelSize: 23
-                bold: true
-              }
-
-              anchors.verticalCenter: dropDownIcon.verticalCenter
-              color: "black"
-            }
-          }
-        }
-      }
-      Rectangle {
-        id: nationalityListviewBackground
-
-        width: receiptDropDown.width + 40
-        implicitHeight: nationalityModel.rowCount * 50
-
-        color: "#f0f0f0"
-
-        radius: receiptDropDownBackground.radius
-
-        ListView {
-          id: nationalityListview
-
-          width: nationalityListviewBackground.width
-          implicitHeight: contentHeight
-
-          x: categoryListview.x + categoryListview.width
-          y: categoryListview.y + categoryListview.height
-
-          model: nationalityModel
+        Repeater {
+          model: categoryModel
 
           delegate: Rectangle {
-            id: nationalityColumnBackground
+            id: dropdownColumnBackground
 
-            width: nationalityListviewBackground.width
-
+            width: categoryListviewBackground.width
             height: 50
 
+            property int hoveredCategoryX: 0
+
             MouseArea {
-              id: nationalityHoverArea
+              id: categoryHoverArea
 
               anchors.fill: parent
-
               hoverEnabled: true
 
+              property int hoveredCategoryY: 0
+
               onEntered: {
-                popup.isInNationalityList = true
                 parent.color = "#f6f7f8"
+
+                nationalityModel.fetchNationality(model.categoryName)
+
+                hoveredCategoryX = dropdownColumnBackground.x
+                hoveredCategoryY = dropdownColumnBackground.y
+
+                nationalityColumn.x = hoveredCategoryX + categoryColumn.x + categoryColumn.width
+                nationalityColumn.y = hoveredCategoryY
               }
 
               onExited: {
-                popup.isInNationalityList = false
                 parent.color = "white"
+
+                if (!popup.isInNationalityList) {
+                  nationalityModel.clearNationalities()
+                }
               }
 
               onClicked: {
-                nationalityListview.x = -1000
+                nationalityColumn.x = -1000
+                nationalityModel.clearNationalities()
                 popup.close()
               }
             }
 
             Row {
+              id: categoryRow
               spacing: 17
 
               anchors.fill: parent
               anchors.margins: 10
+              anchors.verticalCenter: dropdownColumnBackground.verticalCenter
 
-              anchors.verticalCenter: nationalityColumnBackground.verticalCenter
+              Image {
+                id: dropDownIcon
+
+                source: "qrc:/icons/categories/" + model.iconName
+                width: 30
+                height: 30
+                fillMode: Image.PreserveAspectFit
+              }
 
               Text {
-                text: model.nationality
+                text: model.categoryName
                 font {
                   family: "DIN Alternate"
                   pixelSize: 23
                   bold: true
                 }
+
+                anchors.verticalCenter: dropDownIcon.verticalCenter
                 color: "black"
+              }
+            }
+          }
+        }
+      }
+
+      Rectangle {
+        id: nationalityСolumnBackground
+
+        width: receiptDropDown.width + 40
+        height: nationalityModel.rowCount * 50
+
+        color: "#f0f0f0"
+
+        radius: receiptDropDownBackground.radius
+
+        Column {
+          id: nationalityColumn
+          width: nationalityСolumnBackground.width
+          height: childrenRect.height
+
+          x: categoryColumn.x + categoryColumn.width
+          y: categoryColumn.y + categoryColumn.height
+
+          Repeater {
+            model: nationalityModel
+
+            delegate: Rectangle {
+              id: nationalityColumnBackground
+
+              width: nationalityСolumnBackground.width
+
+              height: 50
+
+              MouseArea {
+                id: nationalityHoverArea
+
+                anchors.fill: parent
+
+                hoverEnabled: true
+
+                onEntered: {
+                  popup.isInNationalityList = true
+                  parent.color = "#f6f7f8"
+                }
+
+                onExited: {
+                  popup.isInNationalityList = false
+                  parent.color = "white"
+                }
+
+                onClicked: {
+                  nationalityColumn.x = -1000
+                  popup.close()
+                }
+              }
+
+              Row {
+                spacing: 17
+
+                anchors.fill: parent
+                anchors.margins: 10
+
+                anchors.verticalCenter: nationalityColumnBackground.verticalCenter
+
+                Text {
+                  text: model.nationality
+                  font {
+                    family: "DIN Alternate"
+                    pixelSize: 23
+                    bold: true
+                  }
+                  color: "black"
+                }
               }
             }
           }
