@@ -33,8 +33,8 @@ void JsonParser::extractValues(const QByteArray &jsonData) {
         emit nationalityExtracted(nationality);
       }
 
-      if (jsonObject.contains("name")) {
-        QString dishName = jsonObject.value("name").toString();
+      if (jsonObject.contains("dish_name")) {
+        QString dishName = jsonObject.value("dish_name").toString();
 
         qDebug() << "Parsed dishName on client: " << dishName;
 

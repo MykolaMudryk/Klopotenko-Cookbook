@@ -68,8 +68,8 @@ void SendDataToClient::onSendNationality(const QString &categoryClient) {
   QByteArray parsedHoveredCategory =
       jsonParser.extractHoveredCategory(categoryClient);
 
-  qDebug() << "Sending JSON hovered category:"
-           << QString::fromUtf8(parsedHoveredCategory);
+  // qDebug() << "Sending JSON hovered category:"
+  //          << QString::fromUtf8(parsedHoveredCategory);
 
   clientSocket->sendTextMessage(QString::fromUtf8(parsedHoveredCategory));
 }
@@ -84,8 +84,7 @@ void SendDataToClient::onSendDishName(const QString &dishName) {
 
   QByteArray parsedDishName = jsonParser.extractDishName(dishName);
 
-  qDebug() << "Sending JSON hovered category:"
-           << QString::fromUtf8(parsedDishName);
+  qDebug() << "Sending JSON dishName:" << QString::fromUtf8(parsedDishName);
 
   clientSocket->sendTextMessage(QString::fromUtf8(parsedDishName));
 }
