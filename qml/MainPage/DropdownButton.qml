@@ -81,6 +81,8 @@ Button {
     property bool isInNationalityList: false
     property bool isInCategoryList: false
 
+    property string selectedCategoryName: ""
+
     background: Rectangle {
       id: popupContainer
 
@@ -131,10 +133,13 @@ Button {
               id: categoryHoverArea
 
               anchors.fill: parent
+
               hoverEnabled: true
 
               onEntered: {
                 parent.color = "#f6f7f8"
+
+                popup.selectedCategoryName = model.categoryName
 
                 nationalityModel.fetchNationality(model.categoryName)
 
@@ -234,16 +239,32 @@ Button {
                 onEntered: {
                   popup.isInNationalityList = true
                   parent.color = "#f6f7f8"
+
+                  dishNameModel.fetchDishName(popup.selectedCategoryName,
+                                              model.nationality)
+
+                  hoveredNationalityX = nationalityColumnBackground.x
+                  hoveredNationalityY = nationalityColumnBackground.y
+
+                  dishNameColumn.x = hoveredNationalityX + nationalityColumn.x
+                      + nationalityColumn.width
+                  dishNameColumn.y = hoveredNationalityY
                 }
 
                 onExited: {
                   popup.isInNationalityList = false
                   parent.color = "white"
+
+                  if (!popup.isInCategoryList) {
+                    dishNameModel.clearDishNames()
+                  }
                 }
 
                 onClicked: {
                   nationalityColumn.x = -1000
                   popup.close()
+
+                  dishNameModel.clearDishNames()
                 }
               }
 

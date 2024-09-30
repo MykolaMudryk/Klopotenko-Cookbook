@@ -24,7 +24,7 @@ class DatabaseHandler : public QObject {
 
   QJsonArray getNationality(const QString &categoryName);
 
-  QJsonArray getDishName(const QString &nationalityName);
+  QJsonArray getDishName(const QString &nationality, const QString &category);
 };
 
 #endif  // DATABASE_HANDLER

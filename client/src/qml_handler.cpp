@@ -115,6 +115,15 @@ void NationalityModel::fetchNationality(const QString &categoryName) {
 DishNameModel::DishNameModel(NetworkClient *client, QObject *parent)
     : QAbstractListModel(parent), networkClient(client) {}
 
+void DishNameModel::fetchDishName(const QString &categoryName,
+                                  const QString &nationality) {
+  QString message = QString("HOVERED_CATEGORY:%1 HOVERED_NATIONALITY:%2")
+                        .arg(categoryName, nationality);
+
+  qDebug() << "Data before request:" << message;
+  networkClient->sendMessage(message);
+}
+
 int DishNameModel::rowCount(const QModelIndex &parent) const {
   Q_UNUSED(parent);
   return m_dishNames.count();
@@ -159,8 +168,4 @@ void DishNameModel::setDishName(const QString &dishName) {
 
 DishNameModel *DishNameModel::dishNameModel() const {
   return const_cast<DishNameModel *>(this);
-}
-
-void DishNameModel::fetchDishName() {
-  networkClient->sendMessage("GET_DISHNAME");
 }

@@ -28,7 +28,7 @@ void JsonParser::extractValues(const QByteArray &jsonData) {
       if (jsonObject.contains("nationality_name")) {
         QString nationality = jsonObject.value("nationality_name").toString();
 
-        qDebug() << "Parsed nationality on client: " << nationality;
+        // qDebug() << "Parsed nationality on client: " << nationality;
 
         emit nationalityExtracted(nationality);
       }

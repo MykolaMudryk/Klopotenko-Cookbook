@@ -66,7 +66,7 @@ QJsonArray DatabaseHandler::getNationality(const QString &categoryName) {
     )");
   query.bindValue(":category_name", categoryName);
 
-  qDebug() << "category name before sql query:" << categoryName;
+  // qDebug() << "category name before sql query:" << categoryName;
 
   if (query.exec()) {
     while (query.next()) {
@@ -78,7 +78,7 @@ QJsonArray DatabaseHandler::getNationality(const QString &categoryName) {
 
       nationalityObject["nationality_name"] = nationality;
 
-      qDebug() << "Data after query on server" << nationality;
+      // qDebug() << "Data after query on server" << nationality;
 
       nationalitiesArray.append(nationalityObject);
     }
@@ -97,20 +97,25 @@ QJsonArray DatabaseHandler::getNationality(const QString &categoryName) {
   }
 }
 
-QJsonArray DatabaseHandler::getDishName(const QString &nationalityName) {
+QJsonArray DatabaseHandler::getDishName(const QString &category,
+                                        const QString &nationality) {
   QSqlQuery query(db);
   QJsonArray dishesArray;
 
   query.prepare(R"(
-        SELECT DISTINCT d.name
-        FROM dishes d
-        JOIN recipes r ON d.recipe_id = r.dish_id
-        JOIN nationalities n ON r.nationality_id = n.nationality_id
-        WHERE n.nationality_name = :nationality_name
-    )");
-  query.bindValue(":nationality_name", nationalityName);
+    SELECT DISTINCT d.name
+    FROM dishes d
+    JOIN recipes r ON d.recipe_id = r.dish_id
+    JOIN nationalities n ON r.nationality_id = n.recipe_id
+    JOIN categories c ON r.category_id = c.recipe_id
+    WHERE n.nationality_name = :nationality_name
+    AND c.category_name = :category_name
+)");
 
-  qDebug() << "Nationality name before SQL query:" << nationalityName;
+  query.bindValue(":category_name", category);
+  query.bindValue(":nationality_name", nationality);
+
+  qDebug() << "Data before SQL query:" << category << nationality;
 
   if (query.exec()) {
     while (query.next()) {

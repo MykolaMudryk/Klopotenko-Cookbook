@@ -109,7 +109,7 @@ class DishNameModel : public QAbstractListModel {
   DishNameModel *dishNameModel() const;
 
  public slots:
-  void fetchDishName();
+  void fetchDishName(const QString &categoryName, const QString &nationality);
 
  signals:
   void dishNameChanged();

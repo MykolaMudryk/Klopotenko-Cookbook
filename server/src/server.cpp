@@ -31,6 +31,9 @@ void SendDataToClient::onIncomingConnection() {
 
     connect(clientSocket, &QWebSocket::textMessageReceived, this,
             &SendDataToClient::onSendNationality);
+
+    connect(clientSocket, &QWebSocket::textMessageReceived, this,
+            &SendDataToClient::onSendDishName);
   }
 }
 
@@ -74,7 +77,7 @@ void SendDataToClient::onSendNationality(const QString &categoryClient) {
   clientSocket->sendTextMessage(QString::fromUtf8(parsedHoveredCategory));
 }
 
-void SendDataToClient::onSendDishName(const QString &dishName) {
+void SendDataToClient::onSendDishName(const QString &hoveredData) {
   QWebSocket *clientSocket = qobject_cast<QWebSocket *>(sender());
 
   if (!clientSocket) {
@@ -82,7 +85,7 @@ void SendDataToClient::onSendDishName(const QString &dishName) {
     return;
   }
 
-  QByteArray parsedDishName = jsonParser.extractDishName(dishName);
+  QByteArray parsedDishName = jsonParser.extractDishName(hoveredData);
 
   qDebug() << "Sending JSON dishName:" << QString::fromUtf8(parsedDishName);
 

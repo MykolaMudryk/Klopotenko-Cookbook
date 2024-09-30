@@ -29,7 +29,7 @@ class SendDataToClient : public QObject {
 
   void onSendCategory(const QString& categoryDatabase);
   void onSendNationality(const QString& categoryClient);
-  void onSendDishName(const QString& dishName);
+  void onSendDishName(const QString& hoveredData);
 };
 
 #endif  // SERVER_H
