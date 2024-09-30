@@ -79,6 +79,7 @@ Button {
     closePolicy: Popup.CloseOnPressOutside
 
     property bool isInNationalityList: false
+    property bool isInCategoryList: false
 
     background: Rectangle {
       id: popupContainer
@@ -89,6 +90,7 @@ Button {
       color: "transparent"
     }
 
+    // close nationality when popup exited
     MouseArea {
       onExited: {
         nationalityColumn.x = -1000
@@ -123,14 +125,13 @@ Button {
             height: 50
 
             property int hoveredCategoryX: 0
+            property int hoveredCategoryY: 0
 
             MouseArea {
               id: categoryHoverArea
 
               anchors.fill: parent
               hoverEnabled: true
-
-              property int hoveredCategoryY: 0
 
               onEntered: {
                 parent.color = "#f6f7f8"
@@ -220,6 +221,9 @@ Button {
 
               height: 50
 
+              property int hoveredNationalityX: 0
+              property int hoveredNationalityY: 0
+
               MouseArea {
                 id: nationalityHoverArea
 
@@ -253,6 +257,80 @@ Button {
 
                 Text {
                   text: model.nationality
+                  font {
+                    family: "DIN Alternate"
+                    pixelSize: 23
+                    bold: true
+                  }
+                  color: "black"
+                }
+              }
+            }
+          }
+        }
+      }
+
+      Rectangle {
+        id: dishNameСolumnBackground
+
+        width: receiptDropDown.width + 40
+        height: dishNameModel.rowCount * 50
+
+        color: "#f0f0f0"
+
+        radius: receiptDropDownBackground.radius
+
+        Column {
+          id: dishNameColumn
+          width: dishNameСolumnBackground.width
+          height: childrenRect.height
+
+          x: nationalityColumn.x + nationalityColumn.width
+          y: nationalityColumn.y + nationalityColumn.height
+
+          Repeater {
+            model: dishNameModel
+
+            delegate: Rectangle {
+              id: columnBackground
+
+              width: dishNameСolumnBackground.width
+
+              height: 50
+
+              MouseArea {
+                id: dishNameHoverArea
+
+                anchors.fill: parent
+
+                hoverEnabled: true
+
+                onEntered: {
+                  popup.isInCategoryList = true
+                  parent.color = "#f6f7f8"
+                }
+
+                onExited: {
+                  popup.isInCategoryList = false
+                  parent.color = "white"
+                }
+
+                onClicked: {
+                  dishNameColumn.x = -1000
+                  popup.close()
+                }
+              }
+
+              Row {
+                spacing: 17
+
+                anchors.fill: parent
+                anchors.margins: 10
+
+                anchors.verticalCenter: dishNameСolumnBackground.verticalCenter
+
+                Text {
+                  text: model.dishName
                   font {
                     family: "DIN Alternate"
                     pixelSize: 23
