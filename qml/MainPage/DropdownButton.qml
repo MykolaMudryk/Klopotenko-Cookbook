@@ -127,9 +127,6 @@ Button {
             width: categoryColumnBackground.width
             height: 50
 
-            property int hoveredCategoryX: 0
-            property int hoveredCategoryY: 0
-
             MouseArea {
               id: categoryHoverArea
 
@@ -149,11 +146,9 @@ Button {
 
                 nationalityModel.fetchNationality(model.categoryName)
 
-                hoveredCategoryX = dropdownColumnBackground.x
-                hoveredCategoryY = dropdownColumnBackground.y
+                nationalityColumn.x = categoryColumn.x + categoryColumn.width
 
-                nationalityColumn.x = hoveredCategoryX + categoryColumn.x + categoryColumn.width
-                nationalityColumn.y = hoveredCategoryY
+                nationalityColumn.y = dropdownColumnBackground.y
               }
 
               onExited: {
@@ -216,11 +211,11 @@ Button {
 
         Column {
           id: nationalityColumn
+
           width: nationalityСolumnBackground.width
           height: childrenRect.height
 
-          x: categoryColumn.x + categoryColumn.width
-          y: categoryColumn.y + categoryColumn.height
+          y: categoryColumn.y + categoryColumn.height + dropdownColumnBackground.y
 
           Repeater {
             model: nationalityModel
@@ -231,9 +226,6 @@ Button {
               width: nationalityСolumnBackground.width
 
               height: 50
-
-              property int hoveredNationalityX: 0
-              property int hoveredNationalityY: 0
 
               MouseArea {
                 id: nationalityHoverArea
@@ -249,12 +241,9 @@ Button {
                   dishNameModel.fetchDishName(popup.selectedCategoryName,
                                               model.nationality)
 
-                  hoveredNationalityX = nationalityColumnBackground.x
-                  hoveredNationalityY = nationalityColumnBackground.y
+                  dishNameColumn.x = nationalityColumn.x + nationalityColumn.width
 
-                  dishNameColumn.x = hoveredNationalityX + nationalityColumn.x
-                      + nationalityColumn.width
-                  dishNameColumn.y = hoveredNationalityY
+                  dishNameColumn.y = nationalityColumnBackground.y + nationalityColumn.y
                 }
 
                 onExited: {
@@ -275,7 +264,6 @@ Button {
               }
 
               Row {
-                spacing: 17
 
                 anchors.fill: parent
                 anchors.margins: 10
@@ -309,12 +297,11 @@ Button {
 
         Column {
           id: dishNameColumn
+
           width: dishNameСolumnBackground.width
           height: childrenRect.height
 
-          x: nationalityColumn.x + nationalityColumn.width
-          y: nationalityColumn.y + nationalityColumn.height
-
+          // y: nationalityColumn.y + nationalityColumn.height + nationalityColumnBackground.y
           Repeater {
             model: dishNameModel
 
@@ -349,8 +336,6 @@ Button {
               }
 
               Row {
-                spacing: 17
-
                 anchors.fill: parent
                 anchors.margins: 10
 
