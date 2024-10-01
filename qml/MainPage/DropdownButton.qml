@@ -82,6 +82,7 @@ Button {
     property bool isInCategoryList: false
 
     property string selectedCategoryName: ""
+    property string lastCategoryName: ""
 
     background: Rectangle {
       id: popupContainer
@@ -140,6 +141,11 @@ Button {
                 parent.color = "#f6f7f8"
 
                 popup.selectedCategoryName = model.categoryName
+
+                if (popup.selectedCategoryName !== popup.lastCategoryName) {
+                  nationalityModel.clearNationalities()
+                  popup.lastCategoryName = popup.selectedCategoryName
+                }
 
                 nationalityModel.fetchNationality(model.categoryName)
 
@@ -348,7 +354,7 @@ Button {
                 anchors.fill: parent
                 anchors.margins: 10
 
-                anchors.verticalCenter: dishNameСolumnBackground.verticalCenter
+                anchors.verticalCenter: columnBackground.verticalCenter
 
                 Text {
                   text: model.dishName
