@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `cookbook` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `cookbook`;
 -- MySQL dump 10.13  Distrib 8.0.38, for macos14 (arm64)
 --
 -- Host: localhost    Database: cookbook
@@ -23,12 +25,12 @@ DROP TABLE IF EXISTS `nationalities`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `nationalities` (
-  `recipe_id` int NOT NULL AUTO_INCREMENT,
+  `id` int NOT NULL AUTO_INCREMENT,
   `nationality_name` varchar(255) NOT NULL,
-  PRIMARY KEY (`recipe_id`),
+  PRIMARY KEY (`id`),
   UNIQUE KEY `nationality_name_UNIQUE` (`nationality_name`),
-  UNIQUE KEY `id_UNIQUE` (`recipe_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  UNIQUE KEY `id_UNIQUE` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,7 +39,7 @@ CREATE TABLE `nationalities` (
 
 LOCK TABLES `nationalities` WRITE;
 /*!40000 ALTER TABLE `nationalities` DISABLE KEYS */;
-INSERT INTO `nationalities` VALUES (4,'Американська кухня'),(5,'Грецька кухня'),(3,'Грузинська кухня'),(2,'Турецька кухня'),(1,'Українська кухня');
+INSERT INTO `nationalities` VALUES (4,'Американська кухня'),(5,'Грецька кухня'),(3,'Грузинська кухня'),(7,'Італійська кухня'),(2,'Турецька кухня'),(1,'Українська кухня'),(6,'Французька кухня');
 /*!40000 ALTER TABLE `nationalities` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +52,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-27 20:31:20
+-- Dump completed on 2024-10-03 23:44:27

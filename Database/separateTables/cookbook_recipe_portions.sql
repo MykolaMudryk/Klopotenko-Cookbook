@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `cookbook` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `cookbook`;
 -- MySQL dump 10.13  Distrib 8.0.38, for macos14 (arm64)
 --
 -- Host: localhost    Database: cookbook
@@ -31,7 +33,7 @@ CREATE TABLE `recipe_portions` (
   UNIQUE KEY `id_UNIQUE` (`id`),
   KEY `recipe_portions_ibfk_1` (`recipe_id`),
   CONSTRAINT `recipe_portions_ibfk_1` FOREIGN KEY (`recipe_id`) REFERENCES `recipes` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -40,7 +42,7 @@ CREATE TABLE `recipe_portions` (
 
 LOCK TABLES `recipe_portions` WRITE;
 /*!40000 ALTER TABLE `recipe_portions` DISABLE KEYS */;
-INSERT INTO `recipe_portions` VALUES (1,1,75.00,164.10),(2,1,100.00,218.80),(3,1,150.00,328.20);
+INSERT INTO `recipe_portions` VALUES (1,1,100.00,218.80),(2,6,100.00,125.00),(3,7,100.00,93.00),(4,8,150.00,125.10),(5,9,150.00,176.92),(6,10,100.00,69.00),(12,2,100.00,260.46),(13,3,100.00,244.77),(14,4,200.00,103.00),(15,5,200.00,56.07);
 /*!40000 ALTER TABLE `recipe_portions` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -53,4 +55,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2024-09-27 20:31:20
+-- Dump completed on 2024-10-03 23:44:27

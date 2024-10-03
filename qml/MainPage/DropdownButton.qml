@@ -215,7 +215,7 @@ Button {
           width: nationalityСolumnBackground.width
           height: childrenRect.height
 
-          y: categoryColumn.y + categoryColumn.height + dropdownColumnBackground.y
+          y: categoryColumn.y + categoryColumn.height
 
           Repeater {
             model: nationalityModel

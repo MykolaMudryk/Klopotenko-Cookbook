@@ -60,7 +60,7 @@ QJsonArray DatabaseHandler::getNationality(const QString &categoryName) {
   query.prepare(R"(
         SELECT DISTINCT n.nationality_name
         FROM nationalities n
-        JOIN recipes r ON n.recipe_id = r.nationality_id
+        JOIN recipes r ON n.id = r.nationality_id
         JOIN categories c ON r.category_id = c.recipe_id
         WHERE c.category_name = :category_name
     )");
@@ -105,8 +105,8 @@ QJsonArray DatabaseHandler::getDishName(const QString &category,
   query.prepare(R"(
     SELECT DISTINCT d.name
     FROM dishes d
-    JOIN recipes r ON d.recipe_id = r.dish_id
-    JOIN nationalities n ON r.nationality_id = n.recipe_id
+    JOIN recipes r ON d.id = r.dish_id
+    JOIN nationalities n ON r.nationality_id = n.id
     JOIN categories c ON r.category_id = c.recipe_id
     WHERE n.nationality_name = :nationality_name
     AND c.category_name = :category_name
