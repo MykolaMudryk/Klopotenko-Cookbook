@@ -43,8 +43,9 @@ This app provides an intuitive and user-friendly way to manage, search, and cust
 
 │ ├──────/qml_handling # QML interaction logic source files
 
-│  ├── dropdown_recipe_list.cpp   # Dropdown list logic
-│  ├── breadcrumb_line.cpp        # Breadcrumb navigation logic
+│ ├── dropdown_recipe_list.cpp   # Dropdown list logic
+
+│ ├── breadcrumb_line.cpp        # Breadcrumb navigation logic
 
 
 │ └────── /include # Client header files
@@ -57,8 +58,9 @@ This app provides an intuitive and user-friendly way to manage, search, and cust
 
 │ ├──────/qml_handling # QML interaction logic header files
 
-│  ├── dropdown_recipe_list.h   # Dropdown list logic header file
-│  ├── breadcrumb_line.h        # Breadcrumb navigation logic header file
+│ ├── dropdown_recipe_list.h   # Dropdown list logic header file
+
+│ ├── breadcrumb_line.h        # Breadcrumb navigation logic header file
 
 │
 ├──────── /server # Code for the server-side
