@@ -1,6 +1,6 @@
-#include "qmlHandling/dropdownRecipeList.h"
-
 #include <QObject>
+
+#include "qmlHandling/dropdown_recipe_list.h"
 
 CategoryModel::CategoryModel(NetworkClient *client, QObject *parent)
     : QAbstractListModel(parent), networkClient(client) {}

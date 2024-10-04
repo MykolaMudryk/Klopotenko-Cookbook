@@ -1,5 +1,5 @@
-#ifndef DROPDOWNRECIPELIST_H
-#define DROPDOWNRECIPELIST_H
+#ifndef DROPDOWN_RECIPE_LIST_H
+#define DROPDOWN_RECIPE_LIST_H
 
 #include <QAbstractListModel>
 #include <QList>
@@ -115,4 +115,4 @@ class DishNameModel : public QAbstractListModel {
   void dishNameChanged();
 };
 
-#endif  // DROPDOWNRECIPELIST_H
+#endif  // DROPDOWN_RECIPE_LIST_H
