@@ -7,7 +7,7 @@
 #include "QtQml/qqmlapplicationengine.h"
 #include "client_json_parser.h"
 #include "network_client.h"
-#include "qml_handler.h"
+#include "qmlHandling/dropdownRecipeList.h"
 
 class Client : public QObject {
   Q_OBJECT

@@ -137,19 +137,3 @@ QJsonArray DatabaseHandler::getDishName(const QString &category,
     return QJsonArray();
   }
 }
-
-QJsonArray DatabaseHandler::setCategories(const QString &categoryName) {
-  QSqlQuery query(db);
-
-  query.prepare(
-      "INSERT INTO categories (category_name) VALUES (:category_name)");
-
-  query.bindValue(":category_name", categoryName);
-
-  if (!query.exec()) {
-    qDebug() << "Error adding category to database:"
-             << query.lastError().text();
-  }
-
-  return getCategories();
-}

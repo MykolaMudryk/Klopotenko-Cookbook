@@ -20,7 +20,6 @@ class DatabaseHandler : public QObject {
   bool connectToDatabase();
 
   QJsonArray getCategories();
-  QJsonArray setCategories(const QString &categoryName);
 
   QJsonArray getNationality(const QString &categoryName);
 
