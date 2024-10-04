@@ -9,15 +9,30 @@
 #include <QSqlError>
 #include <QSqlQuery>
 
-class DatabaseHandler : public QObject {
+class DatabaseConnection : public QObject {
+  Q_OBJECT
+ private:
+  QSqlDatabase db;
+
+  static DatabaseConnection *instance;
+
+  explicit DatabaseConnection(QObject *parent = nullptr);
+
+ public:
+  bool connectToDatabase();
+
+  static DatabaseConnection *getInstance();
+
+  QSqlDatabase getConnection();
+};
+
+class DropdownRecipes : public QObject {
   Q_OBJECT
  private:
   QSqlDatabase db;
 
  public:
-  explicit DatabaseHandler(QObject *parent = nullptr);
-
-  bool connectToDatabase();
+  explicit DropdownRecipes(QObject *parent = nullptr);
 
   QJsonArray getCategories();
 

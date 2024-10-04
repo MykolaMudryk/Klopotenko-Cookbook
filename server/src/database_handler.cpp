@@ -1,15 +1,17 @@
 #include "database_handler.h"
 
-DatabaseHandler::DatabaseHandler(QObject *parent)
-    : QObject(parent), db(QSqlDatabase::addDatabase("QMYSQL")) {}
-
-bool DatabaseHandler::connectToDatabase() {
+DatabaseConnection::DatabaseConnection(QObject *parent) : QObject(parent) {
+  db = QSqlDatabase::addDatabase("QMYSQL");
   db.setHostName("localhost");
   db.setPort(3306);
   db.setDatabaseName("cookbook");
   db.setUserName("root");
   db.setPassword("12345678");
 
+  connectToDatabase();
+}
+
+bool DatabaseConnection::connectToDatabase() {
   if (!db.open()) {
     qDebug() << "Не вдалося підключитися до бази даних: "
              << db.lastError().text();
@@ -22,7 +24,20 @@ bool DatabaseHandler::connectToDatabase() {
   return true;
 }
 
-QJsonArray DatabaseHandler::getCategories() {
+DatabaseConnection *DatabaseConnection::getInstance() {
+  if (!instance) instance = new DatabaseConnection;
+  return instance;
+}
+
+QSqlDatabase DatabaseConnection::getConnection() { return db; };
+
+DatabaseConnection *DatabaseConnection::instance = nullptr;
+
+DropdownRecipes::DropdownRecipes(QObject *parent) : QObject(parent) {
+  db = DatabaseConnection::getInstance()->getConnection();
+}
+
+QJsonArray DropdownRecipes::getCategories() {
   QSqlQuery query(db);
   QJsonArray categoriesArray;
 
@@ -51,7 +66,7 @@ QJsonArray DatabaseHandler::getCategories() {
   }
 }
 
-QJsonArray DatabaseHandler::getNationality(const QString &categoryName) {
+QJsonArray DropdownRecipes::getNationality(const QString &categoryName) {
   QSqlQuery query(db);
   QJsonArray nationalitiesArray;
 
@@ -97,7 +112,7 @@ QJsonArray DatabaseHandler::getNationality(const QString &categoryName) {
   }
 }
 
-QJsonArray DatabaseHandler::getDishName(const QString &category,
+QJsonArray DropdownRecipes::getDishName(const QString &category,
                                         const QString &nationality) {
   QSqlQuery query(db);
   QJsonArray dishesArray;

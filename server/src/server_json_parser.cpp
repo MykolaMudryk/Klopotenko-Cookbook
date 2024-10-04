@@ -1,15 +1,11 @@
 #include "server_json_parser.h"
 
 ParseClientData::ParseClientData(QObject *parent)
-    : QObject(parent), database(this) {
-  if (!database.connectToDatabase()) {
-    qDebug() << "{\"error\": \"Database connection failed\"}";
-  }
-}
+    : QObject(parent), dropdownRecipes(this) {}
 
 QByteArray ParseClientData::extractCategory(const QString &getCategory) {
   if (getCategory == "GET_CATEGORIES") {
-    QJsonArray categoriesArray = database.getCategories();
+    QJsonArray categoriesArray = dropdownRecipes.getCategories();
 
     if (!categoriesArray.isEmpty()) {
       QJsonDocument doc(categoriesArray);
@@ -27,7 +23,8 @@ QByteArray ParseClientData::extractHoveredCategory(
   if (hoveredCategory.startsWith("GET_NATIONALITY")) {
     QString categoryName = hoveredCategory.mid(16).trimmed();
 
-    QJsonArray nationalitiesArray = database.getNationality(categoryName);
+    QJsonArray nationalitiesArray =
+        dropdownRecipes.getNationality(categoryName);
 
     QJsonDocument doc(nationalitiesArray);
     QByteArray jsonResponse = doc.toJson(QJsonDocument::Compact);
@@ -56,7 +53,8 @@ QByteArray ParseClientData::extractDishName(const QString &hoveredData) {
     qDebug() << "Category:" << categoryName;
     qDebug() << "Nationality:" << nationality;
 
-    QJsonArray dishNameArray = database.getDishName(categoryName, nationality);
+    QJsonArray dishNameArray =
+        dropdownRecipes.getDishName(categoryName, nationality);
 
     QJsonDocument doc(dishNameArray);
     QByteArray jsonResponse = doc.toJson(QJsonDocument::Compact);

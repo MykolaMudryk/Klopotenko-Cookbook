@@ -13,7 +13,7 @@
 class ParseClientData : public QObject {
   Q_OBJECT
  private:
-  DatabaseHandler database;
+  DropdownRecipes dropdownRecipes;
   QString hoveredCategoryName;
 
  public:
