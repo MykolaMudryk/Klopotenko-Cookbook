@@ -12,10 +12,10 @@ Image {
   height: 75
 
   anchors {
-    verticalCenter: grayBackground.verticalCenter
+    verticalCenter: parent.verticalCenter
 
-    right: grayBackground.right
-    rightMargin: 150
+    right: parent.right
+    rightMargin: 30
   }
 
   MouseArea {

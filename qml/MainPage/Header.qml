@@ -11,10 +11,6 @@ Rectangle {
 
   color: "#555555"
 
-  DropdownButton {
-    id: dropdownReceiptButton
-  }
-
   Text {
     id: klopotenkoTittleWord
 
@@ -55,9 +51,5 @@ Rectangle {
       bottom: grayBackground.bottom
       bottomMargin: 4
     }
-  }
-
-  AddReceiptButton {
-    id: addReceiptButton
   }
 }

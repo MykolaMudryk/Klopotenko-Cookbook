@@ -2,6 +2,10 @@
     <qresource prefix="/">
         <file>../icons/decorative/dropdownIcon.png</file>
 	<file>../icons/decorative/plusAddReceipt.png</file>
+  <file>../icons/decorative/finder_magnifying_glass.png</file>
+  <file>../icons/decorative/breadcrumb_house.png</file>
+  <file>../icons/decorative/filter.png</file>
+
 	<file>../icons/categories/snack.png</file>
 	<file>../icons/categories/salad.png</file>
 	<file>../icons/categories/main.png</file>

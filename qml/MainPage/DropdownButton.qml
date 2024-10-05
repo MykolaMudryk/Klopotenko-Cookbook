@@ -15,9 +15,10 @@ Button {
   }
 
   anchors {
-    left: parent.left
-    leftMargin: 25
     verticalCenter: parent.verticalCenter
+
+    left: parent.left
+    leftMargin: 30
   }
 
   contentItem: Text {
@@ -47,7 +48,7 @@ Button {
 
     anchors.fill: parent
 
-    radius: 7
+    radius: 8
 
     Image {
       id: customArrowIcon

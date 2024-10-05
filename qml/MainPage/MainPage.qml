@@ -19,5 +19,26 @@ ApplicationWindow {
       left: parent.left
       right: parent.right
     }
+
+    DropdownButton {
+      id: dropdownReceiptButton
+    }
+
+    AddReceiptButton {
+      id: addReceiptButton
+    }
+
+    Finder {
+      id: finderLine
+
+      anchors {
+        top: header.bottom
+        topMargin: 17
+
+        left: dropdownReceiptButton.left
+
+        right: addReceiptButton.right
+      }
+    }
   }
 }
