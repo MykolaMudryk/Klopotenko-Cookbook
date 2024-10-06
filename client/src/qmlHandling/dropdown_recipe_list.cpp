@@ -120,7 +120,7 @@ void DishNameModel::fetchDishName(const QString &categoryName,
   QString message = QString("HOVERED_CATEGORY:%1 HOVERED_NATIONALITY:%2")
                         .arg(categoryName, nationality);
 
-  qDebug() << "Data before request:" << message;
+  // qDebug() << "Data before request:" << message;
   networkClient->sendMessage(message);
 }
 

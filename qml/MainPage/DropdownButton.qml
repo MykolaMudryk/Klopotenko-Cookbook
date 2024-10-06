@@ -82,7 +82,9 @@ Button {
     property bool isInNationalityList: false
     property bool isInCategoryList: false
 
-    property string selectedCategoryName: ""
+    property string selectedCategory: ""
+    property string selectedNationality: ""
+
     property string lastCategoryName: ""
 
     background: Rectangle {
@@ -138,11 +140,11 @@ Button {
               onEntered: {
                 parent.color = "#f6f7f8"
 
-                popup.selectedCategoryName = model.categoryName
+                popup.selectedCategory = model.categoryName
 
-                if (popup.selectedCategoryName !== popup.lastCategoryName) {
+                if (popup.selectedCategory !== popup.lastCategoryName) {
                   nationalityModel.clearNationalities()
-                  popup.lastCategoryName = popup.selectedCategoryName
+                  popup.lastCategoryName = popup.selectedCategory
                 }
 
                 nationalityModel.fetchNationality(model.categoryName)
@@ -163,6 +165,7 @@ Button {
               onClicked: {
                 nationalityColumn.x = -1000
                 nationalityModel.clearNationalities()
+                breadCrumb.updateBreadCrumb(model.categoryName)
                 popup.close()
               }
             }
@@ -239,7 +242,9 @@ Button {
                   popup.isInNationalityList = true
                   parent.color = "#f6f7f8"
 
-                  dishNameModel.fetchDishName(popup.selectedCategoryName,
+                  popup.selectedNationality = model.nationality
+
+                  dishNameModel.fetchDishName(popup.selectedCategory,
                                               model.nationality)
 
                   dishNameColumn.x = nationalityColumn.x + nationalityColumn.width
@@ -261,6 +266,8 @@ Button {
                   popup.close()
 
                   dishNameModel.clearDishNames()
+                  breadCrumb.updateBreadCrumb(popup.selectedCategory,
+                                              model.nationality)
                 }
               }
 
@@ -302,7 +309,6 @@ Button {
           width: dishNameСolumnBackground.width
           height: childrenRect.height
 
-          // y: nationalityColumn.y + nationalityColumn.height + nationalityColumnBackground.y
           Repeater {
             model: dishNameModel
 
@@ -332,6 +338,9 @@ Button {
 
                 onClicked: {
                   dishNameColumn.x = -1000
+                  breadCrumb.updateBreadCrumb(popup.selectedCategory,
+                                              popup.selectedNationality,
+                                              model.dishName)
                   popup.close()
                 }
               }

@@ -7,6 +7,7 @@
 #include "QtQml/qqmlapplicationengine.h"
 #include "client_json_parser.h"
 #include "network_client.h"
+#include "qmlHandling/breadcrumb_line.h"
 #include "qmlHandling/dropdown_recipe_list.h"
 
 class Client : public QObject {
@@ -24,6 +25,7 @@ class Client : public QObject {
   CategoryModel *categoryModel;
   NationalityModel *nationalityModel;
   DishNameModel *dishNameModel;
+  BreadCrumb *breadCrumb;
 };
 
 #endif  // CLIENT_H

@@ -8,7 +8,8 @@ Client::Client(QObject *parent)
       jsonParser(new JsonParser(this)),
       categoryModel(new CategoryModel(networkClient, this)),
       nationalityModel(new NationalityModel(networkClient, this)),
-      dishNameModel(new DishNameModel(networkClient, this)) {
+      dishNameModel(new DishNameModel(networkClient, this)),
+      breadCrumb(new BreadCrumb(this)) {
   connect(networkClient, &NetworkClient::requestFinished, jsonParser,
           &JsonParser::extractValues);
 
@@ -27,4 +28,5 @@ void Client::setupQML(QQmlApplicationEngine &engine) {
   engine.rootContext()->setContextProperty("nationalityModel",
                                            nationalityModel);
   engine.rootContext()->setContextProperty("dishNameModel", dishNameModel);
+  engine.rootContext()->setContextProperty("breadCrumb", breadCrumb);
 }

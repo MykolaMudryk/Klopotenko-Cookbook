@@ -12,7 +12,7 @@ NetworkClient::NetworkClient(QObject *parent)
 
 void NetworkClient::connectToServer() {
   websocket->open(QUrl("ws://localhost:8080/"));
-  qDebug() << "Client opened connection";
+  // qDebug() << "Client opened connection";
 }
 
 void NetworkClient::onConnected() { qDebug() << "Connected to the server"; }
@@ -31,16 +31,16 @@ void NetworkClient::onTextMessageReceived(const QString &message) {
   // qDebug() << "Received message on client:" << message;
 
   if (jsonDoc.isNull()) {
-    qWarning() << "Received JSON is null.";
+    // qWarning() << "Received JSON is null.";
     return;
   } else if (!jsonDoc.isObject() && !jsonDoc.isArray()) {
-    qWarning() << "Received JSON is not an object nor array";
+    // qWarning() << "Received JSON is not an object nor array";
 
   } else {
     if (jsonDoc.isArray() && jsonDoc.array().isEmpty()) {
-      qWarning() << "Received empty array.";
+      // qWarning() << "Received empty array.";
     } else {
-      qDebug() << "Received data is correct";
+      // qDebug() << "Received data is correct";
       emit requestFinished(message.toUtf8());
     }
   }

@@ -50,8 +50,8 @@ QByteArray ParseClientData::extractDishName(const QString &hoveredData) {
     QString nationality =
         hoveredData.mid(nationalityStart + nationalityKey.length()).trimmed();
 
-    qDebug() << "Category:" << categoryName;
-    qDebug() << "Nationality:" << nationality;
+    // qDebug() << "Category:" << categoryName;
+    // qDebug() << "Nationality:" << nationality;
 
     QJsonArray dishNameArray =
         dropdownRecipes.getDishName(categoryName, nationality);

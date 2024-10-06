@@ -1,5 +1,37 @@
 import QtQuick 2.15
 
-Item {
+Image {
+  id: houseIcon
 
+  source: "qrc:/icons/decorative/breadcrumb_house.png"
+
+  width: 45
+  height: 45
+
+  fillMode: Image.PreserveAspectFit
+
+  anchors.left: finderLine.left
+
+  Row {
+    id: breadCrumbRow
+
+    anchors {
+
+      verticalCenter: houseIcon.verticalCenter
+
+      left: parent.right
+      leftMargin: 10
+    }
+
+    Text {
+      text: breadCrumb.breadCrumbRow
+      color: "black"
+
+      font {
+        family: "DIN Alternate"
+        pixelSize: 20
+        bold: true
+      }
+    }
+  }
 }

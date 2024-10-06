@@ -23,7 +23,6 @@ ApplicationWindow {
     DropdownButton {
       id: dropdownReceiptButton
     }
-
     AddReceiptButton {
       id: addReceiptButton
     }
@@ -38,6 +37,15 @@ ApplicationWindow {
         left: dropdownReceiptButton.left
 
         right: addReceiptButton.right
+      }
+
+      BreadCrumbNavigation {
+        id: breadCrumbNavigation
+
+        anchors {
+          top: finderLine.bottom
+          topMargin: 13
+        }
       }
     }
   }

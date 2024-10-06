@@ -130,7 +130,7 @@ QJsonArray DropdownRecipes::getDishName(const QString &category,
   query.bindValue(":category_name", category);
   query.bindValue(":nationality_name", nationality);
 
-  qDebug() << "Data before SQL query:" << category << nationality;
+  // qDebug() << "Data before SQL query:" << category << nationality;
 
   if (query.exec()) {
     while (query.next()) {
@@ -140,7 +140,7 @@ QJsonArray DropdownRecipes::getDishName(const QString &category,
 
       dishObject["dish_name"] = dishName;
 
-      qDebug() << "Data after query on server" << dishName;
+      // qDebug() << "Data after query on server" << dishName;
 
       dishesArray.append(dishObject);
     }

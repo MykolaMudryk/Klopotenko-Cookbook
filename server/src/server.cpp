@@ -87,7 +87,7 @@ void SendDataToClient::onSendDishName(const QString &hoveredData) {
 
   QByteArray parsedDishName = jsonParser.extractDishName(hoveredData);
 
-  qDebug() << "Sending JSON dishName:" << QString::fromUtf8(parsedDishName);
+  // qDebug() << "Sending JSON dishName:" << QString::fromUtf8(parsedDishName);
 
   clientSocket->sendTextMessage(QString::fromUtf8(parsedDishName));
 }
