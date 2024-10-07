@@ -8,6 +8,7 @@
         <file>../qml/MainPage/RecipeList.qml</file>
         <file>../qml/MainPage/DropdownButton.qml</file>
         <file>../qml/MainPage/AddReceiptButton.qml</file>
+        <file>../qml/MainPage/CurrentRecipe.qml</file>
         <file>../qml/ReceiptPage/ReceiptPage.qml</file>
     </qresource>
 </RCC>

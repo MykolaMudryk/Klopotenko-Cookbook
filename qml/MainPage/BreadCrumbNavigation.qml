@@ -10,8 +10,6 @@ Image {
 
   fillMode: Image.PreserveAspectFit
 
-  anchors.left: finderLine.left
-
   Row {
     id: breadCrumbRow
 
@@ -29,7 +27,7 @@ Image {
 
       font {
         family: "DIN Alternate"
-        pixelSize: 20
+        pixelSize: 16
         bold: true
       }
     }

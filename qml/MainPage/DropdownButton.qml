@@ -26,10 +26,12 @@ Button {
 
     text: "Список рецептів"
 
-    font.family: "DIN Alternate"
+    font {
+      family: "DIN Alternate"
 
-    font.pixelSize: 25
-    font.bold: true
+      pixelSize: 25
+      bold: true
+    }
 
     horizontalAlignment: Text.AlignLeft
     verticalAlignment: Text.AlignVCenter

@@ -45,6 +45,23 @@ ApplicationWindow {
         anchors {
           top: finderLine.bottom
           topMargin: 13
+
+          left: finderLine.left
+        }
+
+        CurrentRecipe {
+          id: currentRecipe
+        }
+
+        FilterPanel {
+          id: filterPanel
+
+          anchors {
+            top: currentRecipe.bottom // встановлюємо анкор до нижньої частини `currentRecipe`
+            topMargin: 25 // задаємо відступ від нижньої частини
+
+            left: currentRecipe.left
+          }
         }
       }
     }
