@@ -21,68 +21,84 @@ Item {
     }
   }
 
-  TextField {
-    id: textField
+  MultiEffect {
+    source: finderBackground
+    anchors.fill: finderBackground
+    shadowBlur: 0.6
+    shadowColor: '#0000FF'
+    shadowEnabled: true
+    shadowVerticalOffset: 0
+    shadowHorizontalOffset: 0
+    brightness: 1
+  }
 
-    anchors.fill: parent
+  Rectangle {
 
-    focus: true
+    id: finderBackground
 
-    color: "black"
+    color: "white"
 
-    leftPadding: magnifyingGlass.width + 32
+    width: finderContainer.width
+    height: finderContainer.height
 
-    font {
-      family: "DIN Alternate"
-      pixelSize: 19
-      bold: true
+    radius: 8
+
+    Image {
+      id: magnifyingGlass
+      source: "qrc:/icons/decorative/finder_magnifying_glass.png"
+      width: 50
+      height: 50
+      fillMode: Image.PreserveAspectFit
+
+      anchors {
+        left: finderBackground.left
+        leftMargin: 16
+        verticalCenter: finderBackground.verticalCenter
+      }
     }
 
-    property string placeholderTexts: "Знайти рецепт за назвою"
+    Text {
+      text: textField.placeholderTexts
+      color: "#aaaaaa"
+      visible: textField.text.length === 0
 
-    background: Rectangle {
-      id: finderBackground
+      font {
+        family: "DIN Alternate"
+        pixelSize: 19
+        bold: true
+      }
+      anchors {
 
-      color: "white"
+        left: magnifyingGlass.right
+        leftMargin: 16
 
-      width: finderContainer.width
-      height: finderContainer.height
+        verticalCenter: finderBackground.verticalCenter
+      }
+    }
 
-      radius: 8
+    TextField {
+      id: textField
 
-      border.color: "#E0E0E0"
+      anchors.fill: parent
 
-      Image {
-        id: magnifyingGlass
-        source: "qrc:/icons/decorative/finder_magnifying_glass.png"
-        width: 50
-        height: 50
-        fillMode: Image.PreserveAspectFit
+      focus: true
 
-        anchors {
-          left: finderBackground.left
-          leftMargin: 16
-          verticalCenter: finderBackground.verticalCenter
-        }
+      color: "black"
+
+      leftPadding: magnifyingGlass.width + 32
+
+      font {
+        family: "DIN Alternate"
+        pixelSize: 19
+        bold: true
       }
 
-      Text {
-        text: textField.placeholderTexts
-        color: "#aaaaaa"
-        visible: textField.text.length === 0
+      property string placeholderTexts: "Знайти рецепт за назвою"
 
-        font {
-          family: "DIN Alternate"
-          pixelSize: 19
-          bold: true
-        }
-        anchors {
+      background: Rectangle {
+        id: transparentBackground
 
-          left: magnifyingGlass.right
-          leftMargin: 16
-
-          verticalCenter: finderBackground.verticalCenter
-        }
+        color: "transparent"
       }
     }
   }

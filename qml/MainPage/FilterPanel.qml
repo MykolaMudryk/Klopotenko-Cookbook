@@ -6,7 +6,6 @@ Item {
   MultiEffect {
     source: filterPanelContainer
     anchors.fill: filterPanelContainer
-    //autoPaddingEnabled: true
     shadowBlur: 0.10
     shadowColor: 'black'
     shadowEnabled: true
@@ -22,6 +21,7 @@ Item {
     width: rectWidth
     height: rectHeight
     color: "white"
+    radius: 5
 
     Image {
       id: filterIcon
