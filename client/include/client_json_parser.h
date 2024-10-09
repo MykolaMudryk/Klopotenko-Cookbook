@@ -22,7 +22,10 @@ class JsonParser : public QObject {
  public slots:
   void extractValues(const QByteArray &jsonData);
  signals:
-  void categoryExtracted(const QString &categoryName, const QString &iconName);
+  void categoryNameIconExtracted(const QString &categoryName,
+                                 const QString &iconName);
+  void categoryNameExtracted(const QString &categoryName);
+
   void nationalityExtracted(const QString &nationality);
   void dishNameExtracted(const QString &nationality);
 };

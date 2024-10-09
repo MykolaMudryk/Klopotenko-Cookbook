@@ -22,7 +22,8 @@ void JsonParser::extractValues(const QByteArray &jsonData) {
         // qDebug() << "Parsed category on client: " << categoryName <<
         // iconName;
 
-        emit categoryExtracted(categoryName, iconName);
+        emit categoryNameIconExtracted(categoryName, iconName);
+        emit categoryNameExtracted(categoryName);
       }
 
       if (jsonObject.contains("nationality_name")) {

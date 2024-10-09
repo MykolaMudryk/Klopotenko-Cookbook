@@ -11,7 +11,7 @@ Button {
 
   onClicked: {
     popup.open()
-    categoryModel.fetchCategories()
+    menuCategoryModel.fetchCategories()
   }
 
   anchors {
@@ -94,7 +94,7 @@ Button {
 
       width: parent.width
       height: parent.height
-
+      radius: 7
       color: "transparent"
     }
 
@@ -107,11 +107,9 @@ Button {
     Rectangle {
       id: categoryColumnBackground
 
-      radius: 7
-
       width: receiptDropDown.width + 40
-      height: categoryModel.rowCount * 50
-
+      height: menuCategoryModel.rowCount() * 50
+      radius: 7
       color: "#f0f0f0"
 
       x: receiptDropDownBackground.x + 14
@@ -124,7 +122,7 @@ Button {
         height: childrenRect.height
 
         Repeater {
-          model: categoryModel
+          model: menuCategoryModel
 
           delegate: Rectangle {
             id: dropdownColumnBackground
@@ -145,11 +143,11 @@ Button {
                 popup.selectedCategory = model.categoryName
 
                 if (popup.selectedCategory !== popup.lastCategoryName) {
-                  nationalityModel.clearNationalities()
+                  menuNationalityModel.clearNationalities()
                   popup.lastCategoryName = popup.selectedCategory
                 }
 
-                nationalityModel.fetchNationality(model.categoryName)
+                menuNationalityModel.fetchNationality(model.categoryName)
 
                 nationalityColumn.x = categoryColumn.x + categoryColumn.width
 
@@ -160,13 +158,13 @@ Button {
                 parent.color = "white"
 
                 if (!popup.isInNationalityList) {
-                  nationalityModel.clearNationalities()
+                  menuNationalityModel.clearNationalities()
                 }
               }
 
               onClicked: {
                 nationalityColumn.x = -1000
-                nationalityModel.clearNationalities()
+                menuNationalityModel.clearNationalities()
                 breadCrumb.updateBreadCrumb(model.categoryName)
                 popup.close()
               }
@@ -209,7 +207,7 @@ Button {
         id: nationalityСolumnBackground
 
         width: receiptDropDown.width + 40
-        height: nationalityModel.rowCount * 50
+        height: menuNationalityModel.rowCount() * 50
 
         color: "#f0f0f0"
 
@@ -224,7 +222,7 @@ Button {
           y: categoryColumn.y + categoryColumn.height
 
           Repeater {
-            model: nationalityModel
+            model: menuNationalityModel
 
             delegate: Rectangle {
               id: nationalityColumnBackground
@@ -246,7 +244,7 @@ Button {
 
                   popup.selectedNationality = model.nationality
 
-                  dishNameModel.fetchDishName(popup.selectedCategory,
+                  menuDishModel.fetchDishName(popup.selectedCategory,
                                               model.nationality)
 
                   dishNameColumn.x = nationalityColumn.x + nationalityColumn.width
@@ -259,7 +257,7 @@ Button {
                   parent.color = "white"
 
                   if (!popup.isInCategoryList) {
-                    dishNameModel.clearDishNames()
+                    menuDishModel.clearDishNames()
                   }
                 }
 
@@ -267,7 +265,7 @@ Button {
                   nationalityColumn.x = -1000
                   popup.close()
 
-                  dishNameModel.clearDishNames()
+                  menuDishModel.clearDishNames()
                   breadCrumb.updateBreadCrumb(popup.selectedCategory,
                                               model.nationality)
                 }
@@ -299,7 +297,7 @@ Button {
         id: dishNameСolumnBackground
 
         width: receiptDropDown.width + 40
-        height: dishNameModel.rowCount * 50
+        height: menuDishModel.rowCount() * 50
 
         color: "#f0f0f0"
 
@@ -312,7 +310,7 @@ Button {
           height: childrenRect.height
 
           Repeater {
-            model: dishNameModel
+            model: menuDishModel
 
             delegate: Rectangle {
               id: columnBackground

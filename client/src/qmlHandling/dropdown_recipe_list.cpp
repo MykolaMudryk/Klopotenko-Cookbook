@@ -2,15 +2,14 @@
 
 #include "qmlHandling/dropdown_recipe_list.h"
 
-CategoryModel::CategoryModel(NetworkClient *client, QObject *parent)
+MenuCategoryModel::MenuCategoryModel(NetworkClient *client, QObject *parent)
     : QAbstractListModel(parent), networkClient(client) {}
 
-int CategoryModel::rowCount(const QModelIndex &parent) const {
-  Q_UNUSED(parent);
+int MenuCategoryModel::rowCount(const QModelIndex &parent) const {
   return m_categories.count();
 }
 
-QVariant CategoryModel::data(const QModelIndex &index, int role) const {
+QVariant MenuCategoryModel::data(const QModelIndex &index, int role) const {
   if (!index.isValid() || index.row() >= m_categories.count()) {
     return QVariant();
   }
@@ -26,15 +25,15 @@ QVariant CategoryModel::data(const QModelIndex &index, int role) const {
   return QVariant();
 }
 
-QHash<int, QByteArray> CategoryModel::roleNames() const {
+QHash<int, QByteArray> MenuCategoryModel::roleNames() const {
   QHash<int, QByteArray> roles;
   roles[CategoryNameRole] = "categoryName";
   roles[IconNameRole] = "iconName";
   return roles;
 }
 
-void CategoryModel::setCategory(const QString &categoryName,
-                                const QString &iconName) {
+void MenuCategoryModel::setCategoryNameIcon(const QString &categoryName,
+                                            const QString &iconName) {
   for (const Category &existingCategory : m_categories) {
     if (existingCategory.name == categoryName &&
         existingCategory.icon == iconName) {
@@ -45,26 +44,41 @@ void CategoryModel::setCategory(const QString &categoryName,
   beginInsertRows(QModelIndex(), m_categories.count(), m_categories.count());
   m_categories.append({categoryName, iconName});
   endInsertRows();
-  emit categoryChanged();
+  emit categoryNameIconChanged();
 }
 
-CategoryModel *CategoryModel::categoryModel() const {
-  return const_cast<CategoryModel *>(this);
+void MenuCategoryModel::setCategoryName(const QString &categoryName) {
+  for (const Category &existingCategory : m_categories) {
+    if (existingCategory.name == categoryName) {
+      emit categoryForFilter();
+      return;
+    }
+  }
+
+  beginInsertRows(QModelIndex(), m_categories.count(), m_categories.count());
+  m_categories.append({categoryName});
+  endInsertRows();
+
+  emit categoryForFilter();
 }
 
-void CategoryModel::fetchCategories() {
+MenuCategoryModel *MenuCategoryModel::menuCategoryModel() const {
+  return const_cast<MenuCategoryModel *>(this);
+}
+
+void MenuCategoryModel::fetchCategories() {
   networkClient->sendMessage("GET_CATEGORIES");
 }
 
-NationalityModel::NationalityModel(NetworkClient *client, QObject *parent)
+MenuNationModel::MenuNationModel(NetworkClient *client, QObject *parent)
     : QAbstractListModel(parent), networkClient(client) {}
 
-int NationalityModel::rowCount(const QModelIndex &parent) const {
+int MenuNationModel::rowCount(const QModelIndex &parent) const {
   Q_UNUSED(parent);
   return m_nationalities.count();
 }
 
-QVariant NationalityModel::data(const QModelIndex &index, int role) const {
+QVariant MenuNationModel::data(const QModelIndex &index, int role) const {
   if (!index.isValid() || index.row() >= m_nationalities.count()) {
     return QVariant();
   }
@@ -76,19 +90,19 @@ QVariant NationalityModel::data(const QModelIndex &index, int role) const {
   return QVariant();
 }
 
-QHash<int, QByteArray> NationalityModel::roleNames() const {
+QHash<int, QByteArray> MenuNationModel::roleNames() const {
   QHash<int, QByteArray> roles;
   roles[NationalityRole] = "nationality";
   return roles;
 }
 
-void NationalityModel::clearNationalities() {
+void MenuNationModel::clearNationalities() {
   beginResetModel();
   m_nationalities.clear();
   endResetModel();
 }
 
-void NationalityModel::setNationality(const QString &nationality) {
+void MenuNationModel::setNationality(const QString &nationality) {
   for (const QString &existingNationality : m_nationalities) {
     if (existingNationality == nationality) {
       return;
@@ -103,19 +117,19 @@ void NationalityModel::setNationality(const QString &nationality) {
   emit nationalityChanged();
 }
 
-NationalityModel *NationalityModel::nationalityModel() const {
-  return const_cast<NationalityModel *>(this);
+MenuNationModel *MenuNationModel::menuNationalityModel() const {
+  return const_cast<MenuNationModel *>(this);
 }
 
-void NationalityModel::fetchNationality(const QString &categoryName) {
+void MenuNationModel::fetchNationality(const QString &categoryName) {
   QString message = QString("GET_NATIONALITY %1").arg(categoryName);
   networkClient->sendMessage(message);
 }
 
-DishNameModel::DishNameModel(NetworkClient *client, QObject *parent)
+MenuDishModel::MenuDishModel(NetworkClient *client, QObject *parent)
     : QAbstractListModel(parent), networkClient(client) {}
 
-void DishNameModel::fetchDishName(const QString &categoryName,
+void MenuDishModel::fetchDishName(const QString &categoryName,
                                   const QString &nationality) {
   QString message = QString("HOVERED_CATEGORY:%1 HOVERED_NATIONALITY:%2")
                         .arg(categoryName, nationality);
@@ -124,12 +138,12 @@ void DishNameModel::fetchDishName(const QString &categoryName,
   networkClient->sendMessage(message);
 }
 
-int DishNameModel::rowCount(const QModelIndex &parent) const {
+int MenuDishModel::rowCount(const QModelIndex &parent) const {
   Q_UNUSED(parent);
   return m_dishNames.count();
 }
 
-QVariant DishNameModel::data(const QModelIndex &index, int role) const {
+QVariant MenuDishModel::data(const QModelIndex &index, int role) const {
   if (!index.isValid() || index.row() >= m_dishNames.count()) {
     return QVariant();
   }
@@ -141,19 +155,19 @@ QVariant DishNameModel::data(const QModelIndex &index, int role) const {
   return QVariant();
 }
 
-QHash<int, QByteArray> DishNameModel::roleNames() const {
+QHash<int, QByteArray> MenuDishModel::roleNames() const {
   QHash<int, QByteArray> roles;
   roles[DishNameRole] = "dishName";
   return roles;
 }
 
-void DishNameModel::clearDishNames() {
+void MenuDishModel::clearDishNames() {
   beginResetModel();
   m_dishNames.clear();
   endResetModel();
 }
 
-void DishNameModel::setDishName(const QString &dishName) {
+void MenuDishModel::setDishName(const QString &dishName) {
   for (const QString &existingDishName : m_dishNames) {
     if (existingDishName == dishName) {
       return;
@@ -166,6 +180,6 @@ void DishNameModel::setDishName(const QString &dishName) {
   emit dishNameChanged();
 }
 
-DishNameModel *DishNameModel::dishNameModel() const {
-  return const_cast<DishNameModel *>(this);
+MenuDishModel *MenuDishModel::menuDishModel() const {
+  return const_cast<MenuDishModel *>(this);
 }

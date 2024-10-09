@@ -22,9 +22,9 @@ class Client : public QObject {
 
  private:
   JsonParser *jsonParser;
-  CategoryModel *categoryModel;
-  NationalityModel *nationalityModel;
-  DishNameModel *dishNameModel;
+  MenuCategoryModel *menuCategoryModel;
+  MenuNationModel *menuNationalityModel;
+  MenuDishModel *menuDishModel;
   BreadCrumb *breadCrumb;
 };
 

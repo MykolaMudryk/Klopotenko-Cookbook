@@ -6,27 +6,31 @@ Client::Client(QObject *parent)
     : QObject(parent),
       networkClient(new NetworkClient(this)),
       jsonParser(new JsonParser(this)),
-      categoryModel(new CategoryModel(networkClient, this)),
-      nationalityModel(new NationalityModel(networkClient, this)),
-      dishNameModel(new DishNameModel(networkClient, this)),
+      menuCategoryModel(new MenuCategoryModel(networkClient, this)),
+      menuNationalityModel(new MenuNationModel(networkClient, this)),
+      menuDishModel(new MenuDishModel(networkClient, this)),
       breadCrumb(new BreadCrumb(this)) {
   connect(networkClient, &NetworkClient::requestFinished, jsonParser,
           &JsonParser::extractValues);
 
-  connect(jsonParser, &JsonParser::categoryExtracted, categoryModel,
-          &CategoryModel::setCategory);
+  connect(jsonParser, &JsonParser::categoryNameIconExtracted, menuCategoryModel,
+          &MenuCategoryModel::setCategoryNameIcon);
 
-  connect(jsonParser, &JsonParser::nationalityExtracted, nationalityModel,
-          &NationalityModel::setNationality);
+  connect(jsonParser, &JsonParser::categoryNameExtracted, menuCategoryModel,
+          &MenuCategoryModel::setCategoryName);
 
-  connect(jsonParser, &JsonParser::dishNameExtracted, dishNameModel,
-          &DishNameModel::setDishName);
+  connect(jsonParser, &JsonParser::nationalityExtracted, menuNationalityModel,
+          &MenuNationModel::setNationality);
+
+  connect(jsonParser, &JsonParser::dishNameExtracted, menuDishModel,
+          &MenuDishModel::setDishName);
 }
 
 void Client::setupQML(QQmlApplicationEngine &engine) {
-  engine.rootContext()->setContextProperty("categoryModel", categoryModel);
-  engine.rootContext()->setContextProperty("nationalityModel",
-                                           nationalityModel);
-  engine.rootContext()->setContextProperty("dishNameModel", dishNameModel);
+  engine.rootContext()->setContextProperty("menuCategoryModel",
+                                           menuCategoryModel);
+  engine.rootContext()->setContextProperty("menuNationalityModel",
+                                           menuNationalityModel);
+  engine.rootContext()->setContextProperty("menuDishModel", menuDishModel);
   engine.rootContext()->setContextProperty("breadCrumb", breadCrumb);
 }

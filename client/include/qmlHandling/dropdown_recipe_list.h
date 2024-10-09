@@ -7,10 +7,10 @@
 
 #include "network_client.h"
 
-class CategoryModel : public QAbstractListModel {
+class MenuCategoryModel : public QAbstractListModel {
   Q_OBJECT
-  Q_PROPERTY(
-      CategoryModel *categoryModel READ categoryModel NOTIFY categoryChanged)
+  Q_PROPERTY(MenuCategoryModel *menuCategoryModel READ menuCategoryModel NOTIFY
+                 categoryNameIconChanged)
 
  private:
   struct Category {
@@ -22,8 +22,8 @@ class CategoryModel : public QAbstractListModel {
   NetworkClient *networkClient;
 
  public:
-  explicit CategoryModel(NetworkClient *client = nullptr,
-                         QObject *parent = nullptr);
+  explicit MenuCategoryModel(NetworkClient *client = nullptr,
+                             QObject *parent = nullptr);
 
   enum CategoryRoles { CategoryNameRole = Qt::UserRole + 1, IconNameRole };
 
@@ -34,29 +34,33 @@ class CategoryModel : public QAbstractListModel {
 
   QHash<int, QByteArray> roleNames() const override;
 
-  void setCategory(const QString &categoryName, const QString &iconName);
+  void setCategoryNameIcon(const QString &categoryName,
+                           const QString &iconName);
 
-  CategoryModel *categoryModel() const;
+  void setCategoryName(const QString &categoryName);
+
+  MenuCategoryModel *menuCategoryModel() const;
 
  public slots:
   void fetchCategories();
 
  signals:
-  void categoryChanged();
+  void categoryNameIconChanged();
+  void categoryForFilter();
 };
 
-class NationalityModel : public QAbstractListModel {
+class MenuNationModel : public QAbstractListModel {
   Q_OBJECT
-  Q_PROPERTY(NationalityModel *nationalityModel READ nationalityModel NOTIFY
-                 nationalityChanged)
+  Q_PROPERTY(MenuNationModel *menuNationalityModel READ menuNationalityModel
+                 NOTIFY nationalityChanged)
 
  private:
   QList<QString> m_nationalities;
   NetworkClient *networkClient;
 
  public:
-  explicit NationalityModel(NetworkClient *client = nullptr,
-                            QObject *parent = nullptr);
+  explicit MenuNationModel(NetworkClient *client = nullptr,
+                           QObject *parent = nullptr);
 
   enum NationalityRoles { NationalityRole = Qt::UserRole + 1 };
 
@@ -71,7 +75,7 @@ class NationalityModel : public QAbstractListModel {
 
   void setNationality(const QString &nationality);
 
-  NationalityModel *nationalityModel() const;
+  MenuNationModel *menuNationalityModel() const;
 
  public slots:
   void fetchNationality(const QString &categoryName);
@@ -80,17 +84,17 @@ class NationalityModel : public QAbstractListModel {
   void nationalityChanged();
 };
 
-class DishNameModel : public QAbstractListModel {
+class MenuDishModel : public QAbstractListModel {
   Q_OBJECT
   Q_PROPERTY(
-      DishNameModel *dishNameModel READ dishNameModel NOTIFY dishNameChanged)
+      MenuDishModel *menuDishModel READ menuDishModel NOTIFY dishNameChanged)
 
  private:
   QList<QString> m_dishNames;
   NetworkClient *networkClient;
 
  public:
-  explicit DishNameModel(NetworkClient *client = nullptr,
+  explicit MenuDishModel(NetworkClient *client = nullptr,
                          QObject *parent = nullptr);
 
   enum DishNameRoles { DishNameRole = Qt::UserRole + 1 };
@@ -106,7 +110,7 @@ class DishNameModel : public QAbstractListModel {
 
   void setDishName(const QString &dishName);
 
-  DishNameModel *dishNameModel() const;
+  MenuDishModel *menuDishModel() const;
 
  public slots:
   void fetchDishName(const QString &categoryName, const QString &nationality);
