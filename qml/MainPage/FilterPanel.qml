@@ -85,13 +85,6 @@ Item {
           target: menuCategoryModel
           function onCategoryForFilter() {
             categoryListContainer.isOpen = !categoryListContainer.isOpen
-
-            console.log("menuCategoryModel.rowCount:", menuCategoryModel.rowCount(),
-                        "Clicked. isAnimating:",
-                        categoryListContainer.isAnimating)
-
-            console.log("isOpen змінено на:", categoryListContainer.isOpen)
-            console.log("Поточна висота:", categoryListContainer.height)
           }
         }
 

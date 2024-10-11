@@ -131,7 +131,7 @@ MenuDishModel::MenuDishModel(NetworkClient *client, QObject *parent)
 
 void MenuDishModel::fetchDishName(const QString &categoryName,
                                   const QString &nationality) {
-  QString message = QString("HOVERED_CATEGORY:%1 HOVERED_NATIONALITY:%2")
+  QString message = QString("HOVERED_CATEGORY %1 HOVERED_NATIONALITY %2")
                         .arg(categoryName, nationality);
 
   // qDebug() << "Data before request:" << message;

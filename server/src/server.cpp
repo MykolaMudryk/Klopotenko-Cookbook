@@ -1,12 +1,15 @@
 #include "server.h"
-SendDataToClient::SendDataToClient(QObject *parent)
+ServerConnection::ServerConnection(QObject *parent)
     : QObject(parent),
       webSocketServer(new QWebSocketServer(QStringLiteral("WebSocket Server"),
                                            QWebSocketServer::NonSecureMode,
-                                           this)),
-      jsonParser(this) {}
+                                           this)) {
+  sendForDropdown = new SendForDropdown(this);
+  registerRequestHandlers();
+  onIncomingConnection();
+}
 
-void SendDataToClient::startServer() {
+void ServerConnection::startServer() {
   port = 8080;
 
   if (!webSocketServer->listen(QHostAddress::LocalHost, port)) {
@@ -15,39 +18,110 @@ void SendDataToClient::startServer() {
   } else {
     qDebug() << "WebSocket server started on port: " << port;
     connect(webSocketServer, &QWebSocketServer::newConnection, this,
-            &SendDataToClient::onIncomingConnection);
+            &ServerConnection::onIncomingConnection);
   }
 }
 
-void SendDataToClient::onIncomingConnection() {
+void ServerConnection::onIncomingConnection() {
   while (webSocketServer->hasPendingConnections()) {
     QWebSocket *clientSocket = webSocketServer->nextPendingConnection();
 
+    QString clientIp = clientSocket->peerAddress().toString();
+    quint16 clientPort = clientSocket->peerPort();
+
+    QString clientId = QString("%1:%2").arg(clientIp).arg(clientPort);
+
+    clients[clientId] = clientSocket;
+
+    qDebug() << "New client socket saved with clientId:" << clientId
+             << "socket address:" << clients[clientId];
+
+    connect(clientSocket, &QWebSocket::textMessageReceived, this,
+            &ServerConnection::onRequestReceived);
+
     connect(clientSocket, &QWebSocket::disconnected, this,
-            &SendDataToClient::onSocketDisconnected);
-
-    connect(clientSocket, &QWebSocket::textMessageReceived, this,
-            &SendDataToClient::onSendCategory);
-
-    connect(clientSocket, &QWebSocket::textMessageReceived, this,
-            &SendDataToClient::onSendNationality);
-
-    connect(clientSocket, &QWebSocket::textMessageReceived, this,
-            &SendDataToClient::onSendDishName);
+            &ServerConnection::onSocketDisconnected);
   }
 }
 
-void SendDataToClient::onSocketDisconnected() {
+void ServerConnection::registerRequestHandlers() {
+  connect(this, &ServerConnection::sendCategory, sendForDropdown,
+          &SendForDropdown::onSendCategory);
+  connect(this, &ServerConnection::sendNationality, sendForDropdown,
+          &SendForDropdown::onSendNationality);
+  connect(this, &ServerConnection::sendDishName, sendForDropdown,
+          &SendForDropdown::onSendDishName);
+
+  requestHandlers["GET_CATEGORIES"] = [this](const QString &clientId,
+                                             const QString &data) {
+    QWebSocket *clientSocket = clients[clientId];
+    emit sendCategory(clientSocket, clientId, data);
+  };
+
+  requestHandlers["GET_NATIONALITY"] = [this](const QString &clientId,
+                                              const QString &data) {
+    QWebSocket *clientSocket = clients[clientId];
+    emit sendNationality(clientSocket, clientId, data);
+  };
+
+  requestHandlers["HOVERED_CATEGORY"] = [this](const QString &clientId,
+                                               const QString &data) {
+    QWebSocket *clientSocket = clients[clientId];
+    emit sendDishName(clientSocket, clientId, data);
+  };
+}
+
+void ServerConnection::onRequestReceived(const QString &request) {
   QWebSocket *clientSocket = qobject_cast<QWebSocket *>(sender());
+
   if (clientSocket) {
-    clients.removeAll(clientSocket);
-    clientSocket->deleteLater();
+    // Знаходимо clientId в мапі clients
+    QString clientId;
+    for (auto it = clients.begin(); it != clients.end(); ++it) {
+      if (it.value() == clientSocket) {
+        clientId = it.key();
+
+        break;
+      }
+    }
+
+    QString qHashKey = request.section(' ', 0, 0);
+
+    if (requestHandlers.contains(qHashKey)) {
+      requestHandlers[qHashKey](
+          clientId, request);  // call signal handler registerRequestHandlers()
+    } else {
+      qWarning() << "Request handler not found or clientId is empty."
+                 << "request:" << request << "clientId:" << clientId;
+    }
   }
 }
 
-void SendDataToClient::onSendCategory(const QString &categoryDatabase) {
+void ServerConnection::onSocketDisconnected() {
   QWebSocket *clientSocket = qobject_cast<QWebSocket *>(sender());
 
+  if (clientSocket) {
+    QString clientId;
+    for (auto it = clients.begin(); it != clients.end(); ++it) {
+      if (it.value() == clientSocket) {
+        clientId = it.key();
+        break;
+      }
+    }
+
+    if (!clientId.isEmpty()) {
+      clients.remove(clientId);
+      clientSocket->deleteLater();
+      qDebug() << "Client disconnected with ID:" << clientId;
+    }
+  }
+}
+
+SendForDropdown::SendForDropdown(QObject *parent) : QObject(parent) {}
+
+void SendForDropdown::onSendCategory(QWebSocket *clientSocket,
+                                     const QString &clientId,
+                                     const QString &categoryDatabase) {
   if (!clientSocket) {
     qWarning() << "Client socket is null, cannot send message.";
     return;
@@ -60,9 +134,9 @@ void SendDataToClient::onSendCategory(const QString &categoryDatabase) {
   clientSocket->sendTextMessage(QString::fromUtf8(parsedCategory));
 }
 
-void SendDataToClient::onSendNationality(const QString &categoryClient) {
-  QWebSocket *clientSocket = qobject_cast<QWebSocket *>(sender());
-
+void SendForDropdown::onSendNationality(QWebSocket *clientSocket,
+                                        const QString &clientId,
+                                        const QString &categoryClient) {
   if (!clientSocket) {
     qWarning() << "Client socket is null, cannot send message.";
     return;
@@ -77,9 +151,9 @@ void SendDataToClient::onSendNationality(const QString &categoryClient) {
   clientSocket->sendTextMessage(QString::fromUtf8(parsedHoveredCategory));
 }
 
-void SendDataToClient::onSendDishName(const QString &hoveredData) {
-  QWebSocket *clientSocket = qobject_cast<QWebSocket *>(sender());
-
+void SendForDropdown::onSendDishName(QWebSocket *clientSocket,
+                                     const QString &clientId,
+                                     const QString &hoveredData) {
   if (!clientSocket) {
     qWarning() << "Client socket is null, cannot send message.";
     return;

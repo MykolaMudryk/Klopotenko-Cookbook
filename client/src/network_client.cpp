@@ -12,7 +12,7 @@ NetworkClient::NetworkClient(QObject *parent)
 
 void NetworkClient::connectToServer() {
   websocket->open(QUrl("ws://localhost:8080/"));
-  // qDebug() << "Client opened connection";
+  qDebug() << "Client opened connection";
 }
 
 void NetworkClient::onConnected() { qDebug() << "Connected to the server"; }

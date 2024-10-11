@@ -23,7 +23,7 @@ class DatabaseConnection : public QObject {
 
   static DatabaseConnection *getInstance();
 
-  QSqlDatabase getConnection();
+  QSqlDatabase getConnection() const;
 };
 
 class DropdownRecipes : public QObject {

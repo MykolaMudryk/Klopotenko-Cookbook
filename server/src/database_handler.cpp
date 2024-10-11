@@ -29,7 +29,7 @@ DatabaseConnection *DatabaseConnection::getInstance() {
   return instance;
 }
 
-QSqlDatabase DatabaseConnection::getConnection() { return db; };
+QSqlDatabase DatabaseConnection::getConnection() const { return db; }
 
 DatabaseConnection *DatabaseConnection::instance = nullptr;
 
