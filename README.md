@@ -4,7 +4,7 @@
 
 ### Key Features:
 
-- **Recipe Browsing**: Users can view all categories, nationalities and general names via cascadings dropdown menu.
+- **Recipe Browsing**: Users can view all categories, nationalities and general names via cascading dropdown menu.
 
 - **Search**: A search bar allows users to find specific recipes by name.
 
