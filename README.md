@@ -8,6 +8,8 @@
 
 - **Search**: A search bar allows users to find specific recipes by name.
 
+- **Breadcrumb Navigation**: A breadcrumb navigation bar helps users track their current page and selected recipe, making it easy to navigate back through categories, nationalities, and dishes.
+
 - **Filters**: Filter recipes by:
   - Dish category (e.g., first course, dessert)
   - National cuisine
