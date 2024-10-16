@@ -2,6 +2,18 @@
 
 **Klopotenko's Cookbook** is a cross-platform client-server application built using **C++**, **Qt**, **MySQL** and **QML** for the GUI, compatible with **macOS**, **Windows** and **Linux**.
 
+**Initial design:**
+
+![Initial Design](Klopotenko-Cookbok/initial_design.jpg)
+
+**Current design:**
+
+![Current Design](Klopotenko-Cookbok/current_design.jpg)
+
+**Dropdown button:**
+
+![Current Design](Klopotenko-Cookbok/dropdown_button.jpg)
+
 ### Key Features:
 
 - **Recipe Browsing**: Users can view all categories, nationalities and general names via cascading dropdown menu.
