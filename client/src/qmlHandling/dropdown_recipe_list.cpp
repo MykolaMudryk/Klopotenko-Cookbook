@@ -47,21 +47,6 @@ void MenuCategoryModel::setCategoryNameIcon(const QString &categoryName,
   emit categoryNameIconChanged();
 }
 
-void MenuCategoryModel::setCategoryName(const QString &categoryName) {
-  for (const Category &existingCategory : m_categories) {
-    if (existingCategory.name == categoryName) {
-      emit categoryForFilter();
-      return;
-    }
-  }
-
-  beginInsertRows(QModelIndex(), m_categories.count(), m_categories.count());
-  m_categories.append({categoryName});
-  endInsertRows();
-
-  emit categoryForFilter();
-}
-
 MenuCategoryModel *MenuCategoryModel::menuCategoryModel() const {
   return const_cast<MenuCategoryModel *>(this);
 }

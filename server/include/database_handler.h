@@ -21,7 +21,7 @@ class DatabaseConnection : public QObject {
  public:
   bool connectToDatabase();
 
-  static DatabaseConnection *getInstance();
+  static DatabaseConnection *getInstance(QObject *parent = nullptr);
 
   QSqlDatabase getConnection() const;
 };

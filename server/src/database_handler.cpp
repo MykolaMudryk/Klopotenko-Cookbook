@@ -24,7 +24,7 @@ bool DatabaseConnection::connectToDatabase() {
   return true;
 }
 
-DatabaseConnection *DatabaseConnection::getInstance() {
+DatabaseConnection *DatabaseConnection::getInstance(QObject *parent) {
   if (!instance) instance = new DatabaseConnection;
   return instance;
 }
@@ -34,7 +34,7 @@ QSqlDatabase DatabaseConnection::getConnection() const { return db; }
 DatabaseConnection *DatabaseConnection::instance = nullptr;
 
 DropdownRecipes::DropdownRecipes(QObject *parent) : QObject(parent) {
-  db = DatabaseConnection::getInstance()->getConnection();
+  db = DatabaseConnection::getInstance(this)->getConnection();
 }
 
 QJsonArray DropdownRecipes::getCategories() {

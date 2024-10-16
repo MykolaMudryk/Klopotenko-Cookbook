@@ -37,8 +37,6 @@ class MenuCategoryModel : public QAbstractListModel {
   void setCategoryNameIcon(const QString &categoryName,
                            const QString &iconName);
 
-  void setCategoryName(const QString &categoryName);
-
   MenuCategoryModel *menuCategoryModel() const;
 
  public slots:
@@ -46,7 +44,6 @@ class MenuCategoryModel : public QAbstractListModel {
 
  signals:
   void categoryNameIconChanged();
-  void categoryForFilter();
 };
 
 class MenuNationModel : public QAbstractListModel {
