@@ -4,15 +4,15 @@
 
 **Initial design:**
 
-![Initial Design](Klopotenko-Cookbok/initial_design.jpg)
+![Initial Design](initial_design.jpg)
 
 **Current design:**
 
-![Current Design](Klopotenko-Cookbok/current_design.jpg)
+![Current Design](current_design.jpg)
 
 **Dropdown button:**
 
-![Current Design](Klopotenko-Cookbok/dropdown_button.jpg)
+![Dropdown button](dropdown_button.jpg)
 
 ### Key Features:
 
