@@ -16,6 +16,9 @@ class DatabaseConnection : public QObject {
 
   static DatabaseConnection *instance;
 
+  DatabaseConnection(const DatabaseConnection &) = delete;
+  DatabaseConnection &operator=(const DatabaseConnection &) = delete;
+
   explicit DatabaseConnection(QObject *parent = nullptr);
 
  public:
@@ -26,19 +29,34 @@ class DatabaseConnection : public QObject {
   QSqlDatabase getConnection() const;
 };
 
-class DropdownRecipes : public QObject {
+class QueryDropdownData : public QObject {
   Q_OBJECT
  private:
   QSqlDatabase db;
 
  public:
-  explicit DropdownRecipes(QObject *parent = nullptr);
+  explicit QueryDropdownData(QObject *parent = nullptr);
 
   QJsonArray getCategories();
 
   QJsonArray getNationality(const QString &categoryName);
 
   QJsonArray getDishName(const QString &nationality, const QString &category);
+};
+
+class QueryFilterData : public QObject {
+  Q_OBJECT
+ private:
+  QSqlDatabase db;
+
+ public:
+  explicit QueryFilterData(QObject *parent = nullptr);
+
+  QJsonArray getAllCategories();
+
+  QJsonArray getAllNation();
+
+  QJsonArray getAllDish();
 };
 
 #endif  // DATABASE_HANDLER

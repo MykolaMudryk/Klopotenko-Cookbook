@@ -9,6 +9,7 @@
 #include "network_client.h"
 #include "qmlHandling/breadcrumb_line.h"
 #include "qmlHandling/dropdown_recipe_list.h"
+#include "qmlHandling/filter_panel.h"
 
 class Client : public QObject {
   Q_OBJECT
@@ -25,6 +26,11 @@ class Client : public QObject {
   MenuCategoryModel *menuCategoryModel;
   MenuNationModel *menuNationalityModel;
   MenuDishModel *menuDishModel;
+
+  FilterCategoryModel *filterCategoryModel;
+  NationModel *nationModel;
+  DishModel *dishModel;
+
   BreadCrumb *breadCrumb;
 };
 

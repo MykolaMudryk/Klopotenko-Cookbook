@@ -5,6 +5,7 @@ ServerConnection::ServerConnection(QObject *parent)
                                            QWebSocketServer::NonSecureMode,
                                            this)) {
   sendForDropdown = new SendForDropdown(this);
+  sendForFilter = new SendForFilter(this);
   registerRequestHandlers();
   onIncomingConnection();
 }
@@ -52,10 +53,17 @@ void ServerConnection::registerRequestHandlers() {
   connect(this, &ServerConnection::sendDishName, sendForDropdown,
           &SendForDropdown::onSendDishName);
 
+  connect(this, &ServerConnection::sendAllCategory, sendForFilter,
+          &SendForFilter::onSendAllCategory);
+  connect(this, &ServerConnection::sendAllNationality, sendForFilter,
+          &SendForFilter::onSendAllNationality);
+  connect(this, &ServerConnection::sendAllDishName, sendForFilter,
+          &SendForFilter::onSendAllDishName);
+
   requestHandlers["GET_CATEGORIES"] = [this](const QString &clientId,
                                              const QString &data) {
     QWebSocket *clientSocket = clients[clientId];
-    emit sendCategory(clientSocket, clientId, data);
+    emit sendCategory(clientSocket, clientId);
   };
 
   requestHandlers["GET_NATIONALITY"] = [this](const QString &clientId,
@@ -68,6 +76,24 @@ void ServerConnection::registerRequestHandlers() {
                                                const QString &data) {
     QWebSocket *clientSocket = clients[clientId];
     emit sendDishName(clientSocket, clientId, data);
+  };
+
+  requestHandlers["GET_FILTER_CATEGORIES"] = [this](const QString &clientId,
+                                                    const QString &data) {
+    QWebSocket *clientSocket = clients[clientId];
+    emit sendAllCategory(clientSocket, clientId);
+  };
+
+  requestHandlers["GET_FILTER_NATIONALITY"] = [this](const QString &clientId,
+                                                     const QString &data) {
+    QWebSocket *clientSocket = clients[clientId];
+    emit sendAllNationality(clientSocket, clientId);
+  };
+
+  requestHandlers["GET_FILTER_DISHNAME"] = [this](const QString &clientId,
+                                                  const QString &data) {
+    QWebSocket *clientSocket = clients[clientId];
+    emit sendAllDishName(clientSocket, clientId);
   };
 }
 
@@ -120,14 +146,13 @@ void ServerConnection::onSocketDisconnected() {
 SendForDropdown::SendForDropdown(QObject *parent) : QObject(parent) {}
 
 void SendForDropdown::onSendCategory(QWebSocket *clientSocket,
-                                     const QString &clientId,
-                                     const QString &categoryDatabase) {
+                                     const QString &clientId) {
   if (!clientSocket) {
     qWarning() << "Client socket is null, cannot send message.";
     return;
   }
 
-  QByteArray parsedCategory = jsonParser.extractCategory(categoryDatabase);
+  QByteArray parsedCategory = jsonParser.extractCategory();
 
   // qDebug() << "Sending JSON category:" << QString::fromUtf8(parsedCategory);
 
@@ -164,4 +189,51 @@ void SendForDropdown::onSendDishName(QWebSocket *clientSocket,
   // qDebug() << "Sending JSON dishName:" << QString::fromUtf8(parsedDishName);
 
   clientSocket->sendTextMessage(QString::fromUtf8(parsedDishName));
+}
+
+SendForFilter::SendForFilter(QObject *parent) {}
+
+void SendForFilter::onSendAllCategory(QWebSocket *clientSocket,
+                                      const QString &clientId) {
+  if (!clientSocket) {
+    qWarning() << "Client socket is null, cannot send message.";
+    return;
+  }
+
+  QByteArray parsedAllcategories = jsonParser.allCategoryResponse();
+
+  // qDebug() << "Sending JSON hovered category:"
+  //          << QString::fromUtf8(parsedHoveredCategory);
+
+  clientSocket->sendTextMessage(QString::fromUtf8(parsedAllcategories));
+}
+
+void SendForFilter::onSendAllNationality(QWebSocket *clientSocket,
+                                         const QString &clientId) {
+  if (!clientSocket) {
+    qWarning() << "Client socket is null, cannot send message.";
+    return;
+  }
+
+  QByteArray parsedAllNations = jsonParser.allNationResponse();
+
+  // qDebug() << "Sending JSON hovered category:"
+  //          << QString::fromUtf8(parsedHoveredCategory);
+
+  clientSocket->sendTextMessage(QString::fromUtf8(parsedAllNations));
+}
+
+void SendForFilter::onSendAllDishName(QWebSocket *clientSocket,
+                                      const QString &clientId) {
+  if (!clientSocket) {
+    qWarning() << "Client socket is null, cannot send message.";
+    return;
+  }
+
+  QByteArray parsedAllDishes = jsonParser.allDishResponse();
+
+  // qDebug() << "Sending JSON hovered category:"
+  //          << QString::fromUtf8(parsedHoveredCategory);
+
+  clientSocket->sendTextMessage(QString::fromUtf8(parsedAllDishes));
 }

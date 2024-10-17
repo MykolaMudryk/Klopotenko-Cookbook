@@ -16,9 +16,6 @@ Client::Client(QObject *parent)
   connect(jsonParser, &JsonParser::categoryNameIconExtracted, menuCategoryModel,
           &MenuCategoryModel::setCategoryNameIcon);
 
-  connect(jsonParser, &JsonParser::categoryNameExtracted, menuCategoryModel,
-          &MenuCategoryModel::setCategoryName);
-
   connect(jsonParser, &JsonParser::nationalityExtracted, menuNationalityModel,
           &MenuNationModel::setNationality);
 
@@ -32,5 +29,11 @@ void Client::setupQML(QQmlApplicationEngine &engine) {
   engine.rootContext()->setContextProperty("menuNationalityModel",
                                            menuNationalityModel);
   engine.rootContext()->setContextProperty("menuDishModel", menuDishModel);
+
+  engine.rootContext()->setContextProperty("filterCategoryModel",
+                                           filterCategoryModel);
+  engine.rootContext()->setContextProperty("nationModel", nationModel);
+  engine.rootContext()->setContextProperty("dishModel", dishModel);
+
   engine.rootContext()->setContextProperty("breadCrumb", breadCrumb);
 }

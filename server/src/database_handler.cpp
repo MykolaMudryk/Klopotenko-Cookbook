@@ -33,11 +33,11 @@ QSqlDatabase DatabaseConnection::getConnection() const { return db; }
 
 DatabaseConnection *DatabaseConnection::instance = nullptr;
 
-DropdownRecipes::DropdownRecipes(QObject *parent) : QObject(parent) {
+QueryDropdownData::QueryDropdownData(QObject *parent) : QObject(parent) {
   db = DatabaseConnection::getInstance(this)->getConnection();
 }
 
-QJsonArray DropdownRecipes::getCategories() {
+QJsonArray QueryDropdownData::getCategories() {
   QSqlQuery query(db);
   QJsonArray categoriesArray;
 
@@ -66,7 +66,7 @@ QJsonArray DropdownRecipes::getCategories() {
   }
 }
 
-QJsonArray DropdownRecipes::getNationality(const QString &categoryName) {
+QJsonArray QueryDropdownData::getNationality(const QString &categoryName) {
   QSqlQuery query(db);
   QJsonArray nationalitiesArray;
 
@@ -112,8 +112,8 @@ QJsonArray DropdownRecipes::getNationality(const QString &categoryName) {
   }
 }
 
-QJsonArray DropdownRecipes::getDishName(const QString &category,
-                                        const QString &nationality) {
+QJsonArray QueryDropdownData::getDishName(const QString &category,
+                                          const QString &nationality) {
   QSqlQuery query(db);
   QJsonArray dishesArray;
 
@@ -149,6 +149,94 @@ QJsonArray DropdownRecipes::getDishName(const QString &category,
     qDebug()
         << "Failed to retrieve dishes for hovered nationality from database:"
         << query.lastError().text();
+    return QJsonArray();
+  }
+}
+
+QueryFilterData::QueryFilterData(QObject *parent) {
+  db = DatabaseConnection::getInstance(this)->getConnection();
+}
+
+QJsonArray QueryFilterData::getAllCategories() {
+  QSqlQuery query(db);
+  QJsonArray categoriesArray;
+
+  query.prepare(R"(SELECT DISTINCT c.category_name
+                    FROM categories c
+                        JOIN recipes r ON c.recipe_id = r.category_id)");
+
+  if (query.exec()) {
+    while (query.next()) {
+      QJsonObject categoryObject;
+
+      QString categoryName = query.value(0).toString();
+
+      categoryObject["category_name"] = categoryName;
+
+      categoriesArray.append(categoryObject);
+    }
+    return categoriesArray;
+
+  } else {
+    qDebug() << "Failed to retrieve categories from database: "
+             << query.lastError().text();
+
+    return QJsonArray();
+  }
+}
+
+QJsonArray QueryFilterData::getAllNation() {
+  QSqlQuery query(db);
+  QJsonArray categoriesArray;
+
+  query.prepare(R"(SELECT DISTINCT n.nationality_name
+                    FROM nationalities n
+                        JOIN recipes r ON n.id = r.nationality_id)");
+
+  if (query.exec()) {
+    while (query.next()) {
+      QJsonObject categoryObject;
+
+      QString categoryName = query.value(0).toString();
+
+      categoryObject["category_name"] = categoryName;
+
+      categoriesArray.append(categoryObject);
+    }
+    return categoriesArray;
+
+  } else {
+    qDebug() << "Failed to retrieve categories from database: "
+             << query.lastError().text();
+
+    return QJsonArray();
+  }
+}
+
+QJsonArray QueryFilterData::getAllDish() {
+  QSqlQuery query(db);
+  QJsonArray categoriesArray;
+
+  query.prepare(R"(SELECT DISTINCT d.name
+                    FROM dishes d
+                        JOIN recipes r ON d.id = r.dish_id)");
+
+  if (query.exec()) {
+    while (query.next()) {
+      QJsonObject categoryObject;
+
+      QString categoryName = query.value(0).toString();
+
+      categoryObject["category_name"] = categoryName;
+
+      categoriesArray.append(categoryObject);
+    }
+    return categoriesArray;
+
+  } else {
+    qDebug() << "Failed to retrieve categories from database: "
+             << query.lastError().text();
+
     return QJsonArray();
   }
 }

@@ -13,16 +13,20 @@
 class ParseClientData : public QObject {
   Q_OBJECT
  private:
-  DropdownRecipes dropdownRecipes;
-  QString hoveredCategoryName;
+  QueryDropdownData queryDropdownData;
+  QueryFilterData queryFilterData;
 
  public:
   explicit ParseClientData(QObject *parent = nullptr);
 
  public slots:
-  QByteArray extractCategory(const QString &getCategory);
+  QByteArray extractCategory();
   QByteArray extractHoveredCategory(const QString &hoveredCategory);
   QByteArray extractDishName(const QString &hoveredData);
+
+  QByteArray allCategoryResponse();
+  QByteArray allNationResponse();
+  QByteArray allDishResponse();
 };
 
 #endif  // JSON_PARSER_H

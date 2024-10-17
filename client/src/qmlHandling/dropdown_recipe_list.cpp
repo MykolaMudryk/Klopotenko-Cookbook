@@ -1,11 +1,10 @@
-#include <QObject>
-
 #include "qmlHandling/dropdown_recipe_list.h"
 
 MenuCategoryModel::MenuCategoryModel(NetworkClient *client, QObject *parent)
     : QAbstractListModel(parent), networkClient(client) {}
 
 int MenuCategoryModel::rowCount(const QModelIndex &parent) const {
+  Q_UNUSED(parent);
   return m_categories.count();
 }
 
