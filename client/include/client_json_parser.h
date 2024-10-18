@@ -2,11 +2,11 @@
 #define CLIENT_JSON_PARSER_H
 
 #include <QByteArray>
+#include <QHash>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QJsonObject>
 #include <QObject>
-#include <QString>
 
 class JsonParser : public QObject {
   Q_OBJECT
@@ -16,8 +16,12 @@ class JsonParser : public QObject {
   QString nationality;
   QString dishName;
 
+  QHash<QString, std::function<void(const QJsonObject &jsonObject)>> signalMap;
+
  public:
   explicit JsonParser(QObject *parent = nullptr);
+
+  void registerHandlers();
 
  public slots:
   void extractValues(const QByteArray &jsonData);

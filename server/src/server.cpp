@@ -101,7 +101,6 @@ void ServerConnection::onRequestReceived(const QString &request) {
   QWebSocket *clientSocket = qobject_cast<QWebSocket *>(sender());
 
   if (clientSocket) {
-    // Знаходимо clientId в мапі clients
     QString clientId;
     for (auto it = clients.begin(); it != clients.end(); ++it) {
       if (it.value() == clientSocket) {
@@ -154,8 +153,6 @@ void SendForDropdown::onSendCategory(QWebSocket *clientSocket,
 
   QByteArray parsedCategory = jsonParser.extractCategory();
 
-  // qDebug() << "Sending JSON category:" << QString::fromUtf8(parsedCategory);
-
   clientSocket->sendTextMessage(QString::fromUtf8(parsedCategory));
 }
 
@@ -170,9 +167,6 @@ void SendForDropdown::onSendNationality(QWebSocket *clientSocket,
   QByteArray parsedHoveredCategory =
       jsonParser.extractHoveredCategory(categoryClient);
 
-  // qDebug() << "Sending JSON hovered category:"
-  //          << QString::fromUtf8(parsedHoveredCategory);
-
   clientSocket->sendTextMessage(QString::fromUtf8(parsedHoveredCategory));
 }
 
@@ -185,8 +179,6 @@ void SendForDropdown::onSendDishName(QWebSocket *clientSocket,
   }
 
   QByteArray parsedDishName = jsonParser.extractDishName(hoveredData);
-
-  // qDebug() << "Sending JSON dishName:" << QString::fromUtf8(parsedDishName);
 
   clientSocket->sendTextMessage(QString::fromUtf8(parsedDishName));
 }

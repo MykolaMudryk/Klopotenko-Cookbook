@@ -2,6 +2,24 @@
 
 JsonParser::JsonParser(QObject *parent) : QObject(parent) {}
 
+void JsonParser::registerHandlers() {
+  signalMap.insert("category_name", [this](const QJsonObject &jsonObject) {
+    QString categoryName = jsonObject.value("category_name").toString();
+    QString iconName = jsonObject.value("iconName").toString();
+    emit categoryNameIconExtracted(categoryName, iconName);
+  });
+
+  signalMap.insert("nationality_name", [this](const QJsonObject &jsonObject) {
+    QString nationality = jsonObject.value("nationality_name").toString();
+    emit nationalityExtracted(nationality);
+  });
+
+  signalMap.insert("dish_name", [this](const QJsonObject &jsonObject) {
+    QString dishName = jsonObject.value("dish_name").toString();
+    emit dishNameExtracted(dishName);
+  });
+}
+
 void JsonParser::extractValues(const QByteArray &jsonData) {
   QJsonDocument doc = QJsonDocument::fromJson(jsonData);
 
@@ -11,35 +29,17 @@ void JsonParser::extractValues(const QByteArray &jsonData) {
   }
     QJsonArray jsonArray = doc.array();
 
+    if (signalMap.isEmpty()) {
+      registerHandlers();
+    }
+
     for (const QJsonValue &value : jsonArray) {
       QJsonObject jsonObject = value.toObject();
 
-      if (jsonObject.contains("category_name") &&
-          jsonObject.contains("iconName")) {
-        QString categoryName = jsonObject.value("category_name").toString();
-        QString iconName = jsonObject.value("iconName").toString();
-
-        // qDebug() << "Parsed category on client: " << categoryName <<
-        // iconName;
-
-        emit categoryNameIconExtracted(categoryName, iconName);
-        emit categoryNameExtracted(categoryName);
-      }
-
-      if (jsonObject.contains("nationality_name")) {
-        QString nationality = jsonObject.value("nationality_name").toString();
-
-        // qDebug() << "Parsed nationality on client: " << nationality;
-
-        emit nationalityExtracted(nationality);
-      }
-
-      if (jsonObject.contains("dish_name")) {
-        QString dishName = jsonObject.value("dish_name").toString();
-
-        // qDebug() << "Parsed dishName on client: " << dishName;
-
-        emit dishNameExtracted(dishName);
+      for (auto it = signalMap.begin(); it != signalMap.end(); ++it) {
+        if (jsonObject.contains(it.key())) {
+          it.value()(jsonObject);
+        }
       }
     }
 }
