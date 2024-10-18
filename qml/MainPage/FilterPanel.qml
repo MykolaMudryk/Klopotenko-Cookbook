@@ -78,12 +78,12 @@ Item {
 
         onClicked: {
 
-          menuCategoryModel.fetchCategories()
+          filterCategoryModel.fetchCategories()
         }
 
         Connections {
-          target: menuCategoryModel
-          function onCategoryForFilter() {
+          target: filterCategoryModel
+          function onCategoryOpen() {
             categoryListContainer.isOpen = !categoryListContainer.isOpen
           }
         }
@@ -153,7 +153,7 @@ Item {
           property bool isOpen: false
 
           width: filterPanelBackground.width
-          height: isOpen ? menuCategoryModel.rowCount() * 40 : 0
+          height: isOpen ? filterCategoryModel.rowCount() * 40 : 0
 
           color: "white"
           radius: filterPanelBackground.radius
@@ -199,7 +199,8 @@ Item {
             height: childrenRect.height
 
             Repeater {
-              model: categoryListContainer.height > 0 ? menuCategoryModel : null
+              model: categoryListContainer.height
+                     > 0 ? filterCategoryModel.allCategoriesModel : null
               delegate: Rectangle {
                 id: dropdownColumnBackground
                 width: parent.width

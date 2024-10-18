@@ -41,7 +41,15 @@ QJsonArray QueryDropdownData::getCategories() {
   QSqlQuery query(db);
   QJsonArray categoriesArray;
 
-  query.prepare("SELECT category_name, iconName FROM categories");
+  query.prepare(R"(
+SELECT category_name, iconName
+FROM (
+    SELECT c.category_name, c.iconName, r.id
+    FROM categories c
+    JOIN recipes r ON c.recipe_id = r.category_id
+) AS subquery
+GROUP BY category_name
+ORDER BY min(id);)");
 
   if (query.exec()) {
     while (query.next()) {
@@ -161,9 +169,16 @@ QJsonArray QueryFilterData::getAllCategories() {
   QSqlQuery query(db);
   QJsonArray categoriesArray;
 
-  query.prepare(R"(SELECT DISTINCT c.category_name
-                    FROM categories c
-                        JOIN recipes r ON c.recipe_id = r.category_id)");
+  query.prepare(R"(
+SELECT category_name
+FROM (
+    SELECT c.category_name, r.id
+    FROM categories c
+    JOIN recipes r ON c.recipe_id = r.category_id
+) AS subquery
+GROUP BY category_name
+ORDER BY MIN(id);
+)");
 
   if (query.exec()) {
     while (query.next()) {
@@ -171,7 +186,7 @@ QJsonArray QueryFilterData::getAllCategories() {
 
       QString categoryName = query.value(0).toString();
 
-      categoryObject["category_name"] = categoryName;
+      categoryObject["all_categories"] = categoryName;
 
       categoriesArray.append(categoryObject);
     }
@@ -187,7 +202,7 @@ QJsonArray QueryFilterData::getAllCategories() {
 
 QJsonArray QueryFilterData::getAllNation() {
   QSqlQuery query(db);
-  QJsonArray categoriesArray;
+  QJsonArray nationArray;
 
   query.prepare(R"(SELECT DISTINCT n.nationality_name
                     FROM nationalities n
@@ -195,15 +210,15 @@ QJsonArray QueryFilterData::getAllNation() {
 
   if (query.exec()) {
     while (query.next()) {
-      QJsonObject categoryObject;
+      QJsonObject nationObject;
 
-      QString categoryName = query.value(0).toString();
+      QString nationName = query.value(0).toString();
 
-      categoryObject["category_name"] = categoryName;
+      nationObject["all_nation"] = nationName;
 
-      categoriesArray.append(categoryObject);
+      nationArray.append(nationObject);
     }
-    return categoriesArray;
+    return nationArray;
 
   } else {
     qDebug() << "Failed to retrieve categories from database: "
@@ -215,7 +230,7 @@ QJsonArray QueryFilterData::getAllNation() {
 
 QJsonArray QueryFilterData::getAllDish() {
   QSqlQuery query(db);
-  QJsonArray categoriesArray;
+  QJsonArray dishArray;
 
   query.prepare(R"(SELECT DISTINCT d.name
                     FROM dishes d
@@ -223,15 +238,15 @@ QJsonArray QueryFilterData::getAllDish() {
 
   if (query.exec()) {
     while (query.next()) {
-      QJsonObject categoryObject;
+      QJsonObject dishObject;
 
-      QString categoryName = query.value(0).toString();
+      QString dishName = query.value(0).toString();
 
-      categoryObject["category_name"] = categoryName;
+      dishObject["all_dishes"] = dishName;
 
-      categoriesArray.append(categoryObject);
+      dishArray.append(dishObject);
     }
-    return categoriesArray;
+    return dishArray;
 
   } else {
     qDebug() << "Failed to retrieve categories from database: "

@@ -9,7 +9,7 @@
 
 class MenuCategoryModel : public QAbstractListModel {
   Q_OBJECT
-  Q_PROPERTY(MenuCategoryModel *menuCategoryModel READ menuCategoryModel NOTIFY
+  Q_PROPERTY(MenuCategoryModel *allCategories READ menuCategoryModel NOTIFY
                  categoryNameIconChanged)
 
  private:
@@ -48,8 +48,8 @@ class MenuCategoryModel : public QAbstractListModel {
 
 class MenuNationModel : public QAbstractListModel {
   Q_OBJECT
-  Q_PROPERTY(MenuNationModel *menuNationalityModel READ menuNationalityModel
-                 NOTIFY nationalityChanged)
+  Q_PROPERTY(MenuNationModel *nationOnCategory READ menuNationalityModel NOTIFY
+                 nationalityChanged)
 
  private:
   QList<QString> m_nationalities;
@@ -83,8 +83,8 @@ class MenuNationModel : public QAbstractListModel {
 
 class MenuDishModel : public QAbstractListModel {
   Q_OBJECT
-  Q_PROPERTY(
-      MenuDishModel *menuDishModel READ menuDishModel NOTIFY dishNameChanged)
+  Q_PROPERTY(MenuDishModel *dishOnCategoryNation READ menuDishModel NOTIFY
+                 dishNameChanged)
 
  private:
   QList<QString> m_dishNames;

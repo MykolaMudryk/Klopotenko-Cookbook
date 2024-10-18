@@ -28,10 +28,12 @@ class JsonParser : public QObject {
  signals:
   void categoryNameIconExtracted(const QString &categoryName,
                                  const QString &iconName);
-  void categoryNameExtracted(const QString &categoryName);
-
   void nationalityExtracted(const QString &nationality);
   void dishNameExtracted(const QString &nationality);
+
+  void allCategoryExtracted(const QString &categoryName);
+  void allNationExtracted(const QString &categoryName);
+  void allDishesExtracted(const QString &categoryName);
 };
 
 #endif  // CLIENT_JSON_PARSER_H

@@ -18,6 +18,21 @@ void JsonParser::registerHandlers() {
     QString dishName = jsonObject.value("dish_name").toString();
     emit dishNameExtracted(dishName);
   });
+
+  signalMap.insert("all_categories", [this](const QJsonObject &jsonObject) {
+    QString allCategories = jsonObject.value("all_categories").toString();
+    emit allCategoryExtracted(allCategories);
+  });
+
+  signalMap.insert("all_nation", [this](const QJsonObject &jsonObject) {
+    QString allNation = jsonObject.value("all_nation").toString();
+    emit allNationExtracted(allNation);
+  });
+
+  signalMap.insert("all_dishes", [this](const QJsonObject &jsonObject) {
+    QString allDishes = jsonObject.value("all_dishes").toString();
+    emit allDishesExtracted(allDishes);
+  });
 }
 
 void JsonParser::extractValues(const QByteArray &jsonData) {

@@ -27,6 +27,15 @@ Client::Client(QObject *parent)
 
   connect(jsonParser, &JsonParser::dishNameExtracted, menuDishModel,
           &MenuDishModel::setDishName);
+
+  connect(jsonParser, &JsonParser::allCategoryExtracted, filterCategoryModel,
+          &FilterCategoryModel::setCategoryName);
+
+  connect(jsonParser, &JsonParser::allNationExtracted, filterNationModel,
+          &FilterNationModel::setNationality);
+
+  connect(jsonParser, &JsonParser::allDishesExtracted, filterDishModel,
+          &FilterDishModel::setDishName);
 }
 
 void Client::setupQML(QQmlApplicationEngine &engine) {

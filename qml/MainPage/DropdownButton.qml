@@ -122,7 +122,7 @@ Button {
         height: childrenRect.height
 
         Repeater {
-          model: menuCategoryModel
+          model: menuCategoryModel.allCategories
 
           delegate: Rectangle {
             id: dropdownColumnBackground
@@ -222,7 +222,7 @@ Button {
           y: categoryColumn.y + categoryColumn.height
 
           Repeater {
-            model: menuNationalityModel
+            model: menuNationalityModel.nationOnCategory
 
             delegate: Rectangle {
               id: nationalityColumnBackground
@@ -310,7 +310,7 @@ Button {
           height: childrenRect.height
 
           Repeater {
-            model: menuDishModel
+            model: menuDishModel.dishOnCategoryNation
 
             delegate: Rectangle {
               id: columnBackground
