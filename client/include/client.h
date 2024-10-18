@@ -28,8 +28,8 @@ class Client : public QObject {
   MenuDishModel *menuDishModel;
 
   FilterCategoryModel *filterCategoryModel;
-  NationModel *nationModel;
-  DishModel *dishModel;
+  FilterNationModel *filterNationModel;
+  FilterDishModel *filterDishModel;
 
   BreadCrumb *breadCrumb;
 };
