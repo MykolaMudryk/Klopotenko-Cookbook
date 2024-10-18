@@ -61,37 +61,37 @@ void ServerConnection::registerRequestHandlers() {
           &SendForFilter::onSendAllDishName);
 
   requestHandlers["GET_CATEGORIES"] = [this](const QString &clientId,
-                                             const QString &data) {
+                                             const QString &request) {
     QWebSocket *clientSocket = clients[clientId];
     emit sendCategory(clientSocket, clientId);
   };
 
   requestHandlers["GET_NATIONALITY"] = [this](const QString &clientId,
-                                              const QString &data) {
+                                              const QString &request) {
     QWebSocket *clientSocket = clients[clientId];
-    emit sendNationality(clientSocket, clientId, data);
+    emit sendNationality(clientSocket, clientId, request);
   };
 
   requestHandlers["HOVERED_CATEGORY"] = [this](const QString &clientId,
-                                               const QString &data) {
+                                               const QString &request) {
     QWebSocket *clientSocket = clients[clientId];
-    emit sendDishName(clientSocket, clientId, data);
+    emit sendDishName(clientSocket, clientId, request);
   };
 
   requestHandlers["GET_FILTER_CATEGORIES"] = [this](const QString &clientId,
-                                                    const QString &data) {
+                                                    const QString &request) {
     QWebSocket *clientSocket = clients[clientId];
     emit sendAllCategory(clientSocket, clientId);
   };
 
   requestHandlers["GET_FILTER_NATIONALITY"] = [this](const QString &clientId,
-                                                     const QString &data) {
+                                                     const QString &request) {
     QWebSocket *clientSocket = clients[clientId];
     emit sendAllNationality(clientSocket, clientId);
   };
 
   requestHandlers["GET_FILTER_DISHNAME"] = [this](const QString &clientId,
-                                                  const QString &data) {
+                                                  const QString &request) {
     QWebSocket *clientSocket = clients[clientId];
     emit sendAllDishName(clientSocket, clientId);
   };
@@ -202,9 +202,6 @@ void SendForFilter::onSendAllCategory(QWebSocket *clientSocket,
 
   QByteArray parsedAllcategories = jsonParser.allCategoryResponse();
 
-  // qDebug() << "Sending JSON hovered category:"
-  //          << QString::fromUtf8(parsedHoveredCategory);
-
   clientSocket->sendTextMessage(QString::fromUtf8(parsedAllcategories));
 }
 
@@ -217,9 +214,6 @@ void SendForFilter::onSendAllNationality(QWebSocket *clientSocket,
 
   QByteArray parsedAllNations = jsonParser.allNationResponse();
 
-  // qDebug() << "Sending JSON hovered category:"
-  //          << QString::fromUtf8(parsedHoveredCategory);
-
   clientSocket->sendTextMessage(QString::fromUtf8(parsedAllNations));
 }
 
@@ -231,9 +225,6 @@ void SendForFilter::onSendAllDishName(QWebSocket *clientSocket,
   }
 
   QByteArray parsedAllDishes = jsonParser.allDishResponse();
-
-  // qDebug() << "Sending JSON hovered category:"
-  //          << QString::fromUtf8(parsedHoveredCategory);
 
   clientSocket->sendTextMessage(QString::fromUtf8(parsedAllDishes));
 }

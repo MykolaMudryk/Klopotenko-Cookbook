@@ -59,7 +59,8 @@ class ServerConnection : public QObject {
 
   SendForFilter* sendForFilter;
 
-  QHash<QString, std::function<void(const QString& clientId, const QString&)>>
+  QHash<QString,
+        std::function<void(const QString& clientId, const QString& request)>>
       requestHandlers;
 
   int port;
